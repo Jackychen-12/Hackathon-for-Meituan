@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CityWalk · 本地智能路线规划</title>
+<style>
+/* ===================== Global ===================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f5f9ff;
+    min-height: 100vh;
+    color: #2c2c2e;
+}
+.app-container {
+    max-width: 430px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #eaf2ff 0%, #f5f9ff 35%, #ffffff 70%);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+.page { display: none; }
+.page.active { display: block; }
+@keyframes pageIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.page.active { animation: pageIn 0.28s ease-out; }
+
+/* ===================== p-login ===================== */
+.p-login.app-container { padding: 80px 28px 40px; overflow: hidden; }
+.p-login .brand { text-align: center; margin-bottom: 48px; }
+.p-login .brand-logo {
+    width: 72px; height: 72px; border-radius: 22px;
+    background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.7), transparent 55%),
+        linear-gradient(135deg, #0a1f44 0%, #1e5fd8 55%, #5b9eff 100%);
+    margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 14px 36px rgba(30,95,216,0.4), inset 0 0 18px rgba(255,255,255,0.25);
+    position: relative;
+}
+.p-login .brand-logo::after {
+    content: ''; position: absolute; inset: -8px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(91,158,255,0.25), transparent 70%);
+    z-index: -1;
+}
+.p-login .brand-title { font-size: 24px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+.p-login .brand-sub { font-size: 13px; color: #8e8e93; }
+
+.p-login .sec-title {
+    font-size: 14px; font-weight: 600; color: #1a1a2e;
+    margin-bottom: 14px; display: flex; align-items: center; gap: 6px;
+}
+.p-login .sec-title .dot {
+    width: 4px; height: 14px;
+    background: linear-gradient(180deg, #1e5fd8, #5b9eff);
+    border-radius: 2px;
+}
+.p-login .avatar-block {
+    background: rgba(255,255,255,0.75); border-radius: 20px; padding: 22px 20px;
+    border: 1px solid rgba(140,180,240,0.3); backdrop-filter: blur(10px);
+    margin-bottom: 24px;
+}
+.p-login .avatar-preview-row { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.p-login .avatar-preview {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, #f5f9ff, #eaf2ff);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px; border: 3px solid #fff;
+    box-shadow: 0 6px 18px rgba(30,95,216,0.15); overflow: hidden; flex-shrink: 0;
+}
+.p-login .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+.p-login .avatar-tip { font-size: 13px; color: #6b6b72; line-height: 1.6; }
+.p-login .avatar-tip strong { color: #1a1a2e; font-weight: 600; }
+
+.p-login .emoji-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 14px;
+}
+.p-login .emoji-item {
+    aspect-ratio: 1; border-radius: 12px;
+    background: rgba(232,242,255,0.65);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; cursor: pointer; transition: all 0.2s;
+    border: 2px solid transparent;
+}
+.p-login .emoji-item:hover { background: rgba(91,158,255,0.15); }
+.p-login .emoji-item.active {
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    border-color: #fff;
+    box-shadow: 0 4px 12px rgba(30,95,216,0.3);
+    transform: scale(1.05);
+}
+.p-login .upload-btn {
+    width: 100%; padding: 12px; border-radius: 12px;
+    background: rgba(255,255,255,0.6);
+    border: 1px dashed rgba(30,95,216,0.5);
+    color: #1e5fd8; font-size: 13px; font-weight: 500; cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.p-login .upload-btn:hover { background: rgba(91,158,255,0.1); }
+.p-login #avatarUpload { display: none; }
+
+.p-login .name-block {
+    background: rgba(255,255,255,0.75); border-radius: 20px; padding: 20px;
+    border: 1px solid rgba(140,180,240,0.3); backdrop-filter: blur(10px);
+    margin-bottom: 36px;
+}
+.p-login .name-input {
+    width: 100%; padding: 12px 14px; border-radius: 12px;
+    background: rgba(232,242,255,0.55);
+    border: 1px solid transparent;
+    font-size: 15px; outline: none; color: #1d1d1f; transition: all 0.2s;
+}
+.p-login .name-input:focus { border-color: rgba(30,95,216,0.5); background: #fff; }
+.p-login .name-hint { font-size: 12px; color: #a0a0a8; margin-top: 8px; }
+.p-login .cta-btn {
+    width: 100%; padding: 16px; border-radius: 16px;
+    background: linear-gradient(135deg, #1e5fd8 0%, #5b9eff 100%);
+    color: #fff; font-size: 16px; font-weight: 600; border: none; cursor: pointer;
+    box-shadow: 0 10px 24px rgba(30,95,216,0.3); transition: all 0.2s;
+}
+.p-login .cta-btn:active { transform: scale(0.98); }
+.p-login .cta-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+/* ===================== p-profile ===================== */
+.p-profile.app-container { padding: 56px 24px 120px; overflow: hidden; }
+.p-profile .top-bar {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+}
+.p-profile .step-indicator {
+    font-size: 12px; color: #5b9eff; font-weight: 600; letter-spacing: 0.5px;
+}
+.p-profile .skip-btn {
+    font-size: 13px; color: #a0a0a8; background: none; border: none; cursor: pointer;
+}
+.p-profile .title-block { margin-bottom: 28px; }
+.p-profile .title-block h2 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+.p-profile .title-block p { font-size: 13px; color: #8e8e93; }
+
+.p-profile .card-stack-area {
+    position: relative; height: 460px; margin: 0 auto; perspective: 1000px;
+}
+.p-profile .profile-card {
+    position: absolute; top: 0; left: 0; right: 0;
+    background: rgba(255,255,255,0.92);
+    border-radius: 24px; padding: 28px 24px;
+    border: 1px solid rgba(140,180,240,0.35);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 12px 32px rgba(30,95,216,0.15);
+    transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center top;
+}
+.p-profile .profile-card.layer-0 { z-index: 5; transform: translateY(0) scale(1); opacity: 1; }
+.p-profile .profile-card.layer-1 { z-index: 4; transform: translateY(14px) scale(0.96); opacity: 0.85; }
+.p-profile .profile-card.layer-2 { z-index: 3; transform: translateY(28px) scale(0.92); opacity: 0.65; }
+.p-profile .profile-card.layer-3 { z-index: 2; transform: translateY(42px) scale(0.88); opacity: 0.4; }
+.p-profile .profile-card.layer-4 { z-index: 1; transform: translateY(56px) scale(0.84); opacity: 0.2; }
+.p-profile .profile-card.dismissed {
+    transform: translateY(-120%) scale(0.85) rotate(-4deg);
+    opacity: 0; pointer-events: none;
+}
+.p-profile .card-num { font-size: 11px; color: #1e5fd8; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+.p-profile .card-q { font-size: 19px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; line-height: 1.4; }
+.p-profile .card-desc { font-size: 13px; color: #8e8e93; margin-bottom: 22px; line-height: 1.5; }
+
+.p-profile .option-list { display: flex; flex-direction: column; gap: 10px; }
+.p-profile .option-item {
+    padding: 14px 16px; border-radius: 14px;
+    background: rgba(232,242,255,0.55);
+    border: 1.5px solid transparent; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 12px;
+}
+.p-profile .option-item:hover { background: rgba(91,158,255,0.12); }
+.p-profile .option-item.selected {
+    background: linear-gradient(135deg, rgba(91,158,255,0.18), rgba(30,95,216,0.12));
+    border-color: rgba(30,95,216,0.5);
+}
+.p-profile .option-emoji { font-size: 24px; flex-shrink: 0; }
+.p-profile .option-text { flex: 1; }
+.p-profile .option-title { font-size: 15px; font-weight: 600; color: #1a1a2e; margin-bottom: 2px; }
+.p-profile .option-sub { font-size: 12px; color: #8e8e93; }
+
+.p-profile .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.p-profile .chip {
+    padding: 8px 14px; border-radius: 20px;
+    background: rgba(232,242,255,0.65);
+    border: 1.5px solid transparent;
+    font-size: 13px; color: #5a5a62; cursor: pointer; transition: all 0.2s; user-select: none;
+}
+.p-profile .chip.selected {
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    color: #fff; border-color: #fff;
+    box-shadow: 0 4px 12px rgba(91,158,255,0.3);
+}
+.p-profile .chip-hint { font-size: 12px; color: #a0a0a8; margin-bottom: 12px; }
+
+.p-profile .card-footer {
+    margin-top: 22px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.p-profile .confirm-btn {
+    flex: 1; padding: 12px; border-radius: 12px;
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    color: #fff; font-size: 14px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s;
+}
+.p-profile .confirm-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.p-profile .confirm-btn:not(:disabled):active { transform: scale(0.98); }
+
+.p-profile .progress-dots { display: flex; gap: 6px; justify-content: center; margin-top: 20px; }
+.p-profile .progress-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(91,158,255,0.25); transition: all 0.3s;
+}
+.p-profile .progress-dot.active {
+    width: 22px; border-radius: 3px;
+    background: linear-gradient(90deg, #1e5fd8, #5b9eff);
+}
+.p-profile .progress-dot.done { background: rgba(30,95,216,0.55); }
+
+.p-profile .done-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.96);
+    display: none; align-items: center; justify-content: center; flex-direction: column;
+    z-index: 100; padding: 40px; text-align: center;
+}
+.p-profile .done-overlay.show { display: flex; animation: fadeIn 0.4s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.p-profile .done-icon {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px; margin-bottom: 24px;
+    box-shadow: 0 12px 30px rgba(30,95,216,0.35);
+}
+.p-profile .done-title { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+.p-profile .done-sub { font-size: 14px; color: #8e8e93; margin-bottom: 32px; line-height: 1.6; }
+.p-profile .done-btn {
+    padding: 14px 40px; border-radius: 16px;
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    color: #fff; font-size: 15px; font-weight: 600; border: none; cursor: pointer;
+    box-shadow: 0 10px 24px rgba(30,95,216,0.3);
+}
+
+/* ===================== p-home ===================== */
+.p-home.app-container { padding-bottom: 84px; overflow: hidden; }
+.p-home .top-status {
+    padding: 56px 24px 0; display: flex; align-items: center; justify-content: space-between;
+}
+.p-home .location-pill {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 12px; background: rgba(255,255,255,0.7);
+    border-radius: 20px; font-size: 12px; color: #5a5a62;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(140,180,240,0.3);
+}
+.p-home .location-pill .dot-pulse {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #5b9eff; animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+}
+.p-home .user-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, #f5f9ff, #eaf2ff);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; border: 2px solid #fff;
+    box-shadow: 0 4px 12px rgba(91,158,255,0.22); overflow: hidden;
+    cursor: pointer;
+}
+.p-home .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.p-home .greeting { padding: 24px 24px 8px; }
+.p-home .greeting h1 { font-size: 26px; font-weight: 700; color: #1a1a2e; line-height: 1.3; margin-bottom: 6px; }
+.p-home .greeting p { font-size: 13px; color: #8e8e93; }
+
+.p-home .input-wrap { padding: 18px 24px 6px; }
+.p-home .input-card {
+    background: rgba(255,255,255,0.85);
+    border-radius: 20px; padding: 12px 14px;
+    border: 1px solid rgba(140,180,240,0.35);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 24px rgba(30,95,216,0.08);
+    display: flex; flex-direction: column; gap: 8px;
+}
+/* 缩略图条（已不展示在输入框，保留 DOM 仅作占位/兼容） */
+.p-home .thumb-row {
+    display: none !important;
+}
+/* 输入行 */
+.p-home .input-row { display: flex; align-items: flex-end; gap: 8px; }
+.p-home .input-row input,
+.p-home .input-row textarea {
+    flex: 1; border: none; background: transparent;
+    font-size: 15px; outline: none; color: #1d1d1f; min-width: 0;
+    padding: 6px 2px;
+}
+.p-home .input-row textarea {
+    /* 自适应换行 */
+    resize: none;
+    line-height: 1.45;
+    font-family: inherit;
+    max-height: 132px; /* ~6 行；超过后内部滚动 */
+    overflow-y: auto;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+.p-home .input-row input::placeholder,
+.p-home .input-row textarea::placeholder { color: #b0b0b8; }
+.p-home .input-icon-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(232,242,255,0.7);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: all 0.2s;
+    font-size: 15px; border: none;
+}
+.p-home .input-icon-btn:hover { background: rgba(91,158,255,0.2); }
+.p-home .input-icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.p-home .input-icon-btn.primary {
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    color: #fff; box-shadow: 0 4px 12px rgba(91,158,255,0.3);
+}
+.p-home .input-divider { width: 1px; height: 16px; background: rgba(91,158,255,0.22); }
+.p-home #imgUpload { display: none; }
+/* 📷 按钮上的"已上传/已识别"徽章 */
+.p-home .input-icon-btn { position: relative; }
+.p-home .upload-badge {
+    position: absolute; top: -4px; right: -4px;
+    min-width: 18px; height: 16px; padding: 0 4px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    color: #fff; font-size: 10px; line-height: 16px;
+    text-align: center; font-weight: 600;
+    box-shadow: 0 2px 5px rgba(30,95,216,0.35);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+/* 快捷预设：单行灵感条 */
+.p-home .inspire-bar {
+    margin: 14px 24px 4px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px 8px 12px;
+    background: linear-gradient(135deg, rgba(91,158,255,0.10), rgba(140,180,240,0.06));
+    border: 1px solid rgba(140,180,240,0.28);
+    border-radius: 18px;
+    backdrop-filter: blur(8px);
+}
+.p-home .inspire-icon {
+    font-size: 16px; flex-shrink: 0;
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    box-shadow: 0 2px 6px rgba(30,95,216,0.3);
+}
+.p-home .inspire-content {
+    flex: 1; min-width: 0; overflow: hidden;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12.5px; color: #1a1a2e;
+    white-space: nowrap; text-overflow: ellipsis;
+}
+.p-home .inspire-content .ic-chip {
+    flex-shrink: 0; padding: 3px 9px; border-radius: 10px;
+    background: rgba(255,255,255,0.8);
+    border: 1px solid rgba(140,180,240,0.4);
+    color: #1e5fd8; font-weight: 600;
+    font-size: 11.5px;
+}
+.p-home .inspire-content .ic-chip.placeholder {
+    background: transparent; border-color: transparent;
+    color: #8e8e93; font-weight: 400;
+}
+.p-home .inspire-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.p-home .inspire-btn {
+    padding: 5px 10px; border-radius: 12px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(140,180,240,0.35);
+    font-size: 12px; color: #5a5a62;
+    cursor: pointer; transition: all 0.2s; user-select: none;
+    display: flex; align-items: center; gap: 3px;
+}
+.p-home .inspire-btn:hover {
+    background: rgba(91,158,255,0.15);
+    border-color: rgba(91,158,255,0.5);
+    color: #1e5fd8;
+}
+.p-home .inspire-btn.spinning span:first-child { display: inline-block; animation: spin 0.6s linear infinite; }
+
+/* 自定义抽屉 */
+.preset-sheet-mask {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+    z-index: 1000; opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+}
+.preset-sheet-mask.show { opacity: 1; pointer-events: auto; }
+.preset-sheet {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    max-width: 480px; margin: 0 auto;
+    background: #f7f8fb; border-radius: 22px 22px 0 0;
+    z-index: 1001; transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+    padding: 8px 0 calc(env(safe-area-inset-bottom) + 16px);
+    max-height: 80vh; overflow-y: auto;
+}
+.preset-sheet.show { transform: translateY(0); }
+.preset-sheet .sheet-handle {
+    width: 36px; height: 4px; border-radius: 2px;
+    background: #d1d5db; margin: 8px auto 14px;
+}
+.preset-sheet .sheet-head {
+    padding: 0 22px 12px; display: flex; align-items: center; justify-content: space-between;
+}
+.preset-sheet .sheet-head h3 {
+    font-size: 16px; font-weight: 700; color: #1a1a2e; margin: 0;
+}
+.preset-sheet .sheet-clear {
+    font-size: 12px; color: #5b9eff; cursor: pointer;
+    padding: 4px 10px; border-radius: 10px;
+    background: rgba(91,158,255,0.1);
+}
+.preset-sheet .preset-row {
+    padding: 10px 22px;
+}
+.preset-sheet .preset-label {
+    font-size: 13px; color: #1a1a2e; font-weight: 600;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 4px;
+}
+.preset-sheet .preset-chips {
+    display: flex; gap: 8px; flex-wrap: wrap;
+}
+.preset-sheet .preset-chip {
+    padding: 8px 14px; border-radius: 16px;
+    background: #fff;
+    border: 1px solid rgba(140,180,240,0.35);
+    font-size: 13px; color: #5a5a62;
+    cursor: pointer; transition: all 0.2s;
+    user-select: none;
+}
+.preset-sheet .preset-chip.selected {
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    color: #fff; border-color: #fff;
+    box-shadow: 0 4px 12px rgba(30,95,216,0.28);
+}
+.preset-sheet .sheet-foot {
+    padding: 14px 22px 0;
+}
+.preset-sheet .sheet-apply {
+    width: 100%; padding: 13px;
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    color: #fff; border: none; border-radius: 14px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 6px 16px rgba(30,95,216,0.3);
+}
+.preset-sheet .sheet-apply:disabled {
+    background: #c7d4ec; box-shadow: none; cursor: not-allowed;
+}
+
+/* 地点选择抽屉（复用 preset-sheet 容器） */
+.poi-search {
+    margin: 0 22px 8px; position: relative;
+}
+.poi-search input {
+    width: 100%; box-sizing: border-box;
+    padding: 10px 14px 10px 36px;
+    border-radius: 12px; border: 1px solid rgba(140,180,240,0.4);
+    background: #fff; font-size: 13px; color: #1a1a2e; outline: none;
+}
+.poi-search::before {
+    content: '🔍'; position: absolute; left: 12px; top: 50%;
+    transform: translateY(-50%); font-size: 13px; opacity: 0.6;
+}
+.poi-list {
+    padding: 4px 22px 0;
+    display: flex; flex-direction: column; gap: 8px;
+    max-height: 48vh; overflow-y: auto;
+}
+.poi-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 13px; border-radius: 12px;
+    background: #fff;
+    border: 1px solid rgba(140,180,240,0.3);
+    cursor: pointer; transition: all 0.18s;
+    user-select: none;
+}
+.poi-item:hover { border-color: rgba(91,158,255,0.6); background: rgba(91,158,255,0.05); }
+.poi-item.selected {
+    border-color: #5b9eff;
+    background: linear-gradient(135deg, rgba(30,95,216,0.08), rgba(91,158,255,0.12));
+}
+.poi-item .poi-check {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 1.5px solid #c0ccdf; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: #fff; transition: all 0.18s;
+}
+.poi-item.selected .poi-check {
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    border-color: #5b9eff;
+}
+.poi-item.selected .poi-check::after { content: '✓'; }
+.poi-item .poi-icon { font-size: 17px; flex-shrink: 0; }
+.poi-item .poi-info { flex: 1; min-width: 0; }
+.poi-item .poi-name {
+    font-size: 14px; font-weight: 600; color: #1a1a2e;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.poi-item .poi-desc {
+    font-size: 11.5px; color: #8e8e93; margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.poi-empty {
+    padding: 30px 0; text-align: center; color: #8e8e93; font-size: 13px;
+}
+
+/* loading toast */
+.cw-toast {
+    position: fixed; left: 50%; top: 30%;
+    transform: translateX(-50%); z-index: 1100;
+    background: rgba(20,30,60,0.92); color: #fff;
+    padding: 14px 20px; border-radius: 14px;
+    font-size: 13.5px; font-weight: 500;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 12px 30px rgba(20,30,60,0.3);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+}
+.cw-toast.show { opacity: 1; }
+.cw-toast .spinner {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.25);
+    border-top-color: #fff;
+    animation: spin 0.7s linear infinite;
+}
+
+/* 缩略图加角标：识别成功/失败 */
+.p-home .thumb-item .thumb-badge {
+    position: absolute; left: 2px; bottom: 2px;
+    font-size: 10px; padding: 1px 5px; border-radius: 8px;
+    background: rgba(30,95,216,0.85); color: #fff; font-weight: 600;
+}
+
+.p-home .sec-header {
+    padding: 22px 24px 12px; display: flex; align-items: center; justify-content: space-between;
+}
+.p-home .sec-header .title {
+    font-size: 16px; font-weight: 700; color: #1a1a2e;
+    display: flex; align-items: center; gap: 6px;
+}
+.p-home .sec-header .title .city-tag {
+    font-size: 11px; color: #5b9eff;
+    background: rgba(91,158,255,0.15);
+    padding: 2px 8px; border-radius: 10px; font-weight: 600;
+}
+.p-home .sec-header .more {
+    font-size: 12px; color: #5b9eff; cursor: pointer;
+    padding: 4px 10px; border-radius: 12px;
+    background: rgba(91,158,255,0.1);
+    transition: all 0.2s; user-select: none;
+}
+.p-home .sec-header .more:hover { background: rgba(91,158,255,0.2); }
+.p-home .sec-header .more.spinning { pointer-events: none; opacity: 0.6; }
+.p-home .sec-header .more.spinning span { display: inline-block; animation: spin 0.6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.p-home .rec-list { padding: 0 24px; display: flex; flex-direction: column; gap: 12px; }
+.p-home .rec-card {
+    position: relative; background: rgba(255,255,255,0.9);
+    border-radius: 18px; overflow: hidden;
+    border: 1px solid rgba(140,180,240,0.3);
+    backdrop-filter: blur(10px);
+    cursor: pointer; transition: all 0.25s; display: flex;
+}
+.p-home .rec-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(30,95,216,0.15); }
+.p-home .rec-card:active { transform: scale(0.98); }
+.p-home .rec-cover {
+    width: 100px; flex-shrink: 0;
+    background-size: cover; background-position: center; background-repeat: no-repeat;
+    position: relative;
+}
+.p-home .rec-cover::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 60%, rgba(255,255,255,0.4));
+}
+.p-home .rec-body {
+    flex: 1; padding: 12px 14px;
+    display: flex; flex-direction: column; justify-content: space-between; min-width: 0;
+}
+.p-home .rec-title {
+    font-size: 15px; font-weight: 700; color: #1a1a2e;
+    margin-bottom: 4px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.p-home .rec-desc {
+    font-size: 12px; color: #8e8e93; line-height: 1.45; margin-bottom: 6px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.p-home .rec-meta { display: flex; gap: 8px; align-items: center; font-size: 11px; color: #5b9eff; }
+.p-home .rec-meta .meta-tag {
+    background: rgba(91,158,255,0.15);
+    padding: 2px 6px; border-radius: 6px; font-weight: 600;
+}
+.p-home .rec-tag-personal {
+    position: absolute; top: 8px; right: 8px;
+    background: rgba(255,255,255,0.85); color: #5b9eff;
+    font-size: 10px; font-weight: 600;
+    padding: 3px 8px; border-radius: 10px;
+    backdrop-filter: blur(8px); z-index: 2;
+}
+.p-home .cover-1 { background: linear-gradient(135deg, #cfe1ff, #1e5fd8); }
+.p-home .cover-2 { background: linear-gradient(135deg, #b8e6ff, #1e5fd8); }
+.p-home .cover-3 { background: linear-gradient(135deg, #dfeeff, #5b9eff); }
+.p-home .cover-4 { background: linear-gradient(135deg, #c9d8ff, #0a1f44); }
+
+/* Voice modal (home) */
+.voice-modal {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(20,15,30,0.5);
+    backdrop-filter: blur(8px);
+    display: none; align-items: flex-end; justify-content: center; z-index: 99;
+}
+.voice-modal.show { display: flex; }
+.voice-sheet {
+    background: #fff; width: 100%; max-width: 430px;
+    border-radius: 24px 24px 0 0; padding: 28px 24px 36px;
+    text-align: center; animation: slideUp 0.3s;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.voice-mic {
+    width: 100px; height: 100px; border-radius: 50%;
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff);
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 44px; color: #fff;
+    box-shadow: 0 0 0 0 rgba(30,95,216,0.5);
+    animation: micPulse 1.5s infinite;
+}
+@keyframes micPulse {
+    0% { box-shadow: 0 0 0 0 rgba(30,95,216,0.5); }
+    100% { box-shadow: 0 0 0 24px rgba(30,95,216,0); }
+}
+.voice-tip { font-size: 16px; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; }
+.voice-sub { font-size: 13px; color: #8e8e93; margin-bottom: 22px; }
+.voice-cancel {
+    padding: 10px 30px; background: rgba(232,242,255,0.7);
+    border: none; border-radius: 20px;
+    font-size: 14px; color: #5a5a62; cursor: pointer;
+}
+
+/* ===================== p-mine ===================== */
+.p-mine.app-container { padding-bottom: 84px; overflow: hidden; }
+.p-mine .top-bar {
+    padding: 56px 24px 0;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.p-mine .back-btn {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(140,180,240,0.3);
+    width: 36px; height: 36px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; color: #5a5a62;
+}
+.p-mine .page-title { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+.p-mine .profile-head {
+    padding: 28px 24px 16px;
+    display: flex; align-items: center; gap: 16px;
+}
+.p-mine .profile-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, #f5f9ff, #eaf2ff);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px; border: 3px solid #fff;
+    box-shadow: 0 6px 18px rgba(91,158,255,0.25);
+    overflow: hidden; flex-shrink: 0;
+}
+.p-mine .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.p-mine .profile-name { flex: 1; min-width: 0; }
+.p-mine .profile-name h2 { font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+.p-mine .profile-name p { font-size: 12px; color: #8e8e93; }
+
+.p-mine .section { padding: 14px 24px; }
+.p-mine .card {
+    background: rgba(255,255,255,0.85);
+    border-radius: 18px; padding: 18px 18px 14px;
+    border: 1px solid rgba(140,180,240,0.3);
+    backdrop-filter: blur(10px);
+}
+.p-mine .card-head {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+}
+.p-mine .card-title {
+    font-size: 14px; font-weight: 700; color: #1a1a2e;
+    display: flex; align-items: center; gap: 6px;
+}
+.p-mine .card-title .dot {
+    width: 4px; height: 14px;
+    background: linear-gradient(180deg, #1e5fd8, #5b9eff);
+    border-radius: 2px;
+}
+.p-mine .edit-btn {
+    font-size: 12px; color: #5b9eff;
+    background: rgba(91,158,255,0.15);
+    border: none; padding: 4px 12px; border-radius: 12px;
+    cursor: pointer; font-weight: 600;
+}
+.p-mine .edit-btn:hover { background: rgba(91,158,255,0.22); }
+
+.p-mine .tag-row {
+    display: flex; align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(140,180,240,0.18);
+    gap: 12px;
+}
+.p-mine .tag-row:last-child { border-bottom: none; padding-bottom: 0; }
+.p-mine .tag-row:first-child { padding-top: 0; }
+.p-mine .tag-label { font-size: 13px; color: #8e8e93; width: 78px; flex-shrink: 0; padding-top: 2px; }
+.p-mine .tag-values { flex: 1; display: flex; flex-wrap: wrap; gap: 6px; }
+.p-mine .tag-pill {
+    padding: 4px 10px; background: rgba(232,242,255,0.7);
+    border-radius: 10px; font-size: 12px; color: #5a5a62; font-weight: 500;
+}
+.p-mine .tag-empty { font-size: 12px; color: #b0b0b8; padding-top: 2px; }
+
+.p-mine .stats-row { display: flex; gap: 10px; margin-bottom: 4px; }
+.p-mine .stat-card {
+    flex: 1; background: rgba(255,255,255,0.85);
+    border-radius: 16px; padding: 16px 12px;
+    border: 1px solid rgba(140,180,240,0.3);
+    backdrop-filter: blur(10px); text-align: center;
+}
+.p-mine .stat-num { font-size: 22px; font-weight: 700; color: #5b9eff; margin-bottom: 2px; }
+.p-mine .stat-label { font-size: 11px; color: #8e8e93; }
+
+.p-mine .menu-list {
+    background: rgba(255,255,255,0.85); border-radius: 18px;
+    border: 1px solid rgba(140,180,240,0.3);
+    backdrop-filter: blur(10px); overflow: hidden;
+}
+.p-mine .menu-item {
+    display: flex; align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(140,180,240,0.18);
+    cursor: pointer; transition: background 0.2s;
+}
+.p-mine .menu-item:last-child { border-bottom: none; }
+.p-mine .menu-item:hover { background: rgba(91,158,255,0.08); }
+.p-mine .menu-icon {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: rgba(91,158,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; margin-right: 12px;
+}
+.p-mine .menu-text { flex: 1; font-size: 14px; color: #1a1a2e; font-weight: 500; }
+.p-mine .menu-arrow { font-size: 14px; color: #c0c0c8; }
+
+/* ===================== Shared bottom tab ===================== */
+.tab-bar {
+    position: fixed; bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(140,180,240,0.3);
+    display: flex; padding: 10px 0 22px;
+    z-index: 50;
+}
+.tab-bar.hidden { display: none; }
+.tab-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; gap: 3px;
+    cursor: pointer; color: #b0b0b8; font-size: 11px;
+    transition: color 0.2s;
+}
+.tab-item.active { color: #5b9eff; }
+.tab-icon { font-size: 22px; }
+</style>
+</head>
+<body>
+
+<!-- ============== p-login ============== -->
+<div class="page p-login app-container" id="page-login">
+    <div class="brand">
+        <div class="brand-logo">🗺️</div>
+        <div class="brand-title">CityWalk</div>
+        <div class="brand-sub">遇见城市，遇见自己</div>
+    </div>
+
+    <div class="sec-title"><span class="dot"></span>选择你的头像</div>
+    <div class="avatar-block">
+        <div class="avatar-preview-row">
+            <div class="avatar-preview" id="avatarPreview">🐱</div>
+            <div class="avatar-tip">
+                <strong>给自己一个标识</strong><br>
+                可选 emoji，也可上传照片
+            </div>
+        </div>
+        <div class="emoji-grid" id="emojiGrid">
+            <div class="emoji-item active" data-emoji="🐱">🐱</div>
+            <div class="emoji-item" data-emoji="🐶">🐶</div>
+            <div class="emoji-item" data-emoji="🦊">🦊</div>
+            <div class="emoji-item" data-emoji="🐼">🐼</div>
+            <div class="emoji-item" data-emoji="🐨">🐨</div>
+            <div class="emoji-item" data-emoji="🐰">🐰</div>
+            <div class="emoji-item" data-emoji="🦁">🦁</div>
+            <div class="emoji-item" data-emoji="🐸">🐸</div>
+            <div class="emoji-item" data-emoji="🐙">🐙</div>
+            <div class="emoji-item" data-emoji="🦄">🦄</div>
+            <div class="emoji-item" data-emoji="🌸">🌸</div>
+            <div class="emoji-item" data-emoji="🍀">🍀</div>
+        </div>
+        <label class="upload-btn" for="avatarUpload">
+            <span>📷</span><span>上传我的照片</span>
+        </label>
+        <input type="file" id="avatarUpload" accept="image/*">
+    </div>
+
+    <div class="sec-title"><span class="dot"></span>给自己起个名字</div>
+    <div class="name-block">
+        <input type="text" class="name-input" id="nameInput" placeholder="例如：小溪" maxlength="12">
+        <div class="name-hint">2-12 个字符，未来路线签名可见</div>
+    </div>
+
+    <button class="cta-btn" id="loginNextBtn">下一步：完善画像</button>
+</div>
+
+<!-- ============== p-profile ============== -->
+<div class="page p-profile app-container" id="page-profile">
+    <div class="top-bar">
+        <span class="step-indicator">STEP 2 / 2 · 初始画像</span>
+        <button class="skip-btn" id="profileSkipBtn">跳过</button>
+    </div>
+    <div class="title-block">
+        <h2>聊聊你是谁 ✨</h2>
+        <p>选完这几张卡，你的专属推荐就准备好啦</p>
+    </div>
+    <div class="card-stack-area" id="cardStack"></div>
+    <div class="progress-dots" id="progressDots"></div>
+
+    <div class="done-overlay" id="doneOverlay">
+        <div class="done-icon">✨</div>
+        <div class="done-title">画像收集完成！</div>
+        <div class="done-sub">已为你准备好<br>更懂你的城市路线</div>
+        <button class="done-btn" id="profileDoneBtn">开启城市漫游</button>
+    </div>
+</div>
+
+<!-- ============== p-home ============== -->
+<div class="page p-home app-container" id="page-home">
+    <div class="top-status">
+        <div class="location-pill">
+            <span class="dot-pulse"></span>
+            <span>📍 <span id="cityName">深圳 · 南山区</span></span>
+        </div>
+        <div class="user-avatar" id="userAvatar">🐱</div>
+    </div>
+
+    <div class="greeting">
+        <h1 id="greetTitle">Hi，<span style="background:linear-gradient(135deg,#1e5fd8,#5b9eff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">朋友</span> 👋</h1>
+        <p id="greetSub">今天想去哪里走走？</p>
+    </div>
+
+    <div class="input-wrap">
+        <div class="input-card">
+            <div class="thumb-row" id="thumbRow"></div>
+            <div class="input-row">
+                <textarea id="mainInput" rows="1" placeholder="一句话描述你想要的路线…"></textarea>
+                <button class="input-icon-btn" id="voiceOpenBtn" title="语音输入">🎤</button>
+                <div class="input-divider"></div>
+                <label class="input-icon-btn" id="imgUploadBtn" for="imgUpload" title="上传图片（≤3张）">📷</label>
+                <input type="file" id="imgUpload" accept="image/*" multiple>
+                <button class="input-icon-btn primary" id="goPlanBtn" title="开始规划">→</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="inspire-bar" id="inspireBar">
+        <div class="inspire-icon">🎲</div>
+        <div class="inspire-content" id="inspireContent"></div>
+        <div class="inspire-actions">
+            <div class="inspire-btn" id="inspireShuffleBtn" title="换一组"><span>⟳</span></div>
+            <div class="inspire-btn" id="inspireCustomBtn" title="自定义"><span>⚙️</span></div>
+        </div>
+    </div>
+
+    <div class="sec-header">
+        <div class="title">
+            为你推荐
+            <span class="city-tag" id="cityTag">深圳</span>
+        </div>
+        <div class="more" id="recRefreshBtn"><span>⟳</span> 换一批</div>
+    </div>
+
+    <div class="rec-list" id="recList"></div>
+</div>
+
+<!-- ============== p-mine ============== -->
+<div class="page p-mine app-container" id="page-mine">
+    <div class="top-bar">
+        <button class="back-btn" id="mineBackBtn">←</button>
+        <div class="page-title">我的</div>
+        <div style="width:36px"></div>
+    </div>
+
+    <div class="profile-head">
+        <div class="profile-avatar" id="mineAvatar">🐱</div>
+        <div class="profile-name">
+            <h2 id="mineUserName">朋友</h2>
+            <p id="mineUserSub">已加入 CityWalk · 探索深圳中</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="stats-row">
+            <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">已生成路线</div></div>
+            <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">已打卡 POI</div></div>
+            <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">收藏路线</div></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="card">
+            <div class="card-head">
+                <div class="card-title"><span class="dot"></span>我的画像</div>
+                <button class="edit-btn" id="mineEditBtn">编辑</button>
+            </div>
+            <div id="mineTagBody"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="menu-list">
+            <div class="menu-item" onclick="alert('待开发')">
+                <div class="menu-icon">📍</div>
+                <div class="menu-text">我去过的地方</div>
+                <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item" onclick="alert('待开发')">
+                <div class="menu-icon">⭐</div>
+                <div class="menu-text">收藏的路线</div>
+                <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item" onclick="alert('待开发')">
+                <div class="menu-icon">🔔</div>
+                <div class="menu-text">通知设置</div>
+                <div class="menu-arrow">›</div>
+            </div>
+            <div class="menu-item" id="mineResetBtn">
+                <div class="menu-icon">🔄</div>
+                <div class="menu-text">重置 demo 数据</div>
+                <div class="menu-arrow">›</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============== Shared Voice Modal ============== -->
+<div class="voice-modal" id="voiceModal">
+    <div class="voice-sheet">
+        <div class="voice-mic">🎤</div>
+        <div class="voice-tip">说出你想去哪里…</div>
+        <div class="voice-sub">例如：周末想找个安静的地方喝咖啡</div>
+        <button class="voice-cancel" id="voiceCancelBtn">取消</button>
+    </div>
+</div>
+
+<!-- ============== Shared Bottom Tab ============== -->
+<div class="tab-bar" id="tabBar">
+    <div class="tab-item" data-tab="home">
+        <div class="tab-icon">🏠</div>
+        <div>首页</div>
+    </div>
+    <div class="tab-item" data-tab="route">
+        <div class="tab-icon">🗺️</div>
+        <div>我的路线</div>
+    </div>
+    <div class="tab-item" data-tab="mine">
+        <div class="tab-icon">👤</div>
+        <div>我的</div>
+    </div>
+</div>
+
+<!-- 自定义偏好抽屉（必须在 <script> 之前插入，确保 init 时能拿到 DOM） -->
+<div class="preset-sheet-mask" id="presetSheetMask"></div>
+<div class="preset-sheet" id="presetSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+        <h3>自定义偏好</h3>
+        <div class="sheet-clear" id="sheetClearBtn">清空</div>
+    </div>
+    <div class="preset-row">
+        <div class="preset-label">⏱️ 时间</div>
+        <div class="preset-chips" data-group="time"></div>
+    </div>
+    <div class="preset-row">
+        <div class="preset-label">👥 人数</div>
+        <div class="preset-chips" data-group="people"></div>
+    </div>
+    <div class="preset-row">
+        <div class="preset-label">🎯 偏好</div>
+        <div class="preset-chips" data-group="style"></div>
+    </div>
+    <div class="sheet-foot">
+        <button class="sheet-apply" id="sheetApplyBtn">应用并写入</button>
+    </div>
+</div>
+
+<!-- 地点选择抽屉（图片识别后弹出） -->
+<div class="preset-sheet-mask" id="poiSheetMask"></div>
+<div class="preset-sheet" id="poiSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+        <h3 id="poiSheetTitle">AI 识别到这些地点</h3>
+        <div class="sheet-clear" id="poiClearBtn">全不选</div>
+    </div>
+    <div class="poi-search" id="poiSearchWrap" style="display:none;">
+        <input type="text" id="poiSearchInput" placeholder="筛选地点…">
+    </div>
+    <div class="poi-list" id="poiList"></div>
+    <div class="sheet-foot">
+        <button class="sheet-apply" id="poiApplyBtn">加入行程（<span id="poiApplyCount">0</span>）</button>
+    </div>
+</div>
+
+<!-- 通用 toast -->
+<div class="cw-toast" id="cwToast">
+    <div class="spinner" id="cwToastSpinner"></div>
+    <div id="cwToastText">处理中…</div>
+</div>
+
+<script>
+/* =====================================================================
+ * Router + Page lifecycle
+ * ===================================================================== */
+const Router = (() => {
+    const PAGES = ['login', 'profile', 'home', 'mine'];
+    const inits = {};
+
+    function show(name) {
+        if (!PAGES.includes(name)) name = 'home';
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        const el = document.getElementById('page-' + name);
+        if (el) el.classList.add('active');
+
+        // Tab bar 仅在 home/mine 显示
+        const tab = document.getElementById('tabBar');
+        if (name === 'home' || name === 'mine') {
+            tab.classList.remove('hidden');
+            tab.querySelectorAll('.tab-item').forEach(it => {
+                it.classList.toggle('active', it.dataset.tab === name);
+            });
+        } else {
+            tab.classList.add('hidden');
+        }
+
+        // 滚回顶部
+        window.scrollTo(0, 0);
+
+        // 调用对应 init
+        if (inits[name]) inits[name]();
+    }
+
+    function go(name) {
+        if (location.hash === '#' + name) {
+            show(name); // 同 hash 也手动触发
+        } else {
+            location.hash = name;
+        }
+    }
+
+    function register(name, initFn) { inits[name] = initFn; }
+
+    function start() {
+        window.addEventListener('hashchange', () => {
+            const name = location.hash.replace('#', '') || decideDefault();
+            show(name);
+        });
+        const name = location.hash.replace('#', '') || decideDefault();
+        // 同步 hash，避免刷新后丢
+        if (!location.hash) location.replace('#' + name);
+        show(name);
+    }
+
+    // 根据 localStorage 决定默认入口
+    function decideDefault() {
+        const basic = JSON.parse(localStorage.getItem('cw_profile_basic') || 'null');
+        const tags = JSON.parse(localStorage.getItem('cw_profile_tags') || 'null');
+        if (!basic) return 'login';
+        if (!tags) return 'profile';
+        return 'home';
+    }
+
+    return { register, go, start };
+})();
+
+/* =====================================================================
+ * Tab bar 公共绑定
+ * ===================================================================== */
+document.querySelectorAll('#tabBar .tab-item').forEach(it => {
+    it.addEventListener('click', () => {
+        const t = it.dataset.tab;
+        if (t === 'home') Router.go('home');
+        else if (t === 'mine') Router.go('mine');
+        else alert('路线历史，待开发');
+    });
+});
+
+/* =====================================================================
+ * Voice modal 公共
+ * ===================================================================== */
+const Voice = {
+    open() { document.getElementById('voiceModal').classList.add('show'); },
+    close() { document.getElementById('voiceModal').classList.remove('show'); }
+};
+document.getElementById('voiceModal').addEventListener('click', (e) => {
+    if (e.target.id === 'voiceModal') Voice.close();
+});
+document.getElementById('voiceCancelBtn').addEventListener('click', Voice.close);
+
+/* =====================================================================
+ * Page: login
+ * ===================================================================== */
+Router.register('login', (() => {
+    let bound = false;
+    const draft = { avatarType: 'emoji', avatar: '🐱', name: '' };
+
+    return function init() {
+        // 已登录直接跳过
+        const exist = JSON.parse(localStorage.getItem('cw_profile_basic') || 'null');
+        if (exist) {
+            // 还原已选状态
+            draft.avatarType = exist.avatarType;
+            draft.avatar = exist.avatar;
+            draft.name = exist.name || '';
+        }
+
+        // 还原 UI
+        const preview = document.getElementById('avatarPreview');
+        if (draft.avatarType === 'image') {
+            preview.innerHTML = `<img src="${draft.avatar}" alt="avatar">`;
+            document.querySelectorAll('#emojiGrid .emoji-item').forEach(x => x.classList.remove('active'));
+        } else {
+            preview.innerHTML = draft.avatar;
+            document.querySelectorAll('#emojiGrid .emoji-item').forEach(x => {
+                x.classList.toggle('active', x.dataset.emoji === draft.avatar);
+            });
+        }
+        document.getElementById('nameInput').value = draft.name;
+
+        if (bound) return;
+        bound = true;
+
+        document.querySelectorAll('#emojiGrid .emoji-item').forEach(el => {
+            el.addEventListener('click', () => {
+                document.querySelectorAll('#emojiGrid .emoji-item').forEach(x => x.classList.remove('active'));
+                el.classList.add('active');
+                const emoji = el.dataset.emoji;
+                draft.avatarType = 'emoji';
+                draft.avatar = emoji;
+                document.getElementById('avatarPreview').innerHTML = emoji;
+            });
+        });
+
+        document.getElementById('avatarUpload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                draft.avatarType = 'image';
+                draft.avatar = ev.target.result;
+                document.getElementById('avatarPreview').innerHTML = `<img src="${ev.target.result}" alt="avatar">`;
+                document.querySelectorAll('#emojiGrid .emoji-item').forEach(x => x.classList.remove('active'));
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('nameInput').addEventListener('input', (e) => {
+            draft.name = e.target.value.trim();
+        });
+
+        document.getElementById('loginNextBtn').addEventListener('click', () => {
+            const name = document.getElementById('nameInput').value.trim();
+            if (name.length < 2) {
+                alert('请输入至少 2 个字符的名字');
+                return;
+            }
+            draft.name = name;
+            localStorage.setItem('cw_profile_basic', JSON.stringify(draft));
+            Router.go('profile');
+        });
+    };
+})());
+
+/* =====================================================================
+ * Page: profile (画像卡片堆)
+ * ===================================================================== */
+Router.register('profile', (() => {
+    let bound = false;
+    const cards = [
+        {
+            num: '01 · 美食偏好',
+            q: '吃这件事，你是？',
+            desc: '我们会优先给你推荐对的味道',
+            type: 'single',
+            options: [
+                { emoji: '🌶️', title: '尝鲜派', sub: '永远在找下一家网红店' },
+                { emoji: '🍜', title: '恋旧派', sub: '老味道才是真味道' },
+                { emoji: '🍱', title: '兼容派', sub: '看心情，都来一点' }
+            ]
+        },
+        {
+            num: '02 · 打卡节奏',
+            q: '玩一天你想怎么走？',
+            desc: '决定推荐路线的密度和节奏',
+            type: 'single',
+            options: [
+                { emoji: '🐢', title: '不紧不慢', sub: '一天 2-3 个点，慢慢逛' },
+                { emoji: '🚶', title: '舒适漫步', sub: '一天 4-5 个点，刚刚好' },
+                { emoji: '🏃', title: '多打卡党', sub: '一天 6+ 个点，最大化体验' }
+            ]
+        },
+        {
+            num: '03 · 出行场景',
+            q: '你最常和谁一起出门？',
+            desc: '可多选，最多 3 个',
+            type: 'multi',
+            max: 3,
+            options: [
+                { label: '一个人' }, { label: '伴侣' }, { label: '闺蜜' },
+                { label: '家人' }, { label: '同事' }, { label: '带娃' },
+                { label: '老人' }, { label: '宠物' }
+            ]
+        },
+        {
+            num: '04 · 风格雷达',
+            q: '你喜欢的城市味道？',
+            desc: '可多选，至少选 2 个',
+            type: 'multi',
+            min: 2,
+            options: [
+                { label: '🏛️ 文艺' }, { label: '☕ 咖啡' }, { label: '🌳 自然' },
+                { label: '🎨 艺术' }, { label: '🛍️ 市集' }, { label: '🏯 历史' },
+                { label: '🌃 夜景' }, { label: '🏖️ 海边' }, { label: '🎵 livehouse' },
+                { label: '📷 出片' }, { label: '🍷 微醺' }, { label: '🧘 治愈' }
+            ]
+        }
+    ];
+
+    let answers, currentIdx;
+
+    function renderStack() {
+        const stack = document.getElementById('cardStack');
+        stack.innerHTML = '';
+        cards.forEach((c, i) => {
+            const layer = i - currentIdx;
+            if (layer < 0 || layer > 4) return;
+            const card = document.createElement('div');
+            card.className = `profile-card layer-${layer}`;
+            card.dataset.idx = i;
+
+            let bodyHTML = '';
+            if (c.type === 'single') {
+                bodyHTML = `<div class="option-list">${c.options.map((o,oi) =>
+                    `<div class="option-item" data-oi="${oi}">
+                        <div class="option-emoji">${o.emoji}</div>
+                        <div class="option-text">
+                            <div class="option-title">${o.title}</div>
+                            <div class="option-sub">${o.sub}</div>
+                        </div>
+                    </div>`
+                ).join('')}</div>`;
+            } else {
+                const hint = c.min ? `至少选 ${c.min} 个` : (c.max ? `最多选 ${c.max} 个` : '可多选');
+                bodyHTML = `
+                    <div class="chip-hint">${hint}</div>
+                    <div class="chip-grid">${c.options.map((o,oi) =>
+                        `<div class="chip" data-oi="${oi}">${o.label}</div>`
+                    ).join('')}</div>
+                    <div class="card-footer">
+                        <button class="confirm-btn" disabled>确定</button>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="card-num">${c.num}</div>
+                <div class="card-q">${c.q}</div>
+                <div class="card-desc">${c.desc}</div>
+                ${bodyHTML}
+            `;
+            stack.appendChild(card);
+            if (layer === 0) bindCardEvents(card, c, i);
+        });
+        renderDots();
+    }
+
+    function bindCardEvents(card, c, i) {
+        if (c.type === 'single') {
+            card.querySelectorAll('.option-item').forEach(el => {
+                el.onclick = () => {
+                    answers[i] = c.options[el.dataset.oi].title;
+                    dismissCard(card);
+                };
+            });
+        } else {
+            const selectedIdx = new Set();
+            const chips = card.querySelectorAll('.chip');
+            const btn = card.querySelector('.confirm-btn');
+            chips.forEach(chip => {
+                chip.onclick = () => {
+                    const oi = +chip.dataset.oi;
+                    if (selectedIdx.has(oi)) {
+                        selectedIdx.delete(oi);
+                        chip.classList.remove('selected');
+                    } else {
+                        if (c.max && selectedIdx.size >= c.max) return;
+                        selectedIdx.add(oi);
+                        chip.classList.add('selected');
+                    }
+                    const ok = c.min ? selectedIdx.size >= c.min : selectedIdx.size > 0;
+                    btn.disabled = !ok;
+                };
+            });
+            btn.onclick = () => {
+                if (btn.disabled) return;
+                answers[i] = Array.from(selectedIdx).map(oi => c.options[oi].label);
+                dismissCard(card);
+            };
+        }
+    }
+
+    function dismissCard(card) {
+        card.classList.add('dismissed');
+        setTimeout(() => {
+            currentIdx++;
+            if (currentIdx >= cards.length) saveAndDone();
+            else renderStack();
+        }, 380);
+    }
+
+    function renderDots() {
+        const dots = document.getElementById('progressDots');
+        dots.innerHTML = '';
+        cards.forEach((_, i) => {
+            const d = document.createElement('div');
+            d.className = 'progress-dot' + (i < currentIdx ? ' done' : (i === currentIdx ? ' active' : ''));
+            dots.appendChild(d);
+        });
+    }
+
+    function saveAndDone() {
+        const profile = {
+            food: answers[0],
+            pace: answers[1],
+            companion: answers[2],
+            styles: answers[3]
+        };
+        localStorage.setItem('cw_profile_tags', JSON.stringify(profile));
+        document.getElementById('doneOverlay').classList.add('show');
+    }
+
+    return function init() {
+        // 每次进入都重置进度（demo 期望可重选）
+        answers = new Array(cards.length).fill(null);
+        currentIdx = 0;
+        document.getElementById('doneOverlay').classList.remove('show');
+        renderStack();
+
+        if (bound) return;
+        bound = true;
+        document.getElementById('profileSkipBtn').addEventListener('click', () => {
+            if (!confirm('跳过后会用通用推荐，确定吗？')) return;
+            localStorage.setItem('cw_profile_tags', JSON.stringify({ skipped: true }));
+            Router.go('home');
+        });
+        document.getElementById('profileDoneBtn').addEventListener('click', () => {
+            Router.go('home');
+        });
+    };
+})());
+
+/* =====================================================================
+ * Page: home
+ * ===================================================================== */
+Router.register('home', (() => {
+    let bound = false;
+
+    // 三组预设
+    const PRESETS = {
+        time:   ['1小时遛弯', '半天 3-4h', '一整天', '夜场（晚6点后）', '周末两天'],
+        people: ['一个人', '两个人约会', '三五好友', '带娃出门', '带老人', '宠物同行'],
+        style:  ['出片打卡', '美食探店', '咖啡漫游', '自然徒步', '小众安静', '艺术展览', '夜景微醺']
+    };
+
+    // 推荐池（>2个，用于轮换）
+    const REC_POOL = [
+        { title:'南头古城慢生活半日', desc:'600 年古城+独立咖啡+市集，刚好一下午', cover:'cover-1', meta:['📍 南山','⏱️ 3-4h','🚶 漫步'], match:t => t.pace==='不紧不慢' && '为你定制' },
+        { title:'深圳湾日落骑行环线', desc:'海风+晚霞+网红补给点，治愈感拉满',     cover:'cover-2', meta:['📍 后海','⏱️ 2h','🚴 骑行'],   match:t => (t.styles||[]).some(s=>s.includes('自然')||s.includes('海')) && '你的偏好' },
+        { title:'蛇口老街市集探店',   desc:'海鲜大排档 + 复古街区 + 独立小店',         cover:'cover-3', meta:['📍 蛇口','⏱️ 4h','🍜 美食'],    match:t => t.food==='尝鲜派' && '尝鲜推荐' },
+        { title:'华侨城 OCT 创意一日', desc:'艺术展 + 设计书店 + Livehouse 夜场',      cover:'cover-4', meta:['📍 华侨城','⏱️ 全天','🎨 文艺'], match:t => (t.styles||[]).some(s=>s.includes('艺术')||s.includes('文艺')) && '懂你' },
+        { title:'梧桐山日出徒步',     desc:'凌晨出发，云海日出，硬核但值得',           cover:'cover-2', meta:['📍 罗湖','⏱️ 5h','🥾 徒步'],    match:t => (t.styles||[]).some(s=>s.includes('自然')) && '你的偏好' },
+        { title:'盐田海鲜+栈道夜跑',  desc:'吃完海鲜沿海岸线 5 公里，夜风超舒服',     cover:'cover-3', meta:['📍 盐田','⏱️ 3h','🌃 夜景'],    match:t => (t.styles||[]).some(s=>s.includes('夜景')) && '夜猫推荐' },
+        { title:'东门老街扫街半日',   desc:'港式茶餐厅 + 复古港风街景 + 小吃',         cover:'cover-1', meta:['📍 罗湖','⏱️ 3h','📷 出片'],    match:t => (t.styles||[]).some(s=>s.includes('出片')) && '出片好去处' },
+        { title:'光明农场亲子一日',   desc:'萌宠互动 + 草地野餐 + 摘菜体验',           cover:'cover-4', meta:['📍 光明','⏱️ 全天','👨‍👩‍👧 亲子'], match:t => '家庭友好' }
+    ];
+
+    // 状态
+    const state = {
+        thumbs: [],                     // [{url, name, pois?:[{name,desc}], status?:'pending'|'ok'|'fail'}]
+        selected: { time:null, people:null, style:null }, // 单选
+        recOffset: 0,
+        tags: {},
+        // 地点抽屉
+        poiCandidates: [],              // 当前抽屉里待选的 [{name,desc}]
+        poiSelected: new Set(),         // 当前抽屉中已勾选的 name
+        confirmedPois: []               // 已应用到输入框的 [{name,desc}]
+    };
+
+    // 豆包 vision 调用走后端代理 /api/vision，API Key 仅在服务端 .env 中
+    const VISION_API = '/api/vision';
+
+    function render() {
+        const basic = JSON.parse(localStorage.getItem('cw_profile_basic') || '{}');
+        state.tags = JSON.parse(localStorage.getItem('cw_profile_tags') || '{}');
+
+        const av = document.getElementById('userAvatar');
+        if (basic.avatarType === 'image' && basic.avatar) {
+            av.innerHTML = `<img src="${basic.avatar}" alt="">`;
+        } else {
+            av.innerHTML = basic.avatar || '🐱';
+        }
+        const name = basic.name || '朋友';
+        document.getElementById('greetTitle').innerHTML =
+            `Hi，<span style="background:linear-gradient(135deg,#1e5fd8,#5b9eff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">${name}</span> 👋`;
+
+        const h = new Date().getHours();
+        let g = '今天想去哪里走走？';
+        if (h < 11) g = '早上好，要不要找家咖啡馆开启一天？';
+        else if (h < 14) g = '中午啦，附近有不错的小馆子等你';
+        else if (h < 18) g = '下午时光，适合慢慢走走';
+        else g = '晚风正好，要去哪里逛逛？';
+        document.getElementById('greetSub').textContent = g;
+
+        renderInspire();
+        renderRecs();
+        renderThumbs();
+    }
+
+    /** 根据当前小时智能猜一组默认组合 */
+    function pickSmartCombo() {
+        const h = new Date().getHours();
+        let timeIdx = 1; // 默认半天
+        if (h < 11) timeIdx = 0;            // 1小时遛弯
+        else if (h < 14) timeIdx = 1;       // 半天
+        else if (h < 17) timeIdx = 1;
+        else if (h < 21) timeIdx = 3;       // 夜场
+        else timeIdx = 0;
+        const peopleIdx = Math.floor(Math.random() * PRESETS.people.length);
+        const styleIdx  = Math.floor(Math.random() * PRESETS.style.length);
+        return {
+            time: PRESETS.time[timeIdx],
+            people: PRESETS.people[peopleIdx],
+            style: PRESETS.style[styleIdx]
+        };
+    }
+
+    function renderInspire() {
+        // 若用户从未选过任何项，给一个智能默认
+        const s = state.selected;
+        if (!s.time && !s.people && !s.style) {
+            const sc = pickSmartCombo();
+            // 只是用于显示，不真的写入 selected，避免误用户提交
+            renderInspireBar({ ...sc, _hint: true });
+        } else {
+            renderInspireBar(s);
+        }
+    }
+
+    function renderInspireBar(combo) {
+        const cont = document.getElementById('inspireContent');
+        const items = [];
+        if (combo.time)   items.push({ k:'time',   v:combo.time });
+        if (combo.people) items.push({ k:'people', v:combo.people });
+        if (combo.style)  items.push({ k:'style',  v:combo.style });
+        if (!items.length) {
+            cont.innerHTML = `<span class="ic-chip placeholder">点这里选择 时间 / 人数 / 偏好</span>`;
+            return;
+        }
+        const cls = combo._hint ? 'ic-chip placeholder' : 'ic-chip';
+        cont.innerHTML = items.map(it => `<span class="${cls}">${it.v}</span>`).join('');
+    }
+
+    /** 抽屉内三组完整 chip */
+    function renderSheetPresets() {
+        Object.keys(PRESETS).forEach(group => {
+            const wrap = document.querySelector(`#presetSheet .preset-chips[data-group="${group}"]`);
+            wrap.innerHTML = PRESETS[group].map(t =>
+                `<div class="preset-chip${state.selected[group]===t?' selected':''}" data-val="${t}">${t}</div>`
+            ).join('');
+            wrap.querySelectorAll('.preset-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const val = chip.dataset.val;
+                    if (state.selected[group] === val) state.selected[group] = null;
+                    else state.selected[group] = val;
+                    renderSheetPresets();
+                });
+            });
+        });
+    }
+
+    function openSheet() {
+        renderSheetPresets();
+        document.getElementById('presetSheetMask').classList.add('show');
+        document.getElementById('presetSheet').classList.add('show');
+    }
+    function closeSheet() {
+        document.getElementById('presetSheetMask').classList.remove('show');
+        document.getElementById('presetSheet').classList.remove('show');
+    }
+
+    function shuffleInspire() {
+        // 一键随机一组并写入 selected
+        const sc = pickSmartCombo();
+        // 二次随机 time 让"换一组"真的随机
+        sc.time = PRESETS.time[Math.floor(Math.random() * PRESETS.time.length)];
+        state.selected = sc;
+        const btn = document.getElementById('inspireShuffleBtn');
+        btn.classList.add('spinning');
+        setTimeout(() => {
+            renderInspire();
+            syncInputFromPresets();
+            btn.classList.remove('spinning');
+        }, 280);
+    }
+
+    /* =========================================================
+     * Toast
+     * ========================================================= */
+    function showToast(text, opts) {
+        const el = document.getElementById('cwToast');
+        document.getElementById('cwToastText').textContent = text || '';
+        document.getElementById('cwToastSpinner').style.display = (opts && opts.loading === false) ? 'none' : '';
+        el.classList.add('show');
+        if (opts && opts.timeout) {
+            clearTimeout(showToast._t);
+            showToast._t = setTimeout(hideToast, opts.timeout);
+        }
+    }
+    function hideToast() {
+        document.getElementById('cwToast').classList.remove('show');
+    }
+
+    /* =========================================================
+     * 图片地点识别
+     * ========================================================= */
+    async function recognizePoisFromImages(thumbs) {
+        showToast('AI 在检索相关行程点…');
+        const promises = thumbs.map(t => recognizeOne(t).then(pois => {
+            t.pois = pois;
+            t.status = 'ok';
+            return pois;
+        }).catch(err => {
+            console.error('[vision] failed:', err);
+            t.pois = [];
+            t.status = 'fail';
+            return [];
+        }));
+        const results = await Promise.all(promises);
+        renderThumbs();
+        // 合并去重
+        const merged = [];
+        const seen = new Set();
+        results.flat().forEach(p => {
+            const key = (p.name || '').trim();
+            if (!key || seen.has(key)) return;
+            seen.add(key);
+            merged.push({ name: key, desc: (p.desc || '').trim() });
+        });
+        if (!merged.length) {
+            showToast('没识别到明确的地点，可以直接描述给我～', { loading: false, timeout: 2200 });
+            return;
+        }
+        hideToast();
+        openPoiSheet(merged);
+    }
+
+    async function recognizeOne(thumb) {
+        // 走后端代理：服务端持有 ARK_API_KEY，避免在前端暴露
+        const prompt = `请仔细识别图片中出现的所有"具体地点 / 地标 / 店铺 / 景点 / 街区 / 商圈 / 园区"等信息，包括图片中的招牌文字、路标、Logo、建筑特征、地理特征等。
+                            
+严格要求：
+1. 只输出真实存在的、可作为行程点的地点名称，不要泛指词（例如"咖啡馆""公园"这种没有专名的不要）；
+2. 每个地点尽量给一个 8 字以内的简短描述（如：网红打卡点、民国风街区、海景咖啡馆 等）；
+3. 如果完全识别不到地点，返回空数组；
+4. 严格输出 JSON，且仅输出 JSON，不要任何其它解释文字、Markdown、注释。
+
+输出格式：
+{"pois":[{"name":"地点专名","desc":"8字内简介"}]}`;
+
+        const res = await fetch(VISION_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image_url: thumb.url, prompt })
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        const text = (data && typeof data.text === 'string') ? data.text : '';
+        // 抽取 JSON
+        const m = text.match(/\{[\s\S]*\}/);
+        if (!m) return [];
+        try {
+            const j = JSON.parse(m[0]);
+            return Array.isArray(j.pois) ? j.pois.filter(p => p && p.name) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    /* =========================================================
+     * 地点选择抽屉
+     * ========================================================= */
+    function openPoiSheet(pois) {
+        state.poiCandidates = pois;
+        // 默认全选，方便用户一键带入
+        state.poiSelected = new Set(pois.map(p => p.name));
+        // 是否启用筛选（>=4 项）
+        document.getElementById('poiSearchWrap').style.display = pois.length >= 4 ? '' : 'none';
+        document.getElementById('poiSearchInput').value = '';
+        document.getElementById('poiSheetTitle').textContent = `AI 识别到 ${pois.length} 个地点`;
+        renderPoiList('');
+        document.getElementById('poiSheetMask').classList.add('show');
+        document.getElementById('poiSheet').classList.add('show');
+    }
+    function closePoiSheet() {
+        document.getElementById('poiSheetMask').classList.remove('show');
+        document.getElementById('poiSheet').classList.remove('show');
+    }
+    function renderPoiList(filter) {
+        const list = document.getElementById('poiList');
+        const f = (filter || '').trim().toLowerCase();
+        const items = state.poiCandidates.filter(p =>
+            !f || p.name.toLowerCase().includes(f) || (p.desc || '').toLowerCase().includes(f)
+        );
+        if (!items.length) {
+            list.innerHTML = `<div class="poi-empty">没有匹配的地点</div>`;
+        } else {
+            list.innerHTML = items.map(p => {
+                const sel = state.poiSelected.has(p.name) ? ' selected' : '';
+                const desc = p.desc ? `<div class="poi-desc">${escapeHtml(p.desc)}</div>` : '';
+                return `<div class="poi-item${sel}" data-name="${escapeHtml(p.name)}">
+                    <div class="poi-check"></div>
+                    <div class="poi-icon">📍</div>
+                    <div class="poi-info">
+                        <div class="poi-name">${escapeHtml(p.name)}</div>
+                        ${desc}
+                    </div>
+                </div>`;
+            }).join('');
+            list.querySelectorAll('.poi-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const n = el.dataset.name;
+                    if (state.poiSelected.has(n)) state.poiSelected.delete(n);
+                    else state.poiSelected.add(n);
+                    el.classList.toggle('selected');
+                    updatePoiApplyCount();
+                });
+            });
+        }
+        updatePoiApplyCount();
+    }
+    function updatePoiApplyCount() {
+        document.getElementById('poiApplyCount').textContent = state.poiSelected.size;
+        const btn = document.getElementById('poiApplyBtn');
+        btn.disabled = state.poiSelected.size === 0;
+    }
+    function applyPois() {
+        // 写入到 confirmedPois，同时同步输入框前缀
+        state.confirmedPois = state.poiCandidates.filter(p => state.poiSelected.has(p.name));
+        syncInputFromPresets();
+        closePoiSheet();
+    }
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function syncInputFromPresets() {
+        const parts = [];
+        if (state.selected.time)   parts.push(state.selected.time);
+        if (state.selected.people) parts.push(state.selected.people);
+        if (state.selected.style)  parts.push(state.selected.style);
+        // 地点：以 "📍A/B/C" 形式追加在最前面
+        if (state.confirmedPois && state.confirmedPois.length) {
+            parts.unshift('📍' + state.confirmedPois.map(p => p.name).join('/'));
+        }
+        const presetText = parts.join(' · ');
+        const input = document.getElementById('mainInput');
+        // 只替换前缀预设部分（用 zero-width 标记位）
+        const sep = '｜';
+        const cur = input.value;
+        const idx = cur.indexOf(sep);
+        const userTail = idx >= 0 ? cur.slice(idx + 1).trimStart() : (cur && !parts.length ? cur : '');
+        if (presetText && userTail) input.value = `${presetText} ${sep} ${userTail}`;
+        else if (presetText) input.value = `${presetText} ${sep} `;
+        else input.value = userTail;
+        autoResizeMainInput();
+    }
+
+    /** textarea 高度自适应：1 行 ~ 6 行（max-height 由 CSS 控制） */
+    function autoResizeMainInput() {
+        const el = document.getElementById('mainInput');
+        if (!el || el.tagName !== 'TEXTAREA') return;
+        el.style.height = 'auto';
+        el.style.height = Math.min(el.scrollHeight, 132) + 'px';
+    }
+
+    function renderThumbs() {
+        const row = document.getElementById('thumbRow');
+        row.innerHTML = state.thumbs.map((t, i) => {
+            let badge = '';
+            if (t.status === 'pending') badge = `<div class="thumb-badge" style="background:rgba(20,30,60,0.7);">识别中</div>`;
+            else if (t.status === 'ok' && t.pois && t.pois.length) badge = `<div class="thumb-badge">📍${t.pois.length}</div>`;
+            else if (t.status === 'fail') badge = `<div class="thumb-badge" style="background:rgba(180,40,40,0.85);">失败</div>`;
+            return `
+            <div class="thumb-item" data-i="${i}" title="${t.pois && t.pois.length ? '点击重新选择地点' : ''}">
+                <img src="${t.url}" alt="">
+                ${badge}
+                <button class="thumb-del" data-i="${i}" title="删除">×</button>
+            </div>`;
+        }).join('');
+        row.classList.toggle('has', state.thumbs.length > 0);
+        row.querySelectorAll('.thumb-del').forEach(b => {
+            b.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const i = +b.dataset.i;
+                state.thumbs.splice(i, 1);
+                // 重新计算还能保留的已确认地点：必须仍出现在剩余图片识别结果中
+                const stillExist = new Set();
+                state.thumbs.forEach(x => (x.pois || []).forEach(p => stillExist.add(p.name)));
+                const before = state.confirmedPois.length;
+                state.confirmedPois = state.confirmedPois.filter(p => stillExist.has(p.name));
+                if (state.confirmedPois.length !== before) syncInputFromPresets();
+                renderThumbs();
+                updateUploadBtn();
+            });
+        });
+        // 点击缩略图：若已识别到地点，重新打开 POI 抽屉
+        row.querySelectorAll('.thumb-item').forEach(el => {
+            el.addEventListener('click', () => {
+                const i = +el.dataset.i;
+                const t = state.thumbs[i];
+                if (t && t.pois && t.pois.length) {
+                    // 合并所有图片的地点供选择
+                    const merged = [];
+                    const seen = new Set();
+                    state.thumbs.forEach(x => (x.pois || []).forEach(p => {
+                        if (!seen.has(p.name)) { seen.add(p.name); merged.push(p); }
+                    }));
+                    state.poiCandidates = merged;
+                    state.poiSelected = new Set(state.confirmedPois.map(p => p.name));
+                    document.getElementById('poiSearchWrap').style.display = merged.length >= 4 ? '' : 'none';
+                    document.getElementById('poiSearchInput').value = '';
+                    document.getElementById('poiSheetTitle').textContent = `共识别到 ${merged.length} 个地点`;
+                    renderPoiList('');
+                    document.getElementById('poiSheetMask').classList.add('show');
+                    document.getElementById('poiSheet').classList.add('show');
+                }
+            });
+        });
+        updateUploadBtn();
+    }
+    function updateUploadBtn() {
+        const btn = document.getElementById('imgUploadBtn');
+        const n = state.thumbs.length;
+        // 在📷按钮上叠一个轻量徽章，因为缩略图不再显示在输入框，徽章是用户唯一能看到的「已上传/已识别」反馈
+        let badge = btn.querySelector('.upload-badge');
+        const recognizedCount = state.thumbs.reduce((s, t) => s + ((t.pois && t.pois.length) || 0), 0);
+        if (n > 0) {
+            if (!badge) {
+                badge = document.createElement('span');
+                badge.className = 'upload-badge';
+                btn.appendChild(badge);
+            }
+            badge.textContent = recognizedCount > 0 ? `📍${recognizedCount}` : `${n}`;
+        } else if (badge) {
+            badge.remove();
+        }
+        if (n >= 3) {
+            btn.style.opacity = '0.45';
+            btn.style.pointerEvents = 'none';
+            btn.title = '已达上限（3 张）';
+        } else {
+            btn.style.opacity = '';
+            btn.style.pointerEvents = '';
+            btn.title = n > 0 ? `已上传 ${n}/3，可继续上传` : `上传图片（≤3 张）`;
+        }
+    }
+
+    function renderRecs() {
+        const t = state.tags;
+        // 取连续 2 个
+        const n = REC_POOL.length;
+        const a = REC_POOL[state.recOffset % n];
+        const b = REC_POOL[(state.recOffset + 1) % n];
+        const list = [a, b].map(r => ({
+            ...r,
+            personal: r.match ? r.match(t) : null
+        }));
+        document.getElementById('recList').innerHTML = list.map((r, idx) => `
+            <div class="rec-card" data-idx="${idx}">
+                <div class="rec-cover ${r.cover}"></div>
+                ${r.personal ? `<div class="rec-tag-personal">✨ ${r.personal}</div>` : ''}
+                <div class="rec-body">
+                    <div>
+                        <div class="rec-title">${r.title}</div>
+                        <div class="rec-desc">${r.desc}</div>
+                    </div>
+                    <div class="rec-meta">
+                        ${r.meta.map(m => `<span class="meta-tag">${m}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        document.querySelectorAll('#recList .rec-card').forEach(el => {
+            el.addEventListener('click', () => {
+                const r = list[+el.dataset.idx];
+                sessionStorage.setItem('cw_pending_query', r.title);
+                alert('路线规划页正在重做中～\n已记录你的诉求：' + r.title);
+            });
+        });
+    }
+
+    function refreshRecs() {
+        const btn = document.getElementById('recRefreshBtn');
+        btn.classList.add('spinning');
+        setTimeout(() => {
+            state.recOffset = (state.recOffset + 2) % REC_POOL.length;
+            renderRecs();
+            btn.classList.remove('spinning');
+        }, 350);
+    }
+
+    return function init() {
+        render();
+        if (bound) return;
+        bound = true;
+
+        document.getElementById('userAvatar').addEventListener('click', () => Router.go('mine'));
+        document.getElementById('voiceOpenBtn').addEventListener('click', Voice.open);
+
+        // 主输入框：自适应换行 + Enter 发送（Shift+Enter 换行）
+        const mainInputEl = document.getElementById('mainInput');
+        mainInputEl.addEventListener('input', autoResizeMainInput);
+        mainInputEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+                e.preventDefault();
+                document.getElementById('goPlanBtn').click();
+            }
+        });
+        autoResizeMainInput();
+
+        document.getElementById('goPlanBtn').addEventListener('click', () => {
+            const txt = document.getElementById('mainInput').value.trim();
+            if (!txt && state.thumbs.length === 0) { alert('先告诉我你想要的路线，或上传图片～'); return; }
+            const payload = {
+                text: txt,
+                images: state.thumbs.map(t => t.url),
+                presets: { ...state.selected },
+                pois: state.confirmedPois.map(p => ({ name: p.name, desc: p.desc }))
+            };
+            sessionStorage.setItem('cw_pending_query', JSON.stringify(payload));
+            alert('路线规划页正在重做中～\n已记录:\n' + (txt || '(仅图片)') + (state.thumbs.length ? `\n图片 ${state.thumbs.length} 张` : ''));
+        });
+
+        document.getElementById('imgUpload').addEventListener('change', (e) => {
+            const files = Array.from(e.target.files || []);
+            if (!files.length) return;
+            const slot = 3 - state.thumbs.length;
+            if (slot <= 0) { alert('最多上传 3 张'); e.target.value = ''; return; }
+            const picks = files.slice(0, slot);
+            if (files.length > slot) alert(`最多 3 张，已为你保留前 ${slot} 张`);
+            let pending = picks.length;
+            const newThumbs = [];
+            picks.forEach(f => {
+                const r = new FileReader();
+                r.onload = (ev) => {
+                    const t = { url: ev.target.result, name: f.name, status: 'pending' };
+                    state.thumbs.push(t);
+                    newThumbs.push(t);
+                    pending--;
+                    if (pending === 0) {
+                        renderThumbs();
+                        // 全部读取完后触发 AI 识别
+                        recognizePoisFromImages(newThumbs);
+                    }
+                };
+                r.readAsDataURL(f);
+            });
+            e.target.value = '';
+        });
+
+        document.getElementById('recRefreshBtn').addEventListener('click', refreshRecs);
+
+        // 灵感条 & 抽屉
+        document.getElementById('inspireBar').addEventListener('click', (e) => {
+            // 点空白区也能打开（若不在两个按钮上）
+            if (e.target.closest('.inspire-actions')) return;
+            openSheet();
+        });
+        document.getElementById('inspireShuffleBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            shuffleInspire();
+        });
+        document.getElementById('inspireCustomBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            openSheet();
+        });
+        document.getElementById('presetSheetMask').addEventListener('click', closeSheet);
+        document.getElementById('sheetClearBtn').addEventListener('click', () => {
+            state.selected = { time:null, people:null, style:null };
+            renderSheetPresets();
+        });
+        document.getElementById('sheetApplyBtn').addEventListener('click', () => {
+            renderInspire();
+            syncInputFromPresets();
+            closeSheet();
+        });
+
+        // 地点抽屉
+        document.getElementById('poiSheetMask').addEventListener('click', closePoiSheet);
+        document.getElementById('poiClearBtn').addEventListener('click', () => {
+            state.poiSelected.clear();
+            renderPoiList(document.getElementById('poiSearchInput').value);
+        });
+        document.getElementById('poiApplyBtn').addEventListener('click', applyPois);
+        document.getElementById('poiSearchInput').addEventListener('input', (e) => {
+            renderPoiList(e.target.value);
+        });
+    };
+})());
+
+/* =====================================================================
+ * Page: mine
+ * ===================================================================== */
+Router.register('mine', (() => {
+    let bound = false;
+
+    function render() {
+        const basic = JSON.parse(localStorage.getItem('cw_profile_basic') || '{}');
+        const tags = JSON.parse(localStorage.getItem('cw_profile_tags') || '{}');
+
+        const av = document.getElementById('mineAvatar');
+        if (basic.avatarType === 'image' && basic.avatar) {
+            av.innerHTML = `<img src="${basic.avatar}" alt="">`;
+        } else {
+            av.innerHTML = basic.avatar || '🐱';
+        }
+        document.getElementById('mineUserName').textContent = basic.name || '朋友';
+
+        const labels = {
+            food: '美食偏好',
+            pace: '打卡节奏',
+            companion: '出行场景',
+            styles: '风格雷达'
+        };
+        const body = document.getElementById('mineTagBody');
+        if (tags.skipped || (!tags.food && !tags.pace && !tags.styles)) {
+            body.innerHTML = `<div class="tag-empty" style="text-align:center;padding:14px 0;">还没有画像，<span style="color:#5b9eff;font-weight:600;cursor:pointer;" id="emptyEdit">点这里完善 →</span></div>`;
+            const emp = document.getElementById('emptyEdit');
+            if (emp) emp.addEventListener('click', () => Router.go('profile'));
+        } else {
+            let html = '';
+            Object.keys(labels).forEach(k => {
+                const v = tags[k];
+                let valHTML;
+                if (!v) valHTML = '<span class="tag-empty">未设置</span>';
+                else if (Array.isArray(v)) valHTML = v.map(x => `<span class="tag-pill">${x}</span>`).join('');
+                else valHTML = `<span class="tag-pill">${v}</span>`;
+                html += `<div class="tag-row">
+                    <div class="tag-label">${labels[k]}</div>
+                    <div class="tag-values">${valHTML}</div>
+                </div>`;
+            });
+            body.innerHTML = html;
+        }
+    }
+
+    return function init() {
+        render();
+        if (bound) return;
+        bound = true;
+
+        document.getElementById('mineBackBtn').addEventListener('click', () => Router.go('home'));
+        document.getElementById('mineEditBtn').addEventListener('click', () => Router.go('profile'));
+        document.getElementById('mineResetBtn').addEventListener('click', () => {
+            if (!confirm('清空所有 demo 数据并回到登录页？')) return;
+            localStorage.clear();
+            sessionStorage.clear();
+            location.hash = 'login';
+            location.reload();
+        });
+    };
+})());
+
+/* =====================================================================
+ * Boot
+ * ===================================================================== */
+Router.start();
+</script>
+</body>
+</html>

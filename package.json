@@ -1,0 +1,14 @@
+{
+  "name": "citywalk-route-planner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CityWalk 路线规划单页应用 + 极简代理后端（保护豆包 API Key）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
