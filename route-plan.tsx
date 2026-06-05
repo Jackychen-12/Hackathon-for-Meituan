@@ -1004,31 +1004,56 @@ function RoutePlanApp() {
           {!loading && plan ? (
             <>
               {allPlans.length > 1 && (
-                <div className="flex gap-2 mb-3">
-                  {allPlans.map((p, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => {
-                        setActivePlanIdx(i);
-                        setPlan(p);
-                        setSelectedStopId(p.stops[0]?.id || null);
-                        setEditMode(false);
-                      }}
-                      className={`flex-1 px-3 py-2 rounded-2xl text-[12px] font-semibold transition-all ${
-                        i === activePlanIdx
-                          ? 'bg-gradient-to-r from-[#1e5fd8] to-[#5b9eff] text-white shadow-[0_4px_12px_rgba(30,95,216,0.3)]'
-                          : 'bg-[rgba(232,242,255,0.65)] text-[#5a5a62] border border-[rgba(140,180,240,0.3)]'
-                      }`}
-                    >
-                      <div className="truncate">{p.dayTitle?.slice(0, 8) || `方案${i + 1}`}</div>
-                      {(p.personas?.length ?? 0) > 0 && (
-                        <div className="text-[10px] mt-0.5 opacity-75 truncate">
-                          {p.personas!.map((pid: string) => ({photographer:'📷',foodie:'🍜',value:'💰',literary:'📚',local:'🏠',parent:'👶'}[pid] || '🎯')).join('')}
-                        </div>
-                      )}
-                    </button>
-                  ))}
+                <div className="mb-4">
+                  <div className="text-[11px] font-semibold text-[#8e8e93] mb-2 flex items-center gap-1.5">
+                    <Sparkles className="h-3 w-3 text-[#5b9eff]" /> 多 Agent 为你生成了 {allPlans.length} 条方案
+                  </div>
+                  <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1" style={{ WebkitOverflowScrolling: 'touch' }}>
+                    {allPlans.map((p, i) => {
+                      const active = i === activePlanIdx;
+                      const personaMap: Record<string, { emoji: string; label: string }> = {
+                        photographer: { emoji: '📷', label: '拍照党' },
+                        foodie: { emoji: '🍜', label: '美食家' },
+                        value: { emoji: '💰', label: '性价比' },
+                        literary: { emoji: '📚', label: '文青' },
+                        local: { emoji: '🏠', label: '老饕' },
+                        parent: { emoji: '👶', label: '带娃' },
+                      };
+                      return (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => {
+                            setActivePlanIdx(i);
+                            setPlan(p);
+                            setSelectedStopId(p.stops[0]?.id || null);
+                            setEditMode(false);
+                          }}
+                          className={`shrink-0 w-[65%] rounded-[16px] p-3 text-left transition-all ${
+                            active
+                              ? 'bg-gradient-to-br from-[#1e5fd8] to-[#5b9eff] text-white shadow-[0_8px_24px_rgba(30,95,216,0.3)]'
+                              : 'bg-white/80 text-[#1a1a2e] border border-[rgba(140,180,240,0.3)]'
+                          }`}
+                        >
+                          <div className="text-[13px] font-bold truncate">{p.dayTitle || `方案 ${i + 1}`}</div>
+                          {p.stance && <div className={`text-[11px] mt-1 leading-4 line-clamp-2 ${active ? 'text-white/80' : 'text-[#8e8e93]'}`}>{p.stance}</div>}
+                          <div className="flex items-center gap-1 mt-2 flex-wrap">
+                            {(p.personas || []).map((pid: string) => {
+                              const pm = personaMap[pid];
+                              return pm ? (
+                                <span key={pid} className={`text-[10px] px-1.5 py-0.5 rounded-full ${active ? 'bg-white/20 text-white' : 'bg-[rgba(91,158,255,0.1)] text-[#5b9eff]'}`}>
+                                  {pm.emoji} {pm.label}
+                                </span>
+                              ) : null;
+                            })}
+                          </div>
+                          <div className={`text-[10px] mt-1.5 ${active ? 'text-white/60' : 'text-[#8e8e93]'}`}>
+                            {p.stops.length}站 · {p.totalDurationText}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
               <div className="text-[18px] font-bold tracking-[0.01em] text-[#1a1a2e]">{plan.dayTitle}</div>

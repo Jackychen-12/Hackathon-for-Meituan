@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>城脉 · LU — 一条会讲故事的路线</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 协作所有权见 AGENTS.md。各视图 section 标 @owner Tx：
+       T1 = Landing + 全局壳(masthead) · T2 = Compare + Profile · T3 = Detail
+       只改自己 owner 的 <section>；改公共结构需周知。 -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ============== MASTHEAD · @owner T1 ============== -->
+  <header class="masthead">
+    <div class="masthead-rule"></div>
+    <div class="masthead-inner">
+      <div class="logo" data-nav="landing">
+        <span class="logo-seal">路</span>
+        <div class="logo-text">
+          <div class="logo-cn">城 脉</div>
+          <div class="logo-en">LU · The City Pulse</div>
+        </div>
+      </div>
+
+      <nav class="masthead-nav">
+        <a href="#" class="nav-link active" data-nav="landing">
+          <span class="nav-num">壹</span><span class="nav-cn">输入</span>
+        </a>
+        <span class="nav-dot">·</span>
+        <a href="#" class="nav-link" data-nav="compare">
+          <span class="nav-num">贰</span><span class="nav-cn">方案</span>
+        </a>
+        <span class="nav-dot">·</span>
+        <a href="#" class="nav-link" data-nav="detail">
+          <span class="nav-num">叁</span><span class="nav-cn">详情</span>
+        </a>
+      </nav>
+
+      <div class="masthead-meta">
+        <div class="meta-date">丙午年 立夏 · MMXXVI</div>
+        <div class="meta-edition">第 ○○一 期 · DEMO</div>
+        <div class="mode-badge" id="mode-badge" aria-label="数据源模式"></div>
+        <div class="masthead-actions">
+          <button id="settings-btn" class="settings-btn" title="设置" aria-label="设置">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+          <button id="auth-btn" class="auth-btn auth-state-out">
+            <span class="auth-out-label">登录大众点评 →</span>
+            <span class="auth-in-block">
+              <span class="auth-avatar" id="auth-avatar">？</span>
+              <span class="auth-name-block">
+                <span class="auth-name" id="auth-name">游客</span>
+                <span class="auth-tag" id="auth-tag">记忆 v0</span>
+              </span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="masthead-rule double"></div>
+  </header>
+
+  <main id="app">
+
+    <!-- ============================================== -->
+    <!-- ============== VIEW 1 · LANDING · @owner T1 ============== -->
+    <!-- ============================================== -->
+    <section id="view-landing" class="view view-active">
+
+      <div class="landing-hero">
+        <div class="hero-eyebrow">
+          <span class="eyebrow-line"></span>
+          <span class="eyebrow-text">CITY · STORY · ROUTE</span>
+          <span class="eyebrow-line"></span>
+        </div>
+
+        <h1 class="hero-title">
+          <span class="title-line-1">告诉我，</span>
+          <span class="title-line-2">今天想往</span>
+          <span class="title-emphasis">何处</span>
+          <span class="title-line-3">去？</span>
+        </h1>
+
+        <p class="hero-sub">
+          说说今天想去哪、想做什么 ── 我帮你<em>避开人多和踩坑</em>，串成一条顺手的路。
+        </p>
+
+        <div class="hero-input">
+          <textarea
+            id="user-query"
+            class="query-input"
+            placeholder="例：周末在上海，喜欢拍照不想排队，预算 500，想感受一点烟火气..."
+            rows="2"
+            autofocus
+          ></textarea>
+          <div class="hero-input-row">
+            <span class="input-hint">Enter 发送 · Shift+Enter 换行</span>
+            <button class="hero-cta" id="cta-go">
+              <span class="cta-cn">生成路线</span>
+              <span class="cta-en">generate →</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 时空约束识别 -->
+        <div class="intent-chips" id="intent-chips" hidden></div>
+
+        <div class="hero-personas">
+          <div class="personas-label">你今天是哪种人？</div>
+          <div class="personas-list" id="personas-list">
+            <button class="persona-chip" data-persona="photographer"><span class="chip-mark">壹</span>拍照党</button>
+            <button class="persona-chip" data-persona="foodie"><span class="chip-mark">贰</span>美食家</button>
+            <button class="persona-chip" data-persona="value"><span class="chip-mark">叁</span>性价比党</button>
+            <button class="persona-chip" data-persona="parent"><span class="chip-mark">肆</span>带娃</button>
+            <button class="persona-chip" data-persona="literary"><span class="chip-mark">伍</span>文青</button>
+            <button class="persona-chip" data-persona="local"><span class="chip-mark">陆</span>本地老饕</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="landing-divider">
+        <span class="divider-mark">◆</span>
+        <span class="divider-label">不知道说什么？看几个例子</span>
+        <span class="divider-mark">◆</span>
+      </div>
+
+      <div class="case-grid" id="case-grid">
+        <!-- case cards injected by JS -->
+      </div>
+      <div class="scroll-hint">
+        <span class="sh-arr">‹</span>
+        <span>左右滑一滑，看看示例</span>
+        <span class="sh-arr">›</span>
+      </div>
+
+      <footer class="landing-footer">
+        <div class="footer-credit">
+          一条由 <span class="credit-name">「路」</span> 串起来的本地生活，给你。
+        </div>
+        <div class="footer-tagline">
+          for 美团 · 2026
+        </div>
+      </footer>
+    </section>
+
+
+    <!-- ============================================== -->
+    <!-- ============== VIEW 2 · COMPARE · @owner T2 ============== -->
+    <!-- ============================================== -->
+    <section id="view-compare" class="view">
+
+      <div class="compare-header">
+        <div class="compare-eyebrow">
+          <span class="ce-num">贰</span>
+          <span class="ce-cn">方 案 对 比</span>
+          <span class="ce-en">/ three plans from three voices /</span>
+        </div>
+        <h2 class="compare-title">
+          为 你 生 成 <span class="ct-em">三 个</span> 方 案
+        </h2>
+        <div class="compare-quote">
+          <span class="cq-mark">“</span>
+          <span class="cq-text" id="compare-query"></span>
+          <span class="cq-mark">”</span>
+        </div>
+        <div class="compare-meta">
+          <span class="cm-item">参 与 的 AI Agent ──</span>
+          <span class="cm-personas" id="compare-personas"></span>
+          <span class="cm-divider">·</span>
+          <span class="cm-item">协 商 后 输 出 <em>3 个 方 案</em></span>
+        </div>
+
+        <!-- 时空约束识别（基于 hero 输入） -->
+        <div class="intent-chips compact" id="compare-intent-chips" hidden></div>
+      </div>
+
+      <div class="plans-stage" id="plans-stage">
+        <!-- 3 plan cards injected -->
+      </div>
+      <div class="plans-dots" id="plans-dots">
+        <!-- dots injected -->
+      </div>
+
+      <div class="compare-rule"></div>
+
+      <div class="compare-footnote">
+        <div class="footnote-num">※</div>
+        <div class="footnote-text">
+          3 个方案由 <em>多 Persona Agent 协商</em> 而来 ── 摄影师与性价比党争论过，美食家与带娃党让步过。<br/>
+          没有"最优解"，只有"最适合你"的那一个。
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================= -->
+    <!-- ============== VIEW 3 · DETAIL · @owner T3 ============== -->
+    <!-- ============================================= -->
+    <section id="view-detail" class="view">
+
+      <div class="detail-header">
+        <button class="back-link" data-nav="compare">
+          <span class="back-arrow">←</span>
+          <span class="back-text">返 回 方 案 对 比</span>
+        </button>
+        <div class="detail-volume">
+          <span class="dv-label">方 案</span>
+          <span class="dv-num" id="detail-volume-num">壹</span>
+        </div>
+      </div>
+
+      <div class="detail-cover">
+        <div class="cover-corner cover-corner-tl"></div>
+        <div class="cover-corner cover-corner-tr"></div>
+        <div class="cover-corner cover-corner-bl"></div>
+        <div class="cover-corner cover-corner-br"></div>
+
+        <div class="cover-side cover-stance">
+          <div class="cs-label">推荐理由</div>
+          <div class="cs-text" id="detail-stance"></div>
+          <div class="cs-divider"></div>
+          <div class="cs-label narrative-sub">叙事</div>
+          <div class="cs-narrative" id="detail-narrative">—</div>
+        </div>
+        <div class="cover-center">
+          <h2 class="cover-title" id="detail-title"></h2>
+          <div class="cover-subtitle" id="detail-subtitle"></div>
+          <div class="cover-stats">
+            <div class="stat">
+              <div class="stat-num" id="stat-time"></div>
+              <div class="stat-label">总 时 长</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+              <div class="stat-num" id="stat-budget"></div>
+              <div class="stat-label">人 均 花 费</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+              <div class="stat-num" id="stat-chapters"></div>
+              <div class="stat-label">行 程 节 点</div>
+            </div>
+          </div>
+        </div>
+        <div class="cover-side cover-debate">
+          <div class="cs-label">Agent 讨 论</div>
+          <div class="debate-list" id="detail-debate"></div>
+        </div>
+      </div>
+
+      <!-- AI 对话调整路线 -->
+      <div class="ai-chat-dock" id="ai-chat-dock">
+        <div class="acd-head">
+          <span class="acd-icon">💬</span>
+          <div class="acd-title-block">
+            <div class="acd-title">想调整这条路线？</div>
+            <div class="acd-hint">说一句话告诉我 ── 或直接点章节卡上的 ··· 菜单</div>
+          </div>
+        </div>
+        <div class="acd-history" id="acd-history"></div>
+        <div class="acd-input-row">
+          <input type="text" id="acd-input" class="acd-input" placeholder="例：把第三站换成不那么贵的 / 删掉一站 / 再加一杯咖啡 ..."/>
+          <button class="acd-send" id="acd-send">发送 →</button>
+        </div>
+        <div class="acd-quick">
+          <button class="acd-chip" data-quick="cheaper">便宜一点</button>
+          <button class="acd-chip" data-quick="shorten">时间紧些</button>
+          <button class="acd-chip" data-quick="add-coffee">加杯咖啡</button>
+          <button class="acd-chip" data-quick="more-photo">多拍照</button>
+          <button class="acd-chip" data-quick="reset">恢复原方案</button>
+        </div>
+      </div>
+
+      <div class="spread">
+        <!-- LEFT: stylized ink map -->
+        <div class="spread-left">
+          <div class="spread-label">
+            <span class="sl-num">［ 一 ］</span>
+            <span class="sl-cn">路 线 地 图</span>
+            <span class="sl-en">— map view —</span>
+          </div>
+          <div class="map-container" id="map-container" data-amap-ready="false">
+            <!-- 占位地图（后续可替换为高德 AMap JS SDK 渲染） -->
+          </div>
+          <div class="map-legend">
+            <span class="lg-item"><span class="lg-dot lg-photo"></span> 拍 照</span>
+            <span class="lg-item"><span class="lg-dot lg-eat"></span> 餐 饮</span>
+            <span class="lg-item"><span class="lg-dot lg-rest"></span> 休 憩</span>
+            <span class="lg-item"><span class="lg-line"></span> 行 程 路 线</span>
+          </div>
+        </div>
+
+        <!-- RIGHT: chapter timeline -->
+        <div class="spread-right">
+          <div class="spread-label">
+            <span class="sl-num">［ 二 ］</span>
+            <span class="sl-cn">行 程 详 情</span>
+            <span class="sl-en">— itinerary —</span>
+            <div class="sl-undo-redo">
+              <button id="btn-undo" class="sl-undo-btn" title="撤销 ⌘Z" disabled>↶</button>
+              <button id="btn-redo" class="sl-undo-btn" title="重做 ⌘⇧Z" disabled>↷</button>
+            </div>
+          </div>
+          <div class="chapter-scroll" id="chapter-scroll">
+            <!-- chapters injected -->
+          </div>
+        </div>
+      </div>
+
+      <!-- POI Bottom Sheet -->
+      <div class="poi-sheet-overlay" id="poi-sheet-overlay"></div>
+      <div class="poi-sheet" id="poi-sheet">
+        <div class="poi-sheet-handle"></div>
+        <div class="poi-sheet-content" id="poi-sheet-content">
+          <!-- injected by openPOISheet -->
+        </div>
+      </div>
+
+      <div class="detail-footnote">
+        <div class="dfn-mark">※</div>
+        <div class="dfn-text">
+          每 个 节 点 上 的「<em>避</em>」字 徽 章 ── 由 LLM 从
+          <span class="ink">大 众 点 评 / 小 红 书 评 论</span> 中 抽 取，
+          自 动 转 成 路 径 规 划 的 <em>约 束 条 件</em>。<br/>
+          这 就 是 "<em>UGC 负 面 信 号 → 避 坑 约 束</em>" ── 城 脉 LU 的 核 心 创 新 之 一。
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ============== VIEW 4 · PROFILE · @owner T2 ============== -->
+    <!-- ============================================== -->
+    <section id="view-profile" class="view">
+
+      <div class="profile-header">
+        <button class="back-link" id="profile-back">
+          <span class="back-arrow">←</span>
+          <span class="back-text">返 回</span>
+        </button>
+
+        <div class="profile-eyebrow">
+          <span class="pe-num">肆</span>
+          <span class="pe-cn">我眼里的你</span>
+          <span class="pe-en">/ what i see in you /</span>
+        </div>
+
+        <h2 class="profile-title">
+          我看到的<span class="pt-em">你</span>，是这样的
+          <span class="pt-version" id="profile-version-badge">v1</span>
+        </h2>
+
+        <div class="profile-digest" id="profile-digest">—</div>
+
+        <div class="profile-meta">
+          <span class="pm-item">基 于</span>
+          <em id="profile-source-fav">132 条收藏</em>
+          <span class="pm-item">·</span>
+          <em id="profile-source-rev">47 条评论</em>
+          <span class="pm-divider">|</span>
+          <span class="pm-item">飞 轮 互 动</span>
+          <em id="profile-interactions">0</em>
+          <span class="pm-item">次</span>
+        </div>
+      </div>
+
+      <div class="profile-body">
+
+        <!-- 主列：画像 + 价格 -->
+        <div class="profile-col profile-col-main">
+
+          <section class="profile-section">
+            <div class="ps-head">
+              <span class="ps-num">［ 一 ］</span>
+              <h3 class="ps-title">你大概是这样的人</h3>
+            </div>
+            <p class="ps-hint">从评论关键词和收藏品类里读出来的几个面。拖滑条调一下 ── 哪个更像你？</p>
+            <div class="persona-cards" id="profile-personas"></div>
+          </section>
+
+          <section class="profile-section">
+            <div class="ps-head">
+              <span class="ps-num">［ 二 ］</span>
+              <h3 class="ps-title">对价格有多在意</h3>
+            </div>
+            <p class="ps-hint">滑到「严格」时，会主动避开贵的地方。</p>
+            <div class="price-slider-wrap">
+              <span class="ps-left">随意</span>
+              <input type="range" id="profile-price" min="0" max="100" value="50" />
+              <span class="ps-right">严格</span>
+              <span class="ps-val" id="profile-price-val">50</span>
+            </div>
+          </section>
+
+          <section class="profile-section">
+            <div class="ps-head">
+              <span class="ps-num">［ 三 ］</span>
+              <h3 class="ps-title">这是怎么读出来的</h3>
+            </div>
+            <p class="ps-hint">从你最近在大众点评的行为里挑的几个关键证据。</p>
+            <div class="provenance-grid" id="profile-provenance"></div>
+          </section>
+        </div>
+
+        <!-- 侧列：品类 + 不想要 + 飞轮 -->
+        <div class="profile-col profile-col-side">
+
+          <section class="profile-section">
+            <div class="ps-head">
+              <span class="ps-num">［ 四 ］</span>
+              <h3 class="ps-title">你常去的几类</h3>
+            </div>
+            <p class="ps-hint">点一下加 / 减；常去的排在前。</p>
+            <div class="cat-chips" id="profile-cats"></div>
+          </section>
+
+          <section class="profile-section">
+            <div class="ps-head">
+              <span class="ps-num">［ 五 ］</span>
+              <h3 class="ps-title">不想被推到的</h3>
+            </div>
+            <p class="ps-hint">从评论里读出来的雷区 + 你自己补充。</p>
+            <div class="dis-chips" id="profile-dis"></div>
+            <input type="text" class="dis-input" id="profile-dis-input" placeholder="按 Enter 加一条自己的雷区"/>
+          </section>
+
+          <section class="profile-section profile-section-wheel">
+            <div class="ps-head">
+              <span class="ps-num">［ 六 ］</span>
+              <h3 class="ps-title">越用越懂你</h3>
+            </div>
+            <p class="ps-hint">每次浏览方案和详情都会被悄悄记下，攒够之后再帮你刷新画像。</p>
+            <div class="wheel-stats" id="profile-wheel-stats"></div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Footer actions -->
+      <div class="profile-footer">
+        <button class="ms-btn-ghost danger" id="profile-logout">退出登录</button>
+        <div class="profile-footer-spacer"></div>
+        <button class="ms-btn-ghost" id="profile-cancel">取消</button>
+        <button class="ms-btn-ghost" id="profile-rebuild">重新分析 ↻</button>
+        <button class="ms-btn" id="profile-save">保存 →</button>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ============== VIEW 5 · SETTINGS ============== -->
+    <!-- ============================================== -->
+    <section id="view-settings" class="view">
+
+      <div class="settings-header">
+        <button class="back-link" id="settings-back">
+          <span class="back-arrow">←</span>
+          <span class="back-text">返回</span>
+        </button>
+        <div class="settings-eyebrow">
+          <span class="se-num">伍</span>
+          <span class="se-cn">设置</span>
+        </div>
+        <h2 class="settings-title">让<span class="st-em">「路」</span>更懂你吧</h2>
+        <p class="settings-sub">告诉它你的偏好和边界，它会越来越像你认识的那个朋友。</p>
+      </div>
+
+      <!-- Tab 切换 -->
+      <div class="settings-tabs" role="tablist">
+        <button class="st-tab active" data-tab="data">数据</button>
+        <button class="st-tab" data-tab="privacy">隐私</button>
+        <button class="st-tab" data-tab="profile">画像</button>
+        <button class="st-tab" data-tab="voice">说话方式</button>
+        <button class="st-tab" data-tab="about">关于</button>
+      </div>
+
+      <!-- 设置内容 -->
+      <div class="settings-body">
+
+        <!-- 一 · 数据来源 -->
+        <div class="st-panel active" data-panel="data">
+        <section class="settings-section">
+          <div class="ss-head">
+            <span class="ss-num">［ 一 ］</span>
+            <h3 class="ss-title">它读了哪些数据</h3>
+          </div>
+          <p class="ss-hint">不想被读到的，就在这里关掉。「路」会自动跳过这些来源。</p>
+
+          <div class="setting-row">
+            <label class="setting-label">
+              <div class="sl-name">大众点评 · 个人收藏</div>
+              <div class="sl-desc">读取你的"我的收藏"列表，作为画像主要素材</div>
+            </label>
+            <label class="lu-switch">
+              <input type="checkbox" data-setting="data.enableDianpingFavorites" checked/><span></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <label class="setting-label">
+              <div class="sl-name">大众点评 · 个人评论</div>
+              <div class="sl-desc">读取你写过的评论与评分，用于识别口味偏好</div>
+            </label>
+            <label class="lu-switch">
+              <input type="checkbox" data-setting="data.enableDianpingReviews" checked/><span></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <label class="setting-label">
+              <div class="sl-name">大众点评 · 别人的评论</div>
+              <div class="sl-desc">用来帮你避开雷区 ── 排队、踩坑、营业陷阱都从这里读</div>
+            </label>
+            <label class="lu-switch">
+              <input type="checkbox" data-setting="data.enableOthersReviews" checked/><span></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <label class="setting-label">
+              <div class="sl-name">高德地图 · 路径规划</div>
+              <div class="sl-desc">使用真实步行/驾车时间替代估算</div>
+            </label>
+            <label class="lu-switch">
+              <input type="checkbox" data-setting="data.enableAMapRoute" checked/><span></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <label class="setting-label">
+              <div class="sl-name">美团 · 实时排队</div>
+              <div class="sl-desc">在节点上显示实时等位时间</div>
+            </label>
+            <label class="lu-switch">
+              <input type="checkbox" data-setting="data.enableMeituanQueue" checked/><span></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <label class="setting-label">
+              <div class="sl-name">美团 · 团购券</div>
+              <div class="sl-desc">在节点上提示可用套餐与折扣</div>
+            </label>
+            <label class="lu-switch">
+              <input type="checkbox" data-setting="data.enableMeituanDeals" checked/><span></span>
+            </label>
+          </div>
+
+          <div class="setting-actions">
+            <button class="ms-btn-ghost" id="settings-refetch">↻ 重新拉取</button>
+            <span class="setting-meta">本地缓存 <em id="settings-cache-size">…</em></span>
+          </div>
+        </section>
+        </div>
+
+        <!-- 二 · 隐私 -->
+        <div class="st-panel" data-panel="privacy">
+        <section class="settings-section">
+          <div class="ss-head">
+            <span class="ss-num">［ 二 ］</span>
+            <h3 class="ss-title">你的数据放在哪</h3>
+          </div>
+          <p class="ss-hint">默认全部存在你自己的浏览器里。要让 AI 帮忙看一眼时才会上行 ── 也可以彻底关掉。</p>
+
+          <div class="setting-row">
+            <label class="setting-label">
+              <div class="sl-name">什么都别上传</div>
+              <div class="sl-desc">完全断网，画像只在你设备里粗略生成（会变得不那么准）</div>
+            </label>
+            <label class="lu-switch">
+              <input type="checkbox" data-setting="privacy.localOnly"/><span></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <label class="setting-label">
+              <div class="sl-name">匿名上传给 AI</div>
+              <div class="sl-desc">去掉你的昵称和头像，只传偏好和评论给后端帮你想</div>
+            </label>
+            <label class="lu-switch">
+              <input type="checkbox" data-setting="privacy.anonymize" checked/><span></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <label class="setting-label">
+              <div class="sl-name">记下我的每次浏览</div>
+              <div class="sl-desc">用这些行为帮你画像越来越准。关掉就不再记。</div>
+            </label>
+            <label class="lu-switch">
+              <input type="checkbox" data-setting="privacy.logInteractions" checked/><span></span>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <label class="setting-label">
+              <div class="sl-name">帮「路」变得更好</div>
+              <div class="sl-desc">匿名统计你的使用方式，帮我们改进推荐 ── 你完全可以不参与</div>
+            </label>
+            <label class="lu-switch">
+              <input type="checkbox" data-setting="privacy.allowAnalytics"/><span></span>
+            </label>
+          </div>
+
+          <div class="setting-actions">
+            <button class="ms-btn-ghost danger" id="settings-clear-all">⚠ 清空所有本地数据</button>
+          </div>
+        </section>
+        </div>
+
+        <!-- 三 · 画像建立 -->
+        <div class="st-panel" data-panel="profile">
+        <section class="settings-section">
+          <div class="ss-head">
+            <span class="ss-num">［ 三 ］</span>
+            <h3 class="ss-title">它怎么认识你</h3>
+          </div>
+          <p class="ss-hint">决定它多久重新看一次你、看得多细、要不要参考你不爱的东西。</p>
+
+          <div class="setting-row vertical">
+            <label class="setting-label">
+              <div class="sl-name">多少次互动后再帮你看一次</div>
+              <div class="sl-desc">浏览满 N 次之后，左下角浮卡会提醒"该重新认识你了"</div>
+            </label>
+            <div class="settings-slider">
+              <span>3</span>
+              <input type="range" min="3" max="30" step="1" data-setting="profile.autoRebuildEvery" value="5"/>
+              <span>30</span>
+              <span class="ss-val" id="ss-auto-rebuild-val">5</span>
+            </div>
+          </div>
+
+          <div class="setting-row vertical">
+            <label class="setting-label">
+              <div class="sl-name">看得多细</div>
+              <div class="sl-desc">轻 = 快但粗；标准 = 平衡；深度 = 让多个 Agent 反复讨论你</div>
+            </label>
+            <div class="radio-group" data-setting="profile.depth">
+              <label><input type="radio" name="profile-depth" value="light"/> 轻</label>
+              <label><input type="radio" name="profile-depth" value="standard" checked/> 标准</label>
+              <label><input type="radio" name="profile-depth" value="deep"/> 深度</label>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <label class="setting-label">
+              <div class="sl-name">参考你的差评</div>
+              <div class="sl-desc">关掉只看好评，画像会变"乐观"但偏离真实</div>
+            </label>
+            <label class="lu-switch">
+              <input type="checkbox" data-setting="profile.includeNegative" checked/><span></span>
+            </label>
+          </div>
+
+          <div class="setting-actions">
+            <button class="ms-btn" id="settings-rebuild-now">↻ 重新分析画像</button>
+          </div>
+        </section>
+
+        <!-- 我的 Agent 团 -->
+        <section class="settings-section">
+          <div class="ss-head">
+            <span class="ss-num">［ ＋ ］</span>
+            <h3 class="ss-title">我的 Agent 团</h3>
+          </div>
+          <p class="ss-hint">勾选你想让哪几位 Agent 参与方案生成。选得越多，差异化讨论越激烈，结果越多元。</p>
+
+          <div class="agent-grid" id="agent-grid">
+            <label class="agent-chip" data-agent="photographer">
+              <input type="checkbox" data-agent-cb="photographer"/>
+              <span class="agent-icon">📷</span>
+              <span class="agent-name">拍照党</span>
+              <span class="agent-desc">出片优先 / 光线敏感</span>
+            </label>
+            <label class="agent-chip" data-agent="foodie">
+              <input type="checkbox" data-agent-cb="foodie"/>
+              <span class="agent-icon">🥢</span>
+              <span class="agent-name">美食家</span>
+              <span class="agent-desc">滋味为先 / 不抠预算</span>
+            </label>
+            <label class="agent-chip" data-agent="value">
+              <input type="checkbox" data-agent-cb="value"/>
+              <span class="agent-icon">💰</span>
+              <span class="agent-name">性价比党</span>
+              <span class="agent-desc">每块钱花在刀刃</span>
+            </label>
+            <label class="agent-chip" data-agent="literary">
+              <input type="checkbox" data-agent-cb="literary"/>
+              <span class="agent-icon">📖</span>
+              <span class="agent-name">文青</span>
+              <span class="agent-desc">书店咖啡馆 / 慢节奏</span>
+            </label>
+            <label class="agent-chip" data-agent="local">
+              <input type="checkbox" data-agent-cb="local"/>
+              <span class="agent-icon">🏮</span>
+              <span class="agent-name">本地老饕</span>
+              <span class="agent-desc">藏在巷子里的店</span>
+            </label>
+            <label class="agent-chip" data-agent="parent">
+              <input type="checkbox" data-agent-cb="parent"/>
+              <span class="agent-icon">👶</span>
+              <span class="agent-name">带娃党</span>
+              <span class="agent-desc">儿童友好 / 节奏松散</span>
+            </label>
+          </div>
+
+          <div class="setting-actions">
+            <span class="setting-meta">当前激活 <em id="agent-active-count">3</em> 位</span>
+          </div>
+        </section>
+        </div>
+
+        <!-- 四 · 对话风格 -->
+        <div class="st-panel" data-panel="voice">
+        <section class="settings-section">
+          <div class="ss-head">
+            <span class="ss-num">［ 四 ］</span>
+            <h3 class="ss-title">它怎么跟你说话</h3>
+          </div>
+          <p class="ss-hint">影响方案文案、Agent 讨论的口吻、章节叙事的措辞 ── 选一个你舒服的语气。</p>
+
+          <div class="setting-row vertical">
+            <label class="setting-label"><div class="sl-name">措辞</div></label>
+            <div class="radio-group" data-setting="voice.formality">
+              <label><input type="radio" name="vf" value="formal"/> 严肃</label>
+              <label><input type="radio" name="vf" value="neutral" checked/> 中性</label>
+              <label><input type="radio" name="vf" value="casual"/> 亲切</label>
+            </div>
+          </div>
+
+          <div class="setting-row vertical">
+            <label class="setting-label"><div class="sl-name">调性</div></label>
+            <div class="radio-group" data-setting="voice.tone">
+              <label><input type="radio" name="vt" value="literary" checked/> 文艺</label>
+              <label><input type="radio" name="vt" value="direct"/> 直白</label>
+              <label><input type="radio" name="vt" value="playful"/> 幽默</label>
+            </div>
+          </div>
+
+          <div class="setting-row vertical">
+            <label class="setting-label"><div class="sl-name">篇幅</div></label>
+            <div class="radio-group" data-setting="voice.length">
+              <label><input type="radio" name="vl" value="concise"/> 极简</label>
+              <label><input type="radio" name="vl" value="standard" checked/> 标准</label>
+              <label><input type="radio" name="vl" value="detailed"/> 详细</label>
+            </div>
+          </div>
+
+          <div class="setting-row vertical">
+            <label class="setting-label"><div class="sl-name">语言</div></label>
+            <div class="radio-group" data-setting="voice.language">
+              <label><input type="radio" name="vlang" value="zh-CN" checked/> 简体中文</label>
+              <label><input type="radio" name="vlang" value="en"/> English</label>
+              <label><input type="radio" name="vlang" value="bilingual"/> 双语</label>
+            </div>
+          </div>
+
+          <div class="voice-preview">
+            <div class="vp-label">它会这样跟你说</div>
+            <div class="vp-content" id="voice-preview-content">—</div>
+          </div>
+        </section>
+        </div>
+
+        <!-- 五 · 关于 -->
+        <div class="st-panel" data-panel="about">
+        <section class="settings-section">
+          <div class="ss-head">
+            <span class="ss-num">［ 五 ］</span>
+            <h3 class="ss-title">关于这个 demo</h3>
+          </div>
+          <div class="about-grid">
+            <div class="about-cell"><span>版本</span><em>城脉「路」· v0.5</em></div>
+            <div class="about-cell"><span>来源</span><em>美团黑客松</em></div>
+            <div class="about-cell"><span>设计</span><em>现代东方编辑风</em></div>
+            <div class="about-cell"><span>许可</span><em>仅 demo 使用</em></div>
+          </div>
+          <div class="setting-actions">
+            <button class="ms-btn-ghost" id="settings-export">导出诊断数据</button>
+            <button class="ms-btn-ghost" id="settings-reset">恢复默认设置</button>
+          </div>
+        </section>
+        </div>
+      </div>
+
+      <div class="settings-footer">
+        <span class="settings-saved-hint" id="settings-saved-hint">改动会自动保存</span>
+        <button class="ms-btn" id="settings-done">完成 →</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============== 路线生成 · 全屏仪式感 overlay ============== -->
+  <div class="gen-ritual" id="gen-ritual" hidden>
+    <div class="gr-backdrop"></div>
+    <div class="gr-card">
+      <div class="gr-eyebrow">
+        <span class="gr-seal">LU</span>
+        <span class="gr-eyebrow-text">正在为你生成路线</span>
+      </div>
+      <h2 class="gr-title" id="gr-title-text">读懂你的意图 ──</h2>
+      <ol class="gr-steps" id="gr-steps">
+        <li data-gr-step="intent"><span class="gr-dot"></span><span class="gr-step-text">读懂你的意图</span></li>
+        <li data-gr-step="agents"><span class="gr-dot"></span><span class="gr-step-text">召集 5 位 Persona Agent</span></li>
+        <li data-gr-step="poi"><span class="gr-dot"></span><span class="gr-step-text">扫描 1,268 个 POI · 47,238 条 UGC</span></li>
+        <li data-gr-step="pitfall"><span class="gr-dot"></span><span class="gr-step-text">从评论中抽取避坑约束</span></li>
+        <li data-gr-step="solve"><span class="gr-dot"></span><span class="gr-step-text">Pareto 求解 3 条差异化路径</span></li>
+      </ol>
+      <div class="gr-ticker" id="gr-ticker">—</div>
+    </div>
+  </div>
+
+  <!-- ============== MEMORY FLYWHEEL WIDGET（左下浮卡） ============== -->
+  <div class="memory-widget" id="memory-widget" hidden>
+    <div class="mw-stripe"></div>
+    <div class="mw-body">
+      <div class="mw-head">
+        <span class="mw-avatar" id="mw-avatar">?</span>
+        <div class="mw-meta">
+          <div class="mw-name" id="mw-name">—</div>
+          <div class="mw-sub" id="mw-sub">记忆 v0</div>
+        </div>
+      </div>
+      <div class="mw-summary" id="mw-summary">—</div>
+      <div class="mw-stats">
+        <div class="mw-stat"><div class="mws-num" id="mws-version">0</div><div class="mws-lbl">版本</div></div>
+        <div class="mw-stat"><div class="mws-num" id="mws-count">0</div><div class="mws-lbl">互动</div></div>
+        <div class="mw-stat"><div class="mws-num" id="mws-pers">0</div><div class="mws-lbl">画像</div></div>
+      </div>
+      <div class="mw-actions">
+        <button class="mw-btn" id="mw-open-modal">查 看 记 忆 形 象</button>
+        <button class="mw-btn mw-btn-ghost" id="mw-refresh" hidden>记 忆 已 满 · 刷 新 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== PROFILE / MEMORY MODAL ============== -->
+  <div class="lu-modal" id="profile-modal" hidden>
+    <div class="lu-modal-backdrop"></div>
+    <div class="lu-modal-frame">
+      <button class="lu-modal-close" id="profile-modal-close">×</button>
+
+      <!-- Stage A · Loading -->
+      <div class="modal-stage modal-stage-loading" data-stage="loading">
+        <div class="ms-eyebrow">壹 · 正 在 分 析</div>
+        <h2 class="ms-title">读 取 你 在 <em>大 众 点 评</em> 的<br/>足 迹 …</h2>
+        <div class="ms-loader" id="ms-loader">
+          <ol class="ms-steps" id="ms-steps">
+            <li data-step="login"><span class="step-dot"></span>OAuth 授权</li>
+            <li data-step="favorites"><span class="step-dot"></span>读取 132 条收藏</li>
+            <li data-step="reviews"><span class="step-dot"></span>读取 47 条评论</li>
+            <li data-step="analyze"><span class="step-dot"></span>LLM 合成偏好画像</li>
+          </ol>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 全局配置 (key / 开关) -->
+  <script src="config.js"></script>
+  <!-- 条件加载真实 AMap JS SDK：config.js 里 amapKey 非空才加载 -->
+  <script>
+    if (window.LU_CONFIG && LU_CONFIG.amapKey) {
+      if (LU_CONFIG.amapSecurityCode) {
+        window._AMapSecurityConfig = { securityJsCode: LU_CONFIG.amapSecurityCode };
+      }
+      const s = document.createElement('script');
+      // AMap.Walking 真实步行路线；AMap.PlaceSearch 按地名搜真实经纬度
+      s.src = 'https://webapi.amap.com/maps?v=2.0&plugin=AMap.Walking,AMap.PlaceSearch&key=' + encodeURIComponent(LU_CONFIG.amapKey);
+      document.head.appendChild(s);
+    }
+  </script>
+  <!-- Mock fixture store -->
+  <script src="data.js"></script>
+  <!-- Real POI data (sync load to ensure available before services init) -->
+  <script>
+    window.REAL_POIS = null;
+    (function() {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'data/real_pois.json', false);
+      try { xhr.send(); if (xhr.status === 200) window.REAL_POIS = JSON.parse(xhr.responseText); }
+      catch(e) { /* fallback to mock */ }
+    })();
+  </script>
+  <!-- User memory + settings (localStorage 持久化) -->
+  <script src="memory.js"></script>
+  <script src="settings.js"></script>
+  <!-- Service layer (each maps to a real backend; method bodies are mocks) -->
+  <script src="services/dianping.js"></script>
+  <script src="services/amap.js"></script>
+  <script src="services/meituan.js"></script>
+  <script src="services/llm.js"></script>
+  <!-- Adapter composes services into UI shapes (cached) -->
+  <script src="adapter.js"></script>
+  <!-- UI render layer (talks to Adapter only) -->
+  <script src="app.js"></script>
+</body>
+</html>
