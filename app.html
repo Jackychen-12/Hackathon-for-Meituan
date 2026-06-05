@@ -30,17 +30,17 @@ body {
 .page.active { animation: pageIn 0.28s ease-out; }
 
 /* ===================== p-login ===================== */
-.p-login.app-container { padding: 80px 28px 40px; overflow: hidden; }
-.p-login .brand { text-align: center; margin-bottom: 48px; }
+.p-login.app-container { padding: 44px 24px 28px; overflow-y: auto; }
+.p-login .brand { text-align: center; margin-bottom: 24px; }
 .p-login .brand-logo {
-    width: 72px; height: 72px; border-radius: 22px;
+    width: 60px; height: 60px; border-radius: 18px;
     background:
         radial-gradient(circle at 30% 30%, rgba(255,255,255,0.7), transparent 55%),
         linear-gradient(135deg, #0a1f44 0%, #1e5fd8 55%, #5b9eff 100%);
-    margin: 0 auto 16px;
+    margin: 0 auto 12px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 32px;
-    box-shadow: 0 14px 36px rgba(30,95,216,0.4), inset 0 0 18px rgba(255,255,255,0.25);
+    font-size: 28px;
+    box-shadow: 0 12px 28px rgba(30,95,216,0.4), inset 0 0 18px rgba(255,255,255,0.25);
     position: relative;
 }
 .p-login .brand-logo::after {
@@ -48,12 +48,12 @@ body {
     background: radial-gradient(circle, rgba(91,158,255,0.25), transparent 70%);
     z-index: -1;
 }
-.p-login .brand-title { font-size: 24px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
-.p-login .brand-sub { font-size: 13px; color: #8e8e93; }
+.p-login .brand-title { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+.p-login .brand-sub { font-size: 12.5px; color: #8e8e93; }
 
 .p-login .sec-title {
-    font-size: 14px; font-weight: 600; color: #1a1a2e;
-    margin-bottom: 14px; display: flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: #1a1a2e;
+    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
 }
 .p-login .sec-title .dot {
     width: 4px; height: 14px;
@@ -61,30 +61,30 @@ body {
     border-radius: 2px;
 }
 .p-login .avatar-block {
-    background: rgba(255,255,255,0.75); border-radius: 20px; padding: 22px 20px;
+    background: rgba(255,255,255,0.75); border-radius: 18px; padding: 16px 16px 14px;
     border: 1px solid rgba(140,180,240,0.3); backdrop-filter: blur(10px);
-    margin-bottom: 24px;
+    margin-bottom: 14px;
 }
-.p-login .avatar-preview-row { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.p-login .avatar-preview-row { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
 .p-login .avatar-preview {
-    width: 72px; height: 72px; border-radius: 50%;
+    width: 56px; height: 56px; border-radius: 50%;
     background: linear-gradient(135deg, #f5f9ff, #eaf2ff);
     display: flex; align-items: center; justify-content: center;
-    font-size: 38px; border: 3px solid #fff;
+    font-size: 30px; border: 2.5px solid #fff;
     box-shadow: 0 6px 18px rgba(30,95,216,0.15); overflow: hidden; flex-shrink: 0;
 }
 .p-login .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
-.p-login .avatar-tip { font-size: 13px; color: #6b6b72; line-height: 1.6; }
+.p-login .avatar-tip { font-size: 12px; color: #6b6b72; line-height: 1.5; }
 .p-login .avatar-tip strong { color: #1a1a2e; font-weight: 600; }
 
 .p-login .emoji-grid {
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 14px;
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 10px;
 }
 .p-login .emoji-item {
-    aspect-ratio: 1; border-radius: 12px;
+    aspect-ratio: 1; border-radius: 10px;
     background: rgba(232,242,255,0.65);
     display: flex; align-items: center; justify-content: center;
-    font-size: 22px; cursor: pointer; transition: all 0.2s;
+    font-size: 20px; cursor: pointer; transition: all 0.2s;
     border: 2px solid transparent;
 }
 .p-login .emoji-item:hover { background: rgba(91,158,255,0.15); }
@@ -95,10 +95,10 @@ body {
     transform: scale(1.05);
 }
 .p-login .upload-btn {
-    width: 100%; padding: 12px; border-radius: 12px;
+    width: 100%; padding: 10px; border-radius: 10px;
     background: rgba(255,255,255,0.6);
     border: 1px dashed rgba(30,95,216,0.5);
-    color: #1e5fd8; font-size: 13px; font-weight: 500; cursor: pointer;
+    color: #1e5fd8; font-size: 12.5px; font-weight: 500; cursor: pointer;
     transition: all 0.2s;
     display: flex; align-items: center; justify-content: center; gap: 6px;
 }
@@ -106,26 +106,143 @@ body {
 .p-login #avatarUpload { display: none; }
 
 .p-login .name-block {
-    background: rgba(255,255,255,0.75); border-radius: 20px; padding: 20px;
+    background: rgba(255,255,255,0.75); border-radius: 18px; padding: 16px;
     border: 1px solid rgba(140,180,240,0.3); backdrop-filter: blur(10px);
-    margin-bottom: 36px;
+    margin-bottom: 18px;
 }
 .p-login .name-input {
-    width: 100%; padding: 12px 14px; border-radius: 12px;
+    width: 100%; padding: 11px 14px; border-radius: 11px;
     background: rgba(232,242,255,0.55);
     border: 1px solid transparent;
-    font-size: 15px; outline: none; color: #1d1d1f; transition: all 0.2s;
+    font-size: 14.5px; outline: none; color: #1d1d1f; transition: all 0.2s;
 }
 .p-login .name-input:focus { border-color: rgba(30,95,216,0.5); background: #fff; }
-.p-login .name-hint { font-size: 12px; color: #a0a0a8; margin-top: 8px; }
+.p-login .name-hint { font-size: 11.5px; color: #a0a0a8; margin-top: 6px; }
 .p-login .cta-btn {
-    width: 100%; padding: 16px; border-radius: 16px;
+    width: 100%; padding: 14px; border-radius: 14px;
     background: linear-gradient(135deg, #1e5fd8 0%, #5b9eff 100%);
-    color: #fff; font-size: 16px; font-weight: 600; border: none; cursor: pointer;
+    color: #fff; font-size: 15px; font-weight: 600; border: none; cursor: pointer;
     box-shadow: 0 10px 24px rgba(30,95,216,0.3); transition: all 0.2s;
 }
 .p-login .cta-btn:active { transform: scale(0.98); }
 .p-login .cta-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+/* ---- Tab 切换登录方式 ---- */
+.p-login .login-tabs {
+    display: flex; gap: 6px; padding: 4px;
+    background: rgba(232,242,255,0.7);
+    border: 1px solid rgba(140,180,240,0.3);
+    border-radius: 14px; margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+}
+.p-login .login-tab {
+    flex: 1; padding: 9px 10px; border-radius: 10px;
+    background: transparent; border: none;
+    font-size: 13px; font-weight: 600; color: #6b6b72;
+    cursor: pointer; transition: all 0.2s; user-select: none;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.p-login .login-tab.active {
+    background: #fff; color: #1e5fd8;
+    box-shadow: 0 2px 8px rgba(30,95,216,0.18);
+}
+.p-login .login-pane { display: none; }
+.p-login .login-pane.active { display: block; animation: paneIn 0.25s ease-out; }
+@keyframes paneIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- 第三方一键登录（蓝色主题） ---- */
+.p-login .oauth-block {
+    background: rgba(255,255,255,0.75); border-radius: 18px; padding: 18px 16px 16px;
+    border: 1px solid rgba(140,180,240,0.3); backdrop-filter: blur(10px);
+}
+.p-login .oauth-btn {
+    width: 100%; padding: 13px 14px; border-radius: 13px;
+    background: linear-gradient(135deg, #1e5fd8 0%, #5b9eff 100%);
+    color: #fff; font-size: 15px; font-weight: 600;
+    border: none; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; gap: 8px;
+    box-shadow: 0 8px 20px rgba(30,95,216,0.32); transition: all 0.2s;
+}
+.p-login .oauth-btn:active { transform: scale(0.98); }
+.p-login .oauth-btn .logo {
+    width: 22px; height: 22px; border-radius: 6px;
+    background: #fff; color: #1e5fd8; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 13px; letter-spacing: -0.5px;
+}
+.p-login .oauth-hint {
+    font-size: 12px; color: #8a8a90; margin-top: 12px;
+    line-height: 1.55; text-align: center;
+}
+.p-login .oauth-hint b { color: #1a1a2e; font-weight: 600; }
+.p-login .oauth-feats {
+    display: flex; gap: 6px; margin-top: 12px;
+    flex-wrap: wrap; justify-content: center;
+}
+.p-login .oauth-feat {
+    font-size: 11.5px; color: #1e5fd8;
+    background: rgba(91,158,255,0.12);
+    padding: 4px 10px; border-radius: 10px;
+}
+.p-login .oauth-back {
+    margin-top: 12px; width: 100%; padding: 10px;
+    background: rgba(91,158,255,0.08); color: #1e5fd8;
+    font-size: 13px; font-weight: 500;
+    border: 1px dashed rgba(30,95,216,0.35); border-radius: 12px;
+    cursor: pointer; display: none;
+}
+.p-login .oauth-back.visible { display: block; }
+
+/* ---- 大众点评登录弹层（蓝色主题） ---- */
+.dp-modal-mask {
+    position: fixed; inset: 0; background: rgba(10,20,40,0.55);
+    backdrop-filter: blur(6px);
+    display: none; align-items: center; justify-content: center;
+    z-index: 9999; padding: 24px;
+}
+.dp-modal-mask.visible { display: flex; }
+.dp-modal {
+    background: #fff; border-radius: 22px; max-width: 360px; width: 100%;
+    padding: 24px 22px 20px; box-shadow: 0 24px 60px rgba(10,20,40,0.3);
+    animation: dpIn 0.25s ease-out;
+}
+@keyframes dpIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.dp-modal h3 {
+    font-size: 16px; font-weight: 700; color: #1a1a2e;
+    margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
+}
+.dp-modal h3 .badge {
+    font-size: 10.5px; padding: 2px 8px; border-radius: 8px;
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff); color: #fff;
+}
+.dp-modal p {
+    font-size: 12.5px; color: #5a5a62; line-height: 1.65; margin-bottom: 12px;
+}
+.dp-modal .steps {
+    background: #f5f8ff; border-radius: 12px; padding: 11px 14px;
+    font-size: 12px; color: #4a4a52; line-height: 1.85;
+    margin-bottom: 14px;
+}
+.dp-modal .steps b { color: #1e5fd8; }
+.dp-modal-btns { display: flex; gap: 10px; }
+.dp-modal-btns button {
+    flex: 1; padding: 11px; border-radius: 12px; border: none;
+    font-size: 13.5px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.dp-modal-btns .ghost {
+    background: #f0f3f9; color: #5a5a62;
+}
+.dp-modal-btns .primary {
+    background: linear-gradient(135deg, #1e5fd8, #5b9eff); color: #fff;
+    box-shadow: 0 6px 16px rgba(30,95,216,0.3);
+}
+.dp-modal-btns button:active { transform: scale(0.97); }
 
 /* ===================== p-profile ===================== */
 .p-profile.app-container { padding: 56px 24px 120px; overflow: hidden; }
@@ -303,9 +420,9 @@ body {
 .p-home .input-row textarea {
     /* 自适应换行 */
     resize: none;
-    line-height: 1.45;
+    line-height: 1.55;
     font-family: inherit;
-    max-height: 132px; /* ~6 行；超过后内部滚动 */
+    max-height: 220px; /* 结构化多行展示时给到 ~10 行 */
     overflow-y: auto;
     word-break: break-word;
     white-space: pre-wrap;
@@ -766,7 +883,7 @@ body {
     background: rgba(255,255,255,0.92);
     backdrop-filter: blur(16px);
     border-top: 1px solid rgba(140,180,240,0.3);
-    display: flex; padding: 10px 0 22px;
+    display: flex; padding: 8px 0 14px;
     z-index: 50;
 }
 .tab-bar.hidden { display: none; }
@@ -779,6 +896,7 @@ body {
 .tab-item.active { color: #5b9eff; }
 .tab-icon { font-size: 22px; }
 </style>
+<link rel="stylesheet" href="./explore-tailwind.css">
 </head>
 <body>
 
@@ -790,42 +908,93 @@ body {
         <div class="brand-sub">遇见城市，遇见自己</div>
     </div>
 
-    <div class="sec-title"><span class="dot"></span>选择你的头像</div>
-    <div class="avatar-block">
-        <div class="avatar-preview-row">
-            <div class="avatar-preview" id="avatarPreview">🐱</div>
-            <div class="avatar-tip">
-                <strong>给自己一个标识</strong><br>
-                可选 emoji，也可上传照片
+    <!-- 登录方式切换 -->
+    <div class="login-tabs" role="tablist">
+        <button type="button" class="login-tab active" data-pane="dp" role="tab">
+            <span>🍜</span><span>大众点评登录</span>
+        </button>
+        <button type="button" class="login-tab" data-pane="self" role="tab">
+            <span>✨</span><span>自建账号</span>
+        </button>
+    </div>
+
+    <!-- Pane: 大众点评 -->
+    <div class="login-pane active" id="pane-dp">
+        <div class="oauth-block">
+            <button class="oauth-btn" id="dpLoginBtn" type="button">
+                <span class="logo">点</span>
+                <span>使用大众点评一键登录</span>
+            </button>
+            <div class="oauth-feats">
+                <span class="oauth-feat">同步口味偏好</span>
+                <span class="oauth-feat">同步常去地段</span>
+                <span class="oauth-feat">免画像</span>
             </div>
+            <div class="oauth-hint">
+                登录后自动基于你的 <b>大众点评足迹</b> 推荐路线
+            </div>
+            <button class="oauth-back" id="dpBackBtn" type="button">
+                ✓ 我已在新窗口完成登录，继续
+            </button>
         </div>
-        <div class="emoji-grid" id="emojiGrid">
-            <div class="emoji-item active" data-emoji="🐱">🐱</div>
-            <div class="emoji-item" data-emoji="🐶">🐶</div>
-            <div class="emoji-item" data-emoji="🦊">🦊</div>
-            <div class="emoji-item" data-emoji="🐼">🐼</div>
-            <div class="emoji-item" data-emoji="🐨">🐨</div>
-            <div class="emoji-item" data-emoji="🐰">🐰</div>
-            <div class="emoji-item" data-emoji="🦁">🦁</div>
-            <div class="emoji-item" data-emoji="🐸">🐸</div>
-            <div class="emoji-item" data-emoji="🐙">🐙</div>
-            <div class="emoji-item" data-emoji="🦄">🦄</div>
-            <div class="emoji-item" data-emoji="🌸">🌸</div>
-            <div class="emoji-item" data-emoji="🍀">🍀</div>
-        </div>
-        <label class="upload-btn" for="avatarUpload">
-            <span>📷</span><span>上传我的照片</span>
-        </label>
-        <input type="file" id="avatarUpload" accept="image/*">
     </div>
 
-    <div class="sec-title"><span class="dot"></span>给自己起个名字</div>
-    <div class="name-block">
-        <input type="text" class="name-input" id="nameInput" placeholder="例如：小溪" maxlength="12">
-        <div class="name-hint">2-12 个字符，未来路线签名可见</div>
-    </div>
+    <!-- Pane: 自建账号 -->
+    <div class="login-pane" id="pane-self">
+        <div class="sec-title"><span class="dot"></span>选择你的头像</div>
+        <div class="avatar-block">
+            <div class="avatar-preview-row">
+                <div class="avatar-preview" id="avatarPreview">🐱</div>
+                <div class="avatar-tip">
+                    <strong>给自己一个标识</strong><br>
+                    可选 emoji，也可上传照片
+                </div>
+            </div>
+            <div class="emoji-grid" id="emojiGrid">
+                <div class="emoji-item active" data-emoji="🐱">🐱</div>
+                <div class="emoji-item" data-emoji="🐶">🐶</div>
+                <div class="emoji-item" data-emoji="🦊">🦊</div>
+                <div class="emoji-item" data-emoji="🐼">🐼</div>
+                <div class="emoji-item" data-emoji="🐨">🐨</div>
+                <div class="emoji-item" data-emoji="🐰">🐰</div>
+                <div class="emoji-item" data-emoji="🦁">🦁</div>
+                <div class="emoji-item" data-emoji="🐸">🐸</div>
+                <div class="emoji-item" data-emoji="🐙">🐙</div>
+                <div class="emoji-item" data-emoji="🦄">🦄</div>
+                <div class="emoji-item" data-emoji="🌸">🌸</div>
+                <div class="emoji-item" data-emoji="🍀">🍀</div>
+            </div>
+            <label class="upload-btn" for="avatarUpload">
+                <span>📷</span><span>上传我的照片</span>
+            </label>
+            <input type="file" id="avatarUpload" accept="image/*">
+        </div>
 
-    <button class="cta-btn" id="loginNextBtn">下一步：完善画像</button>
+        <div class="sec-title"><span class="dot"></span>给自己起个名字</div>
+        <div class="name-block">
+            <input type="text" class="name-input" id="nameInput" placeholder="例如：小溪" maxlength="12">
+            <div class="name-hint">2-12 个字符，未来路线签名可见</div>
+        </div>
+
+        <button class="cta-btn" id="loginNextBtn">下一步：完善画像</button>
+    </div>
+</div>
+
+<!-- 大众点评登录引导弹层 -->
+<div class="dp-modal-mask" id="dpModalMask">
+    <div class="dp-modal">
+        <h3>大众点评登录 <span class="badge">DEMO</span></h3>
+        <p>因浏览器同源策略限制，我们将<b>新窗口跳转</b>到大众点评官方登录页。完成登录后回到本页点击「我已登录」即可。</p>
+        <div class="steps">
+            <div><b>① </b>点击「打开登录页」跳转大众点评</div>
+            <div><b>② </b>用手机号 / 微信 / QQ 完成登录</div>
+            <div><b>③ </b>回到 CityWalk 点击「我已登录」</div>
+        </div>
+        <div class="dp-modal-btns">
+            <button class="ghost" id="dpModalCancel">取消</button>
+            <button class="primary" id="dpModalGo">打开登录页</button>
+        </div>
+    </div>
 </div>
 
 <!-- ============== p-profile ============== -->
@@ -898,6 +1067,16 @@ body {
     <div class="rec-list" id="recList"></div>
 </div>
 
+<!-- ============== p-route ============== -->
+<div class="page app-container" id="page-route" style="padding-bottom:0;overflow:hidden;background:#edf1f4;">
+    <div id="exploreRouteRoot" style="min-height:100vh;"></div>
+</div>
+
+<!-- ============== p-plan ============== -->
+<div class="page app-container" id="page-plan" style="padding-bottom:0;overflow:hidden;background:#edf1f4;">
+    <div id="routePlanRoot" style="min-height:100vh;"></div>
+</div>
+
 <!-- ============== p-mine ============== -->
 <div class="page p-mine app-container" id="page-mine">
     <div class="top-bar">
@@ -961,10 +1140,19 @@ body {
 <!-- ============== Shared Voice Modal ============== -->
 <div class="voice-modal" id="voiceModal">
     <div class="voice-sheet">
-        <div class="voice-mic">🎤</div>
-        <div class="voice-tip">说出你想去哪里…</div>
-        <div class="voice-sub">例如：周末想找个安静的地方喝咖啡</div>
-        <button class="voice-cancel" id="voiceCancelBtn">取消</button>
+        <div class="voice-mic" id="voiceMic">🎤</div>
+        <div class="voice-tip" id="voiceTip">说出你想去哪里…</div>
+        <div class="voice-sub" id="voiceSub">例如：周末想找个安静的地方喝咖啡</div>
+        <div id="voiceTranscript" style="min-height:24px;font-size:14px;color:#1a1a2e;font-weight:500;
+             padding:10px 14px;margin:6px 16px 18px;border-radius:12px;
+             background:rgba(232,242,255,0.6);display:none;text-align:left;line-height:1.5;"></div>
+        <div style="display:flex;gap:10px;justify-content:center;">
+            <button class="voice-cancel" id="voiceCancelBtn">取消</button>
+            <button class="voice-cancel" id="voiceUseBtn"
+                    style="display:none;background:linear-gradient(135deg,#1e5fd8,#5b9eff);color:#fff;font-weight:600;">
+                使用这段
+            </button>
+        </div>
     </div>
 </div>
 
@@ -976,7 +1164,7 @@ body {
     </div>
     <div class="tab-item" data-tab="route">
         <div class="tab-icon">🗺️</div>
-        <div>我的路线</div>
+        <div>探索</div>
     </div>
     <div class="tab-item" data-tab="mine">
         <div class="tab-icon">👤</div>
@@ -1037,7 +1225,7 @@ body {
  * Router + Page lifecycle
  * ===================================================================== */
 const Router = (() => {
-    const PAGES = ['login', 'profile', 'home', 'mine'];
+    const PAGES = ['login', 'profile', 'home', 'route', 'plan', 'mine'];
     const inits = {};
 
     function show(name) {
@@ -1046,9 +1234,9 @@ const Router = (() => {
         const el = document.getElementById('page-' + name);
         if (el) el.classList.add('active');
 
-        // Tab bar 仅在 home/mine 显示
+        // Tab bar 仅在 home/route/mine 显示
         const tab = document.getElementById('tabBar');
-        if (name === 'home' || name === 'mine') {
+        if (name === 'home' || name === 'route' || name === 'mine') {
             tab.classList.remove('hidden');
             tab.querySelectorAll('.tab-item').forEach(it => {
                 it.classList.toggle('active', it.dataset.tab === name);
@@ -1104,22 +1292,191 @@ document.querySelectorAll('#tabBar .tab-item').forEach(it => {
     it.addEventListener('click', () => {
         const t = it.dataset.tab;
         if (t === 'home') Router.go('home');
+        else if (t === 'route') Router.go('route');
         else if (t === 'mine') Router.go('mine');
-        else alert('路线历史，待开发');
     });
 });
 
 /* =====================================================================
- * Voice modal 公共
+ * Voice modal 公共 —— 浏览器原生 Web Speech API 实现
+ *   - Chrome / Edge / 大多数 Chromium 内核浏览器原生支持，无需 Key、无需后端
+ *   - 不支持时给出降级提示（可在此处接 /api/asr 走豆包 ASR）
  * ===================================================================== */
-const Voice = {
-    open() { document.getElementById('voiceModal').classList.add('show'); },
-    close() { document.getElementById('voiceModal').classList.remove('show'); }
-};
+const Voice = (() => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let rec = null;
+    let finalText = '';
+    let interimText = '';
+    let active = false;
+
+    function $(id) { return document.getElementById(id); }
+
+    function setUI(state, msg) {
+        const tip = $('voiceTip'), sub = $('voiceSub'), mic = $('voiceMic');
+        const tx  = $('voiceTranscript'), useBtn = $('voiceUseBtn');
+        if (state === 'listening') {
+            tip.textContent = '正在听…';
+            sub.textContent = '说完后会自动识别';
+            mic.style.animation = 'micPulse 1.2s infinite';
+            tx.style.display = 'block';
+            useBtn.style.display = 'none';
+        } else if (state === 'done') {
+            tip.textContent = '识别完成';
+            sub.textContent = '可以发送，或重新录制';
+            mic.style.animation = 'none';
+            useBtn.style.display = finalText.trim() ? 'inline-block' : 'none';
+        } else if (state === 'error') {
+            tip.textContent = '语音识别失败';
+            sub.textContent = msg || '请检查麦克风权限或换个浏览器试试';
+            mic.style.animation = 'none';
+            tx.style.display = 'none';
+            useBtn.style.display = 'none';
+        } else { // idle
+            tip.textContent = '说出你想去哪里…';
+            sub.textContent = '例如：周末想找个安静的地方喝咖啡';
+            mic.style.animation = 'none';
+            tx.style.display = 'none';
+            tx.innerHTML = '';
+            useBtn.style.display = 'none';
+            finalText = '';
+            interimText = '';
+        }
+    }
+
+    function renderTranscript() {
+        const tx = $('voiceTranscript');
+        tx.innerHTML = `<span style="color:#1a1a2e;">${finalText}</span>` +
+                       `<span style="color:#8e8e93;">${interimText}</span>` +
+                       (finalText || interimText ? '' : '<span style="color:#b0b0b8;">…</span>');
+    }
+
+    function start() {
+        if (!SR) {
+            setUI('error', '当前浏览器不支持语音识别，建议使用 Chrome / Edge');
+            // 进阶：此处可调用 fallbackRecord() 走 MediaRecorder + /api/asr
+            return;
+        }
+        if (active) return;
+
+        finalText = '';
+        interimText = '';
+
+        rec = new SR();
+        rec.lang = 'zh-CN';
+        rec.continuous = true;        // 持续识别直到手动停止
+        rec.interimResults = true;    // 边说边出实时结果
+
+        rec.onstart = () => {
+            active = true;
+            setUI('listening');
+            renderTranscript();
+        };
+        rec.onresult = (e) => {
+            interimText = '';
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+                const seg = e.results[i];
+                if (seg.isFinal) finalText += seg[0].transcript;
+                else interimText += seg[0].transcript;
+            }
+            renderTranscript();
+        };
+        rec.onerror = (e) => {
+            active = false;
+            const map = {
+                'not-allowed': '麦克风权限被拒绝，请在浏览器设置中允许',
+                'no-speech':   '没有听到声音，请再试一次',
+                'audio-capture': '没有检测到麦克风设备',
+                'network':     '网络异常，无法完成识别',
+                'aborted':     ''
+            };
+            if (e.error === 'aborted') return; // 主动停止不算错
+            setUI('error', map[e.error] || ('错误：' + e.error));
+        };
+        rec.onend = () => {
+            active = false;
+            if (finalText.trim()) setUI('done');
+        };
+
+        try { rec.start(); }
+        catch (err) { setUI('error', err.message); }
+    }
+
+    function stop() {
+        if (rec && active) {
+            try { rec.stop(); } catch (_) {}
+        }
+        active = false;
+    }
+
+    async function commit() {
+        const text = finalText.trim();
+        if (!text) return;
+
+        // UI 切换为"精炼中"
+        const tip = $('voiceTip'), sub = $('voiceSub'), mic = $('voiceMic');
+        const useBtn = $('voiceUseBtn');
+        useBtn.disabled = true;
+        useBtn.textContent = 'AI 精炼中…';
+        tip.textContent = 'AI 正在整理你说的内容…';
+        sub.textContent = '提取时间、地点、美食等关键信息';
+        mic.style.animation = 'micPulse 1.2s infinite';
+
+        let fields = null;
+        try {
+            const r = await fetch('/api/refine', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            const data = await r.json();
+            if (r.ok && data && data.fields) fields = data.fields;
+        } catch (e) {
+            console.warn('[voice] refine failed:', e);
+        }
+
+        // 写回结构化输入：优先用 AI 字段；失败则把原始文本塞到 "其它" 行
+        if (fields && (fields.time || fields.food || fields.people || fields.style ||
+                       fields.other || (fields.place && fields.place.length))) {
+            if (window.CityWalkHome && window.CityWalkHome.applyRefined) {
+                window.CityWalkHome.applyRefined(fields);
+            }
+        } else {
+            // 兜底：精炼失败时，把原话当作 "其它" 字段
+            if (window.CityWalkHome && window.CityWalkHome.applyRefined) {
+                window.CityWalkHome.applyRefined({ other: text });
+            } else {
+                const input = document.getElementById('mainInput');
+                if (input) {
+                    input.value = (input.value ? input.value + '\n' : '') + text;
+                    input.dispatchEvent(new Event('input'));
+                }
+            }
+        }
+
+        useBtn.disabled = false;
+        useBtn.textContent = '使用这段';
+        close();
+    }
+
+    function open() {
+        document.getElementById('voiceModal').classList.add('show');
+        setUI('idle');
+        // 弹层动画结束后再开始，避免 Safari 把权限弹窗吞掉
+        setTimeout(start, 250);
+    }
+    function close() {
+        stop();
+        setUI('idle');
+        document.getElementById('voiceModal').classList.remove('show');
+    }
+
+    return { open, close, commit };
+})();
 document.getElementById('voiceModal').addEventListener('click', (e) => {
     if (e.target.id === 'voiceModal') Voice.close();
 });
 document.getElementById('voiceCancelBtn').addEventListener('click', Voice.close);
+document.getElementById('voiceUseBtn').addEventListener('click', () => Voice.commit());
 
 /* =====================================================================
  * Page: login
@@ -1191,6 +1548,71 @@ Router.register('login', (() => {
             draft.name = name;
             localStorage.setItem('cw_profile_basic', JSON.stringify(draft));
             Router.go('profile');
+        });
+
+        /* ---- 登录方式 Tab 切换 ---- */
+        document.querySelectorAll('.login-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.dataset.pane;
+                document.querySelectorAll('.login-tab').forEach(t => t.classList.toggle('active', t === tab));
+                document.querySelectorAll('.login-pane').forEach(p => {
+                    p.classList.toggle('active', p.id === `pane-${target}`);
+                });
+            });
+        });
+
+        /* ---- 大众点评一键登录（DEMO 跳转方案） ---- */
+        const dpModalMask = document.getElementById('dpModalMask');
+        const dpBackBtn   = document.getElementById('dpBackBtn');
+        let dpPopupOpened = false;
+
+        document.getElementById('dpLoginBtn').addEventListener('click', () => {
+            dpModalMask.classList.add('visible');
+        });
+        document.getElementById('dpModalCancel').addEventListener('click', () => {
+            dpModalMask.classList.remove('visible');
+        });
+        document.getElementById('dpModalGo').addEventListener('click', () => {
+            // 跳转大众点评官方登录页（受同源策略限制，无法读取登录态）
+            window.open('https://account.dianping.com/login', '_blank', 'noopener,noreferrer');
+            dpModalMask.classList.remove('visible');
+            dpPopupOpened = true;
+            dpBackBtn.classList.add('visible');
+            dpBackBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        // 用户回流：基于"已登录大众点评"标记预填名字 / 头像
+        // 大众点评登录后：跳过初始偏好设置，画像由点评足迹自动总结
+        dpBackBtn.addEventListener('click', () => {
+            if (!dpPopupOpened) {
+                alert('请先点击「使用大众点评一键登录」完成登录');
+                return;
+            }
+            const dpUser = {
+                avatarType: 'emoji',
+                avatar: '🍜',
+                name: '点评用户',
+                source: 'dianping',
+                loginAt: Date.now(),
+            };
+            localStorage.setItem('cw_profile_basic', JSON.stringify(dpUser));
+            localStorage.setItem('cw_dp_linked', '1');
+
+            // 模拟基于大众点评足迹（美食、打卡等偏好）自动总结的画像
+            const dpTags = {
+                source: 'dianping',
+                summary: '近 90 天在大众点评收藏 28 家、打卡 56 次，偏好潮汕菜 / 日料 / 精品咖啡，常出没于华侨城、蛇口、深圳湾',
+                food: '尝鲜派',
+                pace: '舒适漫步',
+                companion: ['伴侣', '闺蜜'],
+                styles: ['☕ 咖啡', '📷 出片', '🍷 微醺', '🌃 夜景'],
+                // 用于"我的画像"额外展示的点评维度
+                cuisines: ['潮汕菜', '日式料理', '东南亚菜', '精品咖啡'],
+                hotspots: ['华侨城', '蛇口海上世界', '深圳湾', '南头古城'],
+                checkinLevel: '资深探店家 · Lv.6',
+            };
+            localStorage.setItem('cw_profile_tags', JSON.stringify(dpTags));
+            Router.go('home');
         });
     };
 })());
@@ -1411,7 +1833,14 @@ Router.register('home', (() => {
     // 状态
     const state = {
         thumbs: [],                     // [{url, name, pois?:[{name,desc}], status?:'pending'|'ok'|'fail'}]
-        selected: { time:null, people:null, style:null }, // 单选
+        // 结构化输入字段（与输入框前缀块一一对应）
+        selected: {
+            time:   null,
+            people: null,
+            style:  null,
+            food:   null,   // 美食偏好（语音/精炼时填）
+            other:  null    // 其它要求（语音/精炼时填）
+        },
         recOffset: 0,
         tags: {},
         // 地点抽屉
@@ -1486,6 +1915,7 @@ Router.register('home', (() => {
         if (combo.time)   items.push({ k:'time',   v:combo.time });
         if (combo.people) items.push({ k:'people', v:combo.people });
         if (combo.style)  items.push({ k:'style',  v:combo.style });
+        if (combo.food)   items.push({ k:'food',   v:'🍽 ' + combo.food });
         if (!items.length) {
             cont.innerHTML = `<span class="ic-chip placeholder">点这里选择 时间 / 人数 / 偏好</span>`;
             return;
@@ -1687,34 +2117,86 @@ Router.register('home', (() => {
         return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
 
-    function syncInputFromPresets() {
-        const parts = [];
-        if (state.selected.time)   parts.push(state.selected.time);
-        if (state.selected.people) parts.push(state.selected.people);
-        if (state.selected.style)  parts.push(state.selected.style);
-        // 地点：以 "📍A/B/C" 形式追加在最前面
-        if (state.confirmedPois && state.confirmedPois.length) {
-            parts.unshift('📍' + state.confirmedPois.map(p => p.name).join('/'));
+    // 结构化输入框前缀的分隔标记（位于结构化区与用户自由输入区之间）
+    const STRUCT_DIV = '╌╌╌╌╌╌╌╌╌╌';
+
+    /**
+     * 把模型精炼出来的字段合并进 state，并刷新 UI。
+     *  - 已选过的字段：用新值"覆盖"（更符合"我刚刚说的"语义）
+     *  - 地点：与已确认地点合并去重，保留顺序
+     */
+    function applyRefined(fields) {
+        if (!fields || typeof fields !== 'object') return;
+        const s = state.selected;
+        if (fields.time)   s.time   = fields.time;
+        if (fields.people) s.people = fields.people;
+        if (fields.style)  s.style  = fields.style;
+        if (fields.food)   s.food   = fields.food;
+        if (fields.other)  s.other  = fields.other;
+
+        if (Array.isArray(fields.place) && fields.place.length) {
+            const seen = new Set(state.confirmedPois.map(p => p.name));
+            fields.place.forEach(name => {
+                const n = String(name).trim();
+                if (n && !seen.has(n)) {
+                    state.confirmedPois.push({ name: n, desc: '语音输入' });
+                    seen.add(n);
+                }
+            });
         }
-        const presetText = parts.join(' · ');
+        renderInspire();
+        syncInputFromPresets();
+    }
+
+    /**
+     * 把当前 state（快捷卡片选项 + 已确认地点 + 语音精炼字段）
+     * 同步成多行结构化文本，写到 mainInput 的"前缀块"中，保留用户在分隔线下方
+     * 自己写的尾部文本不动。
+     */
+    function syncInputFromPresets() {
+        const s = state.selected;
+        const places = (state.confirmedPois || []).map(p => p.name);
+
+        const lines = [];
+        if (s.time)         lines.push('时间：'   + s.time);
+        if (places.length)  lines.push('地点：'   + places.join('/'));   // 多地点用 / 分隔，单独成行
+        if (s.food)         lines.push('美食：'   + s.food);
+        if (s.people)       lines.push('游玩人数：' + s.people);
+        if (s.style)        lines.push('偏好：'   + s.style);
+        if (s.other)        lines.push('其它：'   + s.other);
+
+        const prefix = lines.join('\n');
         const input = document.getElementById('mainInput');
-        // 只替换前缀预设部分（用 zero-width 标记位）
-        const sep = '｜';
         const cur = input.value;
-        const idx = cur.indexOf(sep);
-        const userTail = idx >= 0 ? cur.slice(idx + 1).trimStart() : (cur && !parts.length ? cur : '');
-        if (presetText && userTail) input.value = `${presetText} ${sep} ${userTail}`;
-        else if (presetText) input.value = `${presetText} ${sep} `;
-        else input.value = userTail;
+
+        // 取出用户在分隔线之下的自由输入；老版本用过 ｜，做向后兼容
+        let userTail = '';
+        const idx1 = cur.indexOf(STRUCT_DIV);
+        const idx2 = cur.indexOf('｜');
+        if (idx1 >= 0) {
+            userTail = cur.slice(idx1 + STRUCT_DIV.length).replace(/^\s*\n?/, '');
+        } else if (idx2 >= 0) {
+            userTail = cur.slice(idx2 + 1).trimStart();
+        } else if (!lines.length) {
+            // 之前没有任何结构化前缀也没有分隔，整段都算用户自由输入
+            userTail = cur;
+        }
+
+        let next;
+        if (prefix && userTail)      next = `${prefix}\n${STRUCT_DIV}\n${userTail}`;
+        else if (prefix)             next = `${prefix}\n${STRUCT_DIV}\n`;
+        else                         next = userTail;
+
+        input.value = next;
         autoResizeMainInput();
     }
 
-    /** textarea 高度自适应：1 行 ~ 6 行（max-height 由 CSS 控制） */
+    /** textarea 高度自适应：1 行 ~ 10 行（max-height 由 CSS 控制） */
     function autoResizeMainInput() {
         const el = document.getElementById('mainInput');
         if (!el || el.tagName !== 'TEXTAREA') return;
         el.style.height = 'auto';
-        el.style.height = Math.min(el.scrollHeight, 132) + 'px';
+        el.style.height = Math.min(el.scrollHeight, 220) + 'px';
     }
 
     function renderThumbs() {
@@ -1828,7 +2310,7 @@ Router.register('home', (() => {
             el.addEventListener('click', () => {
                 const r = list[+el.dataset.idx];
                 sessionStorage.setItem('cw_pending_query', r.title);
-                alert('路线规划页正在重做中～\n已记录你的诉求：' + r.title);
+                Router.go('plan');
             });
         });
     }
@@ -1847,6 +2329,10 @@ Router.register('home', (() => {
         render();
         if (bound) return;
         bound = true;
+
+        // 暴露 hook：让 Voice 模块识别 + 模型精炼后回调写入结构化输入框
+        window.CityWalkHome = window.CityWalkHome || {};
+        window.CityWalkHome.applyRefined = applyRefined;
 
         document.getElementById('userAvatar').addEventListener('click', () => Router.go('mine'));
         document.getElementById('voiceOpenBtn').addEventListener('click', Voice.open);
@@ -1872,7 +2358,7 @@ Router.register('home', (() => {
                 pois: state.confirmedPois.map(p => ({ name: p.name, desc: p.desc }))
             };
             sessionStorage.setItem('cw_pending_query', JSON.stringify(payload));
-            alert('路线规划页正在重做中～\n已记录:\n' + (txt || '(仅图片)') + (state.thumbs.length ? `\n图片 ${state.thumbs.length} 张` : ''));
+            Router.go('plan');
         });
 
         document.getElementById('imgUpload').addEventListener('change', (e) => {
@@ -1960,13 +2446,70 @@ Router.register('mine', (() => {
         }
         document.getElementById('mineUserName').textContent = basic.name || '朋友';
 
+        // 大众点评登录用户：副标题展示绑定来源
+        const sub = document.getElementById('mineUserSub');
+        if (sub) {
+            if (basic.source === 'dianping') {
+                sub.innerHTML = '已绑定 <b style="color:#1e5fd8;">大众点评</b> · 画像由点评足迹自动生成';
+            } else {
+                sub.textContent = '已加入 CityWalk · 探索深圳中';
+            }
+        }
+
+        const editBtn = document.getElementById('mineEditBtn');
+        const body = document.getElementById('mineTagBody');
+
+        // —— 大众点评画像：基于美食 / 打卡等偏好自动总结 ——
+        if (tags.source === 'dianping') {
+            if (editBtn) editBtn.style.display = 'none';
+            const cuisinesHTML = (tags.cuisines || []).map(x => `<span class="tag-pill">${x}</span>`).join('') || '<span class="tag-empty">未识别</span>';
+            const hotspotsHTML = (tags.hotspots || []).map(x => `<span class="tag-pill">${x}</span>`).join('') || '<span class="tag-empty">未识别</span>';
+            const stylesHTML   = (tags.styles   || []).map(x => `<span class="tag-pill">${x}</span>`).join('') || '<span class="tag-empty">未识别</span>';
+            const companionHTML= (Array.isArray(tags.companion) ? tags.companion : (tags.companion ? [tags.companion] : []))
+                                  .map(x => `<span class="tag-pill">${x}</span>`).join('') || '<span class="tag-empty">未识别</span>';
+
+            body.innerHTML = `
+                <div style="background:linear-gradient(135deg,rgba(91,158,255,0.12),rgba(30,95,216,0.08));
+                            border:1px solid rgba(91,158,255,0.25);border-radius:12px;
+                            padding:10px 12px;margin-bottom:12px;font-size:12px;color:#1e5fd8;
+                            display:flex;align-items:center;gap:6px;">
+                    <span>🍜</span><span>来自大众点评足迹的智能总结</span>
+                </div>
+                ${tags.summary ? `<div style="font-size:13px;color:#5a5a62;line-height:1.6;
+                            background:rgba(232,242,255,0.5);border-radius:10px;
+                            padding:10px 12px;margin-bottom:10px;">${tags.summary}</div>` : ''}
+                ${tags.checkinLevel ? `<div class="tag-row">
+                    <div class="tag-label">点评等级</div>
+                    <div class="tag-values"><span class="tag-pill" style="background:linear-gradient(135deg,#fff4d6,#ffe6a8);color:#a06a00;">${tags.checkinLevel}</span></div>
+                </div>` : ''}
+                <div class="tag-row">
+                    <div class="tag-label">爱吃什么</div>
+                    <div class="tag-values">${cuisinesHTML}</div>
+                </div>
+                <div class="tag-row">
+                    <div class="tag-label">常去打卡</div>
+                    <div class="tag-values">${hotspotsHTML}</div>
+                </div>
+                <div class="tag-row">
+                    <div class="tag-label">城市风格</div>
+                    <div class="tag-values">${stylesHTML}</div>
+                </div>
+                <div class="tag-row">
+                    <div class="tag-label">出行场景</div>
+                    <div class="tag-values">${companionHTML}</div>
+                </div>
+            `;
+            return;
+        }
+
+        // —— 普通用户画像：基于初始偏好问卷 ——
+        if (editBtn) editBtn.style.display = '';
         const labels = {
             food: '美食偏好',
             pace: '打卡节奏',
             companion: '出行场景',
             styles: '风格雷达'
         };
-        const body = document.getElementById('mineTagBody');
         if (tags.skipped || (!tags.food && !tags.pace && !tags.styles)) {
             body.innerHTML = `<div class="tag-empty" style="text-align:center;padding:14px 0;">还没有画像，<span style="color:#5b9eff;font-weight:600;cursor:pointer;" id="emptyEdit">点这里完善 →</span></div>`;
             const emp = document.getElementById('emptyEdit');
@@ -2010,5 +2553,7 @@ Router.register('mine', (() => {
  * ===================================================================== */
 Router.start();
 </script>
+<script src="./explore-route.bundle.js"></script>
+<script src="./route-plan.bundle.js"></script>
 </body>
 </html>

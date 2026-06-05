@@ -6,9 +6,19 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "build:route": "npx tailwindcss -i ./tailwind-route.css -o ./explore-tailwind.css --content ./explore-route.tsx ./route-plan.tsx && npx esbuild explore-route.tsx --bundle --format=iife --platform=browser --target=es2020 --define:process.env.NODE_ENV=\\\"production\\\" --minify --outfile=explore-route.bundle.js && npx esbuild route-plan.tsx --bundle --format=iife --platform=browser --target=es2020 --define:process.env.NODE_ENV=\\\"production\\\" --minify --outfile=route-plan.bundle.js"
   },
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "esbuild": "^0.28.0",
+    "lucide-react": "^1.17.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.13"
   }
 }
