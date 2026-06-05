@@ -1,17 +1,16 @@
-# Render 一键部署蓝图（含后端）
-# 用法：把仓库推到 GitHub → Render → New → Blueprint → 选这个仓库
-# 部署后在 Render 控制台 Environment 填 ANTHROPIC_API_KEY 即启用真实 Claude
 services:
   - type: web
-    name: chengmai-lu
-    runtime: python
+    name: citywalk-planner
+    runtime: node
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    buildCommand: npm install && npm run build:route
+    startCommand: node server.js
     envVars:
-      - key: ANTHROPIC_API_KEY
-        sync: false            # 在控制台手填，不进 git
-      - key: LU_MODEL_SONNET
-        value: claude-sonnet-4-6
-      - key: LU_MODEL_HAIKU
-        value: claude-haiku-4-5-20251001
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: ARK_API_KEY
+        sync: false
+      - key: DIANPING_COOKIE
+        sync: false
+      - key: PORT
+        value: 10000
