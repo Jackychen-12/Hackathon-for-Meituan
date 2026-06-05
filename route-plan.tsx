@@ -183,6 +183,51 @@ const catalog: CatalogPoi[] = [
   }
 ];
 
+const RADAR_DIMS = [
+  { key: 'photo', label: '出片', weights: { photographer: 1.0, literary: 0.4 } },
+  { key: 'taste', label: '滋味', weights: { foodie: 1.0, local: 0.7 } },
+  { key: 'value', label: '性价', weights: { value: 1.0 } },
+  { key: 'cult',  label: '文化', weights: { literary: 1.0, local: 0.5 } },
+  { key: 'easy',  label: '便捷', weights: { parent: 1.0, value: 0.3, local: 0.3 } },
+];
+
+function calcRadarScores(personas: string[]): number[] {
+  const pScore: Record<string, number> = {};
+  personas.forEach((p, i) => { pScore[p] = (pScore[p] || 0) + (i === 0 ? 1.0 : 0.5); });
+  return RADAR_DIMS.map(dim => {
+    let s = 0;
+    for (const [p, w] of Object.entries(dim.weights)) s += (pScore[p] || 0) * w;
+    return Math.min(1, s / 1.5);
+  });
+}
+
+function RadarChart({ scores, size = 64 }: { scores: number[]; size?: number }) {
+  const cx = size / 2, cy = size / 2, r = size * 0.38;
+  const n = 5;
+  const pts = (radius: number) => Array.from({ length: n }, (_, i) => {
+    const a = (Math.PI * 2 * i) / n - Math.PI / 2;
+    return [cx + radius * Math.cos(a), cy + radius * Math.sin(a)];
+  });
+  const bg = pts(r);
+  const data = scores.map((s, i) => {
+    const a = (Math.PI * 2 * i) / n - Math.PI / 2;
+    return [cx + r * s * Math.cos(a), cy + r * s * Math.sin(a)];
+  });
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <polygon points={bg.map(p => p.join(',')).join(' ')} fill="rgba(91,158,255,0.08)" stroke="rgba(91,158,255,0.2)" strokeWidth="0.5" />
+      <polygon points={pts(r * 0.5).map(p => p.join(',')).join(' ')} fill="none" stroke="rgba(91,158,255,0.15)" strokeWidth="0.5" />
+      <polygon points={data.map(p => p.join(',')).join(' ')} fill="rgba(91,158,255,0.25)" stroke="#5b9eff" strokeWidth="1.5" />
+      {RADAR_DIMS.map((dim, i) => {
+        const a = (Math.PI * 2 * i) / n - Math.PI / 2;
+        const lx = cx + (r + 10) * Math.cos(a);
+        const ly = cy + (r + 10) * Math.sin(a);
+        return <text key={dim.key} x={lx} y={ly} textAnchor="middle" dominantBaseline="central" fontSize="7" fill="#8e8e93">{dim.label}</text>;
+      })}
+    </svg>
+  );
+}
+
 const travelModeLabel: Record<TravelMode, string> = {
   walk: '步行',
   metro: '地铁',
@@ -1047,6 +1092,11 @@ function RoutePlanApp() {
                               ) : null;
                             })}
                           </div>
+                          {(p.personas?.length ?? 0) > 0 && (
+                            <div className="flex justify-center mt-1.5">
+                              <RadarChart scores={calcRadarScores(p.personas || [])} size={56} />
+                            </div>
+                          )}
                           <div className={`text-[10px] mt-1.5 ${active ? 'text-white/60' : 'text-[#8e8e93]'}`}>
                             {p.stops.length}站 · {p.totalDurationText}
                           </div>
@@ -1059,6 +1109,14 @@ function RoutePlanApp() {
               <div className="text-[18px] font-bold tracking-[0.01em] text-[#1a1a2e]">{plan.dayTitle}</div>
               {plan.stance && (
                 <div className="mt-1 text-[12px] text-[#5b9eff] font-medium">{plan.stance}</div>
+              )}
+              {plan.personas && plan.personas.length > 0 && (
+                <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                  {plan.personas.map((pid: string) => {
+                    const pm: Record<string, string> = {photographer:'📷 拍照党',foodie:'🍜 美食家',value:'💰 性价比',literary:'📚 文青',local:'🏠 老饕',parent:'👶 带娃'};
+                    return pm[pid] ? <span key={pid} className="text-[10px] px-2 py-0.5 rounded-full bg-[rgba(91,158,255,0.1)] text-[#5b9eff] font-medium">{pm[pid]}</span> : null;
+                  })}
+                </div>
               )}
               {!expanded ? (
                 <p className="mt-2 line-clamp-2 pr-10 text-[13px] leading-6 text-[#8e8e93]">{plan.summary}</p>
@@ -1331,6 +1389,41 @@ function RoutePlanApp() {
                   <div className="mt-1 text-[13px] text-[#5a5a62]">{detailStop.reason}</div>
                 </div>
               )}
+              {(() => {
+                const texts = ((detailStop as any).reviews || []).map((r:any) => r.text).join('');
+                const pitfalls: string[] = [];
+                if (/排队|等位|人多|拥挤/.test(texts)) pitfalls.push('⏰ 高峰时段可能需要排队');
+                if (/贵|价格高|性价比低/.test(texts)) pitfalls.push('💰 价格偏高，注意预算');
+                if (/难找|不好找|导航/.test(texts)) pitfalls.push('📍 位置较隐蔽，建议提前导航');
+                if (/服务差|态度|慢/.test(texts)) pitfalls.push('⚠️ 部分用户反馈服务待改善');
+                if (!pitfalls.length) return null;
+                return (
+                  <div className="rounded-[16px] bg-[#FFF8E1] p-3 mb-4">
+                    <div className="text-[12px] font-semibold text-[#B77C00] mb-1.5">⚡ 避坑提醒</div>
+                    {pitfalls.map((p, i) => <div key={i} className="text-[11px] text-[#8B6914] leading-5">{p}</div>)}
+                  </div>
+                );
+              })()}
+              <div className="rounded-[16px] bg-[rgba(232,242,255,0.5)] p-3 mb-4">
+                <div className="text-[12px] font-semibold text-[#1a1a2e] mb-2">🛒 优惠信息</div>
+                <div className="flex gap-2">
+                  <div className="flex-1 rounded-xl bg-white p-2 text-center">
+                    <div className="text-[10px] text-[#8e8e93]">团购券</div>
+                    <div className="text-[13px] font-bold text-[#5b9eff]">¥{detailStop.avg_price ? Math.round(detailStop.avg_price * 0.85) : 59}</div>
+                    <div className="text-[9px] text-[#8e8e93] line-through">¥{detailStop.avg_price || 69}</div>
+                  </div>
+                  <div className="flex-1 rounded-xl bg-white p-2 text-center">
+                    <div className="text-[10px] text-[#8e8e93]">排队状态</div>
+                    <div className="text-[13px] font-bold text-[#34C759]">较空闲</div>
+                    <div className="text-[9px] text-[#8e8e93]">约0-5min</div>
+                  </div>
+                  <div className="flex-1 rounded-xl bg-white p-2 text-center">
+                    <div className="text-[10px] text-[#8e8e93]">预约</div>
+                    <div className="text-[13px] font-bold text-[#5b9eff]">可订</div>
+                    <div className="text-[9px] text-[#8e8e93]">今日有位</div>
+                  </div>
+                </div>
+              </div>
               {detailStop.reviews && detailStop.reviews.length > 0 && (
                 <div>
                   <div className="text-[16px] font-bold text-[#1a1a2e] mb-3">用户评论</div>

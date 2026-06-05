@@ -1158,6 +1158,13 @@ body {
             <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">已打卡 POI</div></div>
             <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">收藏路线</div></div>
         </div>
+        <div class="card" style="margin-top:12px;">
+            <div class="card-head">
+                <div class="card-title"><span class="dot"></span>记忆飞轮</div>
+            </div>
+            <div id="memoryStatus" style="font-size:12px;color:#5a5a62;line-height:1.7;">
+            </div>
+        </div>
     </div>
 
     <div class="section">
@@ -1245,6 +1252,12 @@ body {
                 <option value="standard" selected>标准</option>
                 <option value="detailed">详细丰富</option>
             </select>
+        </div>
+        <div class="setting-item" style="flex-direction:column;align-items:stretch;">
+            <div class="setting-label" style="margin-bottom:8px;">预览效果</div>
+            <div id="voicePreview" style="background:rgba(232,242,255,0.5);border-radius:12px;padding:12px;font-size:12px;line-height:1.7;color:#5a5a62;min-height:60px;transition:all 0.3s;">
+                根据你的偏好，推荐武康路→安福路→永康路的半日漫步路线。
+            </div>
         </div>
     </div>
 
@@ -2672,6 +2685,27 @@ Router.register('mine', (() => {
             if (statNumsDP[0]) statNumsDP[0].textContent = routesDP;
             if (statNumsDP[1]) statNumsDP[1].textContent = checkinsDP.length;
             if (statNumsDP[2]) statNumsDP[2].textContent = favsDP.length;
+
+            // 记忆飞轮状态
+            const memElDP = document.getElementById('memoryStatus');
+            if (memElDP) {
+                const interactions = parseInt(localStorage.getItem('cw_route_count') || '0');
+                const checkinCount = checkinsDP.length;
+                const favCount = favsDP.length;
+                const totalActions = interactions + checkinCount + favCount;
+                const level = totalActions < 3 ? '初识' : totalActions < 10 ? '了解中' : totalActions < 25 ? '熟悉' : '默契';
+                const progress = Math.min(100, Math.round(totalActions / 25 * 100));
+                memElDP.innerHTML = `
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <div style="flex:1;height:4px;border-radius:2px;background:rgba(232,242,255,0.65);overflow:hidden;">
+                            <div style="width:${progress}%;height:100%;border-radius:2px;background:linear-gradient(90deg,#1e5fd8,#5b9eff);transition:width 0.5s;"></div>
+                        </div>
+                        <span style="font-size:11px;color:#5b9eff;font-weight:600;">${level}</span>
+                    </div>
+                    <div>累计互动 ${totalActions} 次 · 生成路线 ${interactions} 条 · 打卡 ${checkinCount} 个 · 收藏 ${favCount} 个</div>
+                    <div style="margin-top:6px;color:#8e8e93;font-size:11px;">${totalActions < 3 ? '继续使用，AI 会越来越懂你的偏好' : totalActions < 10 ? '已经开始了解你的风格' : '个性化推荐已根据你的偏好调整'}</div>
+                `;
+            }
             return;
         }
 
@@ -2711,6 +2745,27 @@ Router.register('mine', (() => {
         if (statNums[0]) statNums[0].textContent = routes;
         if (statNums[1]) statNums[1].textContent = checkins.length;
         if (statNums[2]) statNums[2].textContent = favs.length;
+
+        // 记忆飞轮状态
+        const memEl = document.getElementById('memoryStatus');
+        if (memEl) {
+            const interactions = parseInt(localStorage.getItem('cw_route_count') || '0');
+            const checkinCount = checkins.length;
+            const favCount = favs.length;
+            const totalActions = interactions + checkinCount + favCount;
+            const level = totalActions < 3 ? '初识' : totalActions < 10 ? '了解中' : totalActions < 25 ? '熟悉' : '默契';
+            const progress = Math.min(100, Math.round(totalActions / 25 * 100));
+            memEl.innerHTML = `
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                    <div style="flex:1;height:4px;border-radius:2px;background:rgba(232,242,255,0.65);overflow:hidden;">
+                        <div style="width:${progress}%;height:100%;border-radius:2px;background:linear-gradient(90deg,#1e5fd8,#5b9eff);transition:width 0.5s;"></div>
+                    </div>
+                    <span style="font-size:11px;color:#5b9eff;font-weight:600;">${level}</span>
+                </div>
+                <div>累计互动 ${totalActions} 次 · 生成路线 ${interactions} 条 · 打卡 ${checkinCount} 个 · 收藏 ${favCount} 个</div>
+                <div style="margin-top:6px;color:#8e8e93;font-size:11px;">${totalActions < 3 ? '继续使用，AI 会越来越懂你的偏好' : totalActions < 10 ? '已经开始了解你的风格' : '个性化推荐已根据你的偏好调整'}</div>
+            `;
+        }
     }
 
     return function init() {
@@ -2738,6 +2793,28 @@ Router.register('settings', (() => {
     return function init() {
         if (bound) return;
         bound = true;
+
+        function updateVoicePreview() {
+            const tone = document.querySelector('#page-settings select[data-key="tone"]')?.value || 'neutral';
+            const style = document.querySelector('#page-settings select[data-key="style"]')?.value || 'direct';
+            const length = document.querySelector('#page-settings select[data-key="length"]')?.value || 'standard';
+
+            const previews = {
+                'casual-literary-concise': '武康路的梧桐很对味，配杯咖啡刚好。',
+                'casual-literary-standard': '武康路的梧桐叶子正好看，九点的光线柔得刚好，拍完顺路去安福路喝杯咖啡，下午的永康路最适合发呆。',
+                'casual-literary-detailed': '清晨的武康路像翻开一本泛黄的相册，梧桐树影斑驳地洒在弧形的大楼墙面上。九点前到最好——那时候旅游团还没来，整条路属于你和邻居家的猫。拍完建筑弧线，沿小马路走到安福路，买手店刚开门，咖啡香从每个转角飘出来...',
+                'neutral-direct-concise': '推荐路线：武康路→安福路→永康路，半日可走完。',
+                'neutral-direct-standard': '根据你的偏好，推荐武康路→安福路→永康路的半日漫步路线。武康路适合拍照，安福路有好的咖啡和买手店，永康路是精品咖啡一条街。',
+                'neutral-direct-detailed': '为你规划了一条衡复区域的半日路线，从武康路出发（建议9点前到达，光线最佳且人少），步行至安福路（约10分钟），可以逛买手店和独立咖啡馆，最后到永康路精品咖啡街收尾。全程约3.5小时，人均消费约80-120元。',
+                'formal-playful-concise': '这条线路会让你的朋友圈质感翻倍 ✨',
+                'formal-playful-standard': '我们精心策划了一条"朋友圈质感翻倍"路线 ✨ 从武康大楼的经典弧线开始，一路咖啡+买手店+老洋房，最后在永康路来一杯精品手冲收尾～',
+                'formal-playful-detailed': '欢迎体验我们的「朋友圈质感翻倍」特别路线 ✨ 第一站武康路——9点的斜阳打在武康大楼上简直是天然滤镜，拍照党请准备好快门！第二站安福路——这里的买手店比你的衣柜有品味多了（不是）...',
+            };
+            const key = tone + '-' + style + '-' + length;
+            const fallback = '根据你的偏好，推荐武康路→安福路→永康路的半日漫步路线。';
+            document.getElementById('voicePreview').textContent = previews[key] || fallback;
+        }
+
         document.getElementById('settingsBackBtn').addEventListener('click', () => Router.go('mine'));
         // toggle 交互
         document.querySelectorAll('#page-settings .toggle').forEach(el => {
@@ -2762,6 +2839,7 @@ Router.register('settings', (() => {
             if (saved) el.value = JSON.parse(saved);
             el.addEventListener('change', () => {
                 localStorage.setItem('cw_setting_' + key, JSON.stringify(el.value));
+                updateVoicePreview();
             });
         });
         // 清空数据
@@ -2772,6 +2850,7 @@ Router.register('settings', (() => {
             location.hash = 'login';
             location.reload();
         });
+        updateVoicePreview();
     };
 })());
 
