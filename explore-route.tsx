@@ -584,7 +584,21 @@ const defaultSpots: Spot[] = [
 ];
 
 
-function ExploreRouteApp() {
+class ErrorBoundary extends React.Component<{children: React.ReactNode}, {error: string | null}> {
+  state = { error: null as string | null };
+  static getDerivedStateFromError(e: any) { return { error: e?.message || String(e) }; }
+  render() {
+    if (this.state.error) return (
+      <div style={{padding:'40px',textAlign:'center',color:'#d00'}}>
+        <h3>探索页渲染出错</h3>
+        <pre style={{fontSize:'12px',whiteSpace:'pre-wrap'}}>{this.state.error}</pre>
+      </div>
+    );
+    return this.props.children;
+  }
+}
+
+function ExploreRouteAppInner() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const dragState = useRef<{ startY: number; startTop: number; moved: boolean } | null>(null);
   const drawerTopRef = useRef(0);
@@ -1195,11 +1209,21 @@ function ExploreRouteApp() {
   );
 }
 
+function ExploreRouteApp() {
+  return <ErrorBoundary><ExploreRouteAppInner /></ErrorBoundary>;
+}
+
 function mount() {
   const rootElement = document.getElementById('exploreRouteRoot');
   if (!rootElement) return;
-  const root = createRoot(rootElement);
-  root.render(<ExploreRouteApp />);
+  try {
+    const root = createRoot(rootElement);
+    root.render(<ExploreRouteApp />);
+  } catch (e: any) {
+    rootElement.innerHTML = `<div style="padding:40px;text-align:center;color:#d00;">
+      <h3>探索页加载失败</h3><pre style="font-size:12px;white-space:pre-wrap;">${e?.message || e}</pre>
+    </div>`;
+  }
 }
 
 if (document.readyState === 'loading') {
