@@ -1,0 +1,921 @@
+{
+  "cases": [
+    {
+      "title": "武康路安福路文艺漫步",
+      "dayTitle": "半日文艺路线",
+      "summary": "从武康路到安福路，打卡网红地标，品味咖啡与街拍。",
+      "personas": [
+        "literary",
+        "photographer"
+      ],
+      "stance": "以文艺和出片为核心，串联武康路、安福路精华。",
+      "stops": [
+        {
+          "poi_id": "dp_wukang_road",
+          "stayMin": 60,
+          "reason": "武康大楼为标志性打卡点，街拍出片率高。",
+          "name": "武康路",
+          "branch_name": "历史风貌街区",
+          "address": "上海市徐汇区武康路 393 号（武康大楼）",
+          "longitude": 121.4365,
+          "latitude": 31.2084,
+          "categories": [
+            "景点",
+            "历史街区",
+            "街拍"
+          ],
+          "avg_rating": 5,
+          "avg_price": 0,
+          "review_count": 6728,
+          "business_hours": [
+            "全天开放"
+          ],
+          "type": "photo",
+          "dp_image": "http://p0.meituan.net/tdctraveldark/f13f09278bb0752dd65b42fd9668ec68364043.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/F59WYsbOXVUQ1l9U",
+          "reviews": [
+            {
+              "author": "街拍小王",
+              "avatar": "王",
+              "rating": 5,
+              "text": "武康大楼侧面 9 点左右光线最柔，人少到可以随便站位。推荐用长焦拍建筑弧线。",
+              "date": "2026-04-15",
+              "highlight": "9点光线最柔"
+            },
+            {
+              "author": "沪上散步",
+              "avatar": "散",
+              "rating": 5,
+              "text": "梧桐叶子最好看是四月底五月初，整条路金绿交织。建议从南往北走，逆光拍人像绝了。",
+              "date": "2026-05-02",
+              "highlight": "梧桐逆光拍人像"
+            },
+            {
+              "author": "周末探路",
+              "avatar": "探",
+              "rating": 4,
+              "text": "11 点之后旅游团就来了，整条路都是举旗子的。要拍照一定趁早。",
+              "date": "2026-03-22",
+              "highlight": "11点后旅游团高峰"
+            },
+            {
+              "author": "本地阿姨",
+              "avatar": "阿",
+              "rating": 5,
+              "text": "住在附近三十年了，最近被各种博主发掘，人确实多了。但清晨的武康路依然属于邻居们。",
+              "date": "2026-04-01",
+              "highlight": "清晨属于邻居"
+            },
+            {
+              "author": "摄影老法师",
+              "avatar": "法",
+              "rating": 5,
+              "text": "武康大楼拍过几百次了，最好的机位是对面花店门口，用 35mm 焦段刚好框住整栋楼的弧线。",
+              "date": "2026-02-18",
+              "highlight": "花店门口35mm最佳机位"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "衡复"
+          ]
+        },
+        {
+          "poi_id": "dp_wukangting",
+          "stayMin": 60,
+          "reason": "文创园区内咖啡馆和艺术空间，适合文艺休憩。",
+          "transitMode": "walk",
+          "transitMin": 10,
+          "name": "武康庭",
+          "branch_name": "Ferguson Lane",
+          "address": "上海市徐汇区武康路 376 号",
+          "longitude": 121.4358,
+          "latitude": 31.2075,
+          "categories": [
+            "面包蛋糕",
+            "南京西路商圈",
+            "咖啡",
+            "文创园区",
+            "拍照"
+          ],
+          "avg_rating": 4,
+          "avg_price": 147,
+          "review_count": 7566,
+          "business_hours": [
+            "09:00-22:00"
+          ],
+          "type": "rest",
+          "dp_image": "https://p0.meituan.net/biztone/048af115194e074a444915dda89df9f4271701.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/H4XolSQ0auDdNY2L",
+          "reviews": [
+            {
+              "author": "院子控",
+              "avatar": "院",
+              "rating": 5,
+              "text": "藤蔓爬满整面墙的时候最好看，一杯手冲坐一下午。安静到能听见鸟叫。",
+              "date": "2026-04-20",
+              "highlight": "藤蔓院落最适合慢拍"
+            },
+            {
+              "author": "咖啡测评",
+              "avatar": "咖",
+              "rating": 4,
+              "text": "手冲 38-45 不等，品质稳定。但下午两点半以后几乎没座位了，建议早来。",
+              "date": "2026-03-15",
+              "highlight": "14:30后客满"
+            },
+            {
+              "author": "安静星人",
+              "avatar": "安",
+              "rating": 5,
+              "text": "全上海最像欧洲小院子的地方。拍照比网红店强一百倍，而且不用排队。",
+              "date": "2026-05-10",
+              "highlight": "像欧洲小院不用排队"
+            },
+            {
+              "author": "雨天来客",
+              "avatar": "雨",
+              "rating": 3,
+              "text": "下雨天露天区完全没法坐，室内就四五个位子。建议看天气再来。",
+              "date": "2026-04-05",
+              "highlight": "下雨天露天无遮挡"
+            },
+            {
+              "author": "文青一号",
+              "avatar": "文",
+              "rating": 5,
+              "text": "院子里的光影从 10 点开始最美，带本书坐到下午。是我在上海最喜欢的「第三空间」。",
+              "date": "2026-03-28",
+              "highlight": "光影10点起最美"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "武康路"
+          ],
+          "distanceKm": 0.1
+        },
+        {
+          "poi_id": "dp_anfu_road",
+          "stayMin": 60,
+          "reason": "安福路聚集独立店铺与画廊，文艺气息浓厚。",
+          "transitMode": "walk",
+          "transitMin": 15,
+          "name": "安福路",
+          "branch_name": "文艺街区",
+          "address": "上海市徐汇区安福路（武康路-常熟路段）",
+          "longitude": 121.4408,
+          "latitude": 31.2125,
+          "categories": [
+            "景点",
+            "街拍",
+            "文艺"
+          ],
+          "avg_rating": 5,
+          "avg_price": 0,
+          "review_count": 5644,
+          "business_hours": [
+            "全天开放"
+          ],
+          "type": "photo",
+          "dp_image": "https://img.meituan.net/kylisean/f196bf4d7c5424819db649418a00a35f15270335.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/G6Q03iCRQqaUI5uZ",
+          "reviews": [
+            {
+              "author": "黄昏猎手",
+              "avatar": "猎",
+              "rating": 5,
+              "text": "17:00-18:30 的光是金色的，打在老洋房立面上特别温柔。这条路就是为黄昏存在的。",
+              "date": "2026-04-22",
+              "highlight": "17-18:30黄金时段"
+            },
+            {
+              "author": "周末漫步",
+              "avatar": "漫",
+              "rating": 4,
+              "text": "好看是真好看，但周五晚上人流恐怖。建议工作日下午来，安静得像私人花园。",
+              "date": "2026-05-08",
+              "highlight": "周五晚人流拥挤"
+            },
+            {
+              "author": "话剧迷",
+              "avatar": "话",
+              "rating": 5,
+              "text": "安福路 288 号话剧中心门口是全路最好的拍照点，有台阶有光影有质感。",
+              "date": "2026-03-30",
+              "highlight": "话剧中心门口最佳拍照点"
+            },
+            {
+              "author": "精酿爱好者",
+              "avatar": "精",
+              "rating": 5,
+              "text": "路边有家站立精酿 bar，一杯 IPA 才 30 块。端着酒杯看夕阳是安福路的正确打开方式。",
+              "date": "2026-04-18",
+              "highlight": "站立精酿30元看夕阳"
+            },
+            {
+              "author": "本地居民",
+              "avatar": "居",
+              "rating": 4,
+              "text": "19 点以后人潮涌入，整条路变成步行街了。想安静体验一定要赶在 18 点前。",
+              "date": "2026-05-15",
+              "highlight": "19点后人潮拥挤"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "安福路"
+          ],
+          "distanceKm": 0.7
+        },
+        {
+          "poi_id": "dp_yongkang_coffee",
+          "stayMin": 45,
+          "reason": "永康路独立咖啡馆，体验上海咖啡文化。",
+          "transitMode": "walk",
+          "transitMin": 20,
+          "name": "永康路咖啡",
+          "branch_name": "老克勒咖啡馆",
+          "address": "上海市徐汇区永康路 67 号",
+          "longitude": 121.4475,
+          "latitude": 31.2105,
+          "categories": [
+            "咖啡",
+            "音乐学院/五官科医院",
+            "独立咖啡馆"
+          ],
+          "avg_rating": 4,
+          "avg_price": 56,
+          "review_count": 4163,
+          "business_hours": [
+            "08:30-18:00"
+          ],
+          "type": "rest",
+          "dp_image": "http://p1.meituan.net/merchant/aa20f9b671354897ba4ac673a202de02934486.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/H1i49HzO1nxLgK2c",
+          "reviews": [
+            {
+              "author": "咖啡续命",
+              "avatar": "续",
+              "rating": 5,
+              "text": "美式 35 可以续杯一下午。老板是个特别老克勒的爷叔，偶尔会跟你聊聊老上海。",
+              "date": "2026-04-15",
+              "highlight": "美式35续杯一下午"
+            },
+            {
+              "author": "安静角落",
+              "avatar": "角",
+              "rating": 5,
+              "text": "没有网红打卡的喧闹，就是一个安安静静喝咖啡的地方。位子不多但翻台快。",
+              "date": "2026-03-08",
+              "highlight": "安静不网红"
+            },
+            {
+              "author": "常客",
+              "avatar": "常",
+              "rating": 5,
+              "text": "来了三年了，每周至少一次。拿铁拉花虽然一般，但豆子烘焙度刚好，不酸不苦。",
+              "date": "2026-05-18",
+              "highlight": "豆子烘焙度刚好"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "永康路"
+          ],
+          "distanceKm": 0.7
+        }
+      ],
+      "totalDistanceKm": 1.5
+    },
+    {
+      "title": "本帮老饕的经典味觉之旅",
+      "dayTitle": "老字号美食与文艺街区的碰撞",
+      "summary": "从武康路出发，打卡老吉士、兰心餐厅等本帮名店，穿插文艺街区与咖啡。",
+      "personas": [
+        "foodie",
+        "literary"
+      ],
+      "stance": "聚焦地道本帮菜老字号，辅以文艺氛围与街拍。",
+      "stops": [
+        {
+          "poi_id": "dp_laojishi",
+          "stayMin": 90,
+          "reason": "本帮菜名店，红烧肉和蟹粉豆腐是招牌。",
+          "transitMode": "",
+          "transitMin": 0,
+          "name": "老吉士",
+          "branch_name": "天平路总店",
+          "address": "上海市徐汇区天平路 41 号",
+          "longitude": 121.4412,
+          "latitude": 31.2095,
+          "categories": [
+            "本帮菜",
+            "徐家汇商圈",
+            "上海菜"
+          ],
+          "avg_rating": 4,
+          "avg_price": 180,
+          "review_count": 11143,
+          "business_hours": [
+            "11:00-14:00",
+            "17:00-21:30"
+          ],
+          "type": "eat",
+          "dp_image": "https://p0.meituan.net/biztone/b3ea40e3bc770698d3f18cc17bfea0d0377604.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/k175tm2mcNdosVCq",
+          "reviews": [
+            {
+              "author": "本帮菜迷",
+              "avatar": "帮",
+              "rating": 5,
+              "text": "油爆河虾是镇店之宝，虾壳酥脆到不用吐。但只有午市才有，晚上来就没了。",
+              "date": "2026-04-28",
+              "highlight": "油爆河虾午市限定"
+            },
+            {
+              "author": "外地食客",
+              "avatar": "外",
+              "rating": 5,
+              "text": "红烧肉入口即化，酱汁挂面一绝。人均 130-150，在这个地段算性价比很高了。",
+              "date": "2026-05-05",
+              "highlight": "红烧肉入口即化"
+            },
+            {
+              "author": "排队选手",
+              "avatar": "排",
+              "rating": 4,
+              "text": "周末 11 点到的，还是等了 40 分钟。建议工作日来或者提前电话订位。",
+              "date": "2026-03-18",
+              "highlight": "周末排队40分钟"
+            },
+            {
+              "author": "老上海",
+              "avatar": "老",
+              "rating": 5,
+              "text": "二十年了味道没变过。八宝辣酱偏甜是老吉士的风格，别说不正宗——这就是上海味道。",
+              "date": "2026-02-25",
+              "highlight": "二十年味道不变"
+            },
+            {
+              "author": "尝鲜党",
+              "avatar": "尝",
+              "rating": 4,
+              "text": "糖醋小排偏甜了一点，但酱汁比例很讲究。蟹粉豆腐真的鲜到掉眉毛。建议避开 21:00 后去，停止点单。",
+              "date": "2026-04-12",
+              "highlight": "21:00停止点单"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "衡复"
+          ]
+        },
+        {
+          "poi_id": "dp_wukang_road",
+          "stayMin": 60,
+          "reason": "武康大楼拍照打卡，感受历史建筑魅力。",
+          "transitMode": "walk",
+          "transitMin": 5,
+          "name": "武康路",
+          "branch_name": "历史风貌街区",
+          "address": "上海市徐汇区武康路 393 号（武康大楼）",
+          "longitude": 121.4365,
+          "latitude": 31.2084,
+          "categories": [
+            "景点",
+            "历史街区",
+            "街拍"
+          ],
+          "avg_rating": 5,
+          "avg_price": 0,
+          "review_count": 6728,
+          "business_hours": [
+            "全天开放"
+          ],
+          "type": "photo",
+          "dp_image": "http://p0.meituan.net/tdctraveldark/f13f09278bb0752dd65b42fd9668ec68364043.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/F59WYsbOXVUQ1l9U",
+          "reviews": [
+            {
+              "author": "街拍小王",
+              "avatar": "王",
+              "rating": 5,
+              "text": "武康大楼侧面 9 点左右光线最柔，人少到可以随便站位。推荐用长焦拍建筑弧线。",
+              "date": "2026-04-15",
+              "highlight": "9点光线最柔"
+            },
+            {
+              "author": "沪上散步",
+              "avatar": "散",
+              "rating": 5,
+              "text": "梧桐叶子最好看是四月底五月初，整条路金绿交织。建议从南往北走，逆光拍人像绝了。",
+              "date": "2026-05-02",
+              "highlight": "梧桐逆光拍人像"
+            },
+            {
+              "author": "周末探路",
+              "avatar": "探",
+              "rating": 4,
+              "text": "11 点之后旅游团就来了，整条路都是举旗子的。要拍照一定趁早。",
+              "date": "2026-03-22",
+              "highlight": "11点后旅游团高峰"
+            },
+            {
+              "author": "本地阿姨",
+              "avatar": "阿",
+              "rating": 5,
+              "text": "住在附近三十年了，最近被各种博主发掘，人确实多了。但清晨的武康路依然属于邻居们。",
+              "date": "2026-04-01",
+              "highlight": "清晨属于邻居"
+            },
+            {
+              "author": "摄影老法师",
+              "avatar": "法",
+              "rating": 5,
+              "text": "武康大楼拍过几百次了，最好的机位是对面花店门口，用 35mm 焦段刚好框住整栋楼的弧线。",
+              "date": "2026-02-18",
+              "highlight": "花店门口35mm最佳机位"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "衡复"
+          ],
+          "distanceKm": 0.5
+        },
+        {
+          "poi_id": "dp_anfu_road",
+          "stayMin": 45,
+          "reason": "安福路文艺小店与街拍，适合饭后散步。",
+          "transitMode": "walk",
+          "transitMin": 10,
+          "name": "安福路",
+          "branch_name": "文艺街区",
+          "address": "上海市徐汇区安福路（武康路-常熟路段）",
+          "longitude": 121.4408,
+          "latitude": 31.2125,
+          "categories": [
+            "景点",
+            "街拍",
+            "文艺"
+          ],
+          "avg_rating": 5,
+          "avg_price": 0,
+          "review_count": 5644,
+          "business_hours": [
+            "全天开放"
+          ],
+          "type": "photo",
+          "dp_image": "https://img.meituan.net/kylisean/f196bf4d7c5424819db649418a00a35f15270335.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/G6Q03iCRQqaUI5uZ",
+          "reviews": [
+            {
+              "author": "黄昏猎手",
+              "avatar": "猎",
+              "rating": 5,
+              "text": "17:00-18:30 的光是金色的，打在老洋房立面上特别温柔。这条路就是为黄昏存在的。",
+              "date": "2026-04-22",
+              "highlight": "17-18:30黄金时段"
+            },
+            {
+              "author": "周末漫步",
+              "avatar": "漫",
+              "rating": 4,
+              "text": "好看是真好看，但周五晚上人流恐怖。建议工作日下午来，安静得像私人花园。",
+              "date": "2026-05-08",
+              "highlight": "周五晚人流拥挤"
+            },
+            {
+              "author": "话剧迷",
+              "avatar": "话",
+              "rating": 5,
+              "text": "安福路 288 号话剧中心门口是全路最好的拍照点，有台阶有光影有质感。",
+              "date": "2026-03-30",
+              "highlight": "话剧中心门口最佳拍照点"
+            },
+            {
+              "author": "精酿爱好者",
+              "avatar": "精",
+              "rating": 5,
+              "text": "路边有家站立精酿 bar，一杯 IPA 才 30 块。端着酒杯看夕阳是安福路的正确打开方式。",
+              "date": "2026-04-18",
+              "highlight": "站立精酿30元看夕阳"
+            },
+            {
+              "author": "本地居民",
+              "avatar": "居",
+              "rating": 4,
+              "text": "19 点以后人潮涌入，整条路变成步行街了。想安静体验一定要赶在 18 点前。",
+              "date": "2026-05-15",
+              "highlight": "19点后人潮拥挤"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "安福路"
+          ],
+          "distanceKm": 0.6
+        },
+        {
+          "poi_id": "dp_lanxin",
+          "stayMin": 90,
+          "reason": "老字号本帮菜，油爆虾和腌笃鲜必点。",
+          "transitMode": "taxi",
+          "transitMin": 15,
+          "name": "兰心餐厅",
+          "branch_name": "进贤路总店",
+          "address": "上海市黄浦区进贤路 130 号",
+          "longitude": 121.4521,
+          "latitude": 31.2168,
+          "categories": [
+            "本帮菜",
+            "淮海路",
+            "上海菜",
+            "老字号"
+          ],
+          "avg_rating": 3.5,
+          "avg_price": 92,
+          "review_count": 11552,
+          "business_hours": [
+            "11:00-13:30",
+            "17:00-20:30"
+          ],
+          "type": "eat",
+          "dp_image": "https://img.meituan.net/msmerchant/8ffa80bfeddca02f554d990d09f35d0117229.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/l4tAieMmQdQiuHLA",
+          "reviews": [
+            {
+              "author": "排队专家",
+              "avatar": "专",
+              "rating": 4,
+              "text": "排队是真的久，周末至少 1 小时起步。但红烧肉真的值得等，肥而不腻入口化渣。",
+              "date": "2026-04-08",
+              "highlight": "周末排队1小时起步"
+            },
+            {
+              "author": "老饕",
+              "avatar": "饕",
+              "rating": 5,
+              "text": "草头圈子是进贤路一绝。建议 11 点开门就到，第一轮不用等。",
+              "date": "2026-03-12",
+              "highlight": "11点开门第一轮免排"
+            },
+            {
+              "author": "上海胃",
+              "avatar": "胃",
+              "rating": 5,
+              "text": "蟹粉豆腐、红烧肉、油爆虾三件套永远不出错。人均 100 出头，本帮菜天花板。",
+              "date": "2026-05-20",
+              "highlight": "三件套人均100"
+            },
+            {
+              "author": "失望一次",
+              "avatar": "失",
+              "rating": 3,
+              "text": "20:30 停止点单，我 20:15 到的只能点两个菜就催单了。务必提前到。",
+              "date": "2026-04-30",
+              "highlight": "20:30停止点单"
+            }
+          ],
+          "regions": [
+            "黄浦区",
+            "进贤路"
+          ],
+          "distanceKm": 1.2
+        },
+        {
+          "poi_id": "dp_yongkang_coffee",
+          "stayMin": 60,
+          "reason": "永康路独立咖啡馆，品尝手冲咖啡解腻。",
+          "transitMode": "walk",
+          "transitMin": 10,
+          "name": "永康路咖啡",
+          "branch_name": "老克勒咖啡馆",
+          "address": "上海市徐汇区永康路 67 号",
+          "longitude": 121.4475,
+          "latitude": 31.2105,
+          "categories": [
+            "咖啡",
+            "音乐学院/五官科医院",
+            "独立咖啡馆"
+          ],
+          "avg_rating": 4,
+          "avg_price": 56,
+          "review_count": 4163,
+          "business_hours": [
+            "08:30-18:00"
+          ],
+          "type": "rest",
+          "dp_image": "http://p1.meituan.net/merchant/aa20f9b671354897ba4ac673a202de02934486.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/H1i49HzO1nxLgK2c",
+          "reviews": [
+            {
+              "author": "咖啡续命",
+              "avatar": "续",
+              "rating": 5,
+              "text": "美式 35 可以续杯一下午。老板是个特别老克勒的爷叔，偶尔会跟你聊聊老上海。",
+              "date": "2026-04-15",
+              "highlight": "美式35续杯一下午"
+            },
+            {
+              "author": "安静角落",
+              "avatar": "角",
+              "rating": 5,
+              "text": "没有网红打卡的喧闹，就是一个安安静静喝咖啡的地方。位子不多但翻台快。",
+              "date": "2026-03-08",
+              "highlight": "安静不网红"
+            },
+            {
+              "author": "常客",
+              "avatar": "常",
+              "rating": 5,
+              "text": "来了三年了，每周至少一次。拿铁拉花虽然一般，但豆子烘焙度刚好，不酸不苦。",
+              "date": "2026-05-18",
+              "highlight": "豆子烘焙度刚好"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "永康路"
+          ],
+          "distanceKm": 0.8
+        }
+      ],
+      "totalDistanceKm": 3.1
+    },
+    {
+      "title": "文艺滨江亲子游",
+      "dayTitle": "徐汇滨江艺术之旅",
+      "summary": "从武康路漫步到徐汇滨江，感受艺术与自然的融合。",
+      "personas": [
+        "literary",
+        "parent"
+      ],
+      "stance": "兼顾文艺氛围与亲子乐趣，让大人小孩都尽兴。",
+      "stops": [
+        {
+          "poi_id": "dp_wukang_road",
+          "stayMin": 60,
+          "reason": "漫步历史街区，欣赏武康大楼，拍照打卡。",
+          "name": "武康路",
+          "branch_name": "历史风貌街区",
+          "address": "上海市徐汇区武康路 393 号（武康大楼）",
+          "longitude": 121.4365,
+          "latitude": 31.2084,
+          "categories": [
+            "景点",
+            "历史街区",
+            "街拍"
+          ],
+          "avg_rating": 5,
+          "avg_price": 0,
+          "review_count": 6728,
+          "business_hours": [
+            "全天开放"
+          ],
+          "type": "photo",
+          "dp_image": "http://p0.meituan.net/tdctraveldark/f13f09278bb0752dd65b42fd9668ec68364043.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/F59WYsbOXVUQ1l9U",
+          "reviews": [
+            {
+              "author": "街拍小王",
+              "avatar": "王",
+              "rating": 5,
+              "text": "武康大楼侧面 9 点左右光线最柔，人少到可以随便站位。推荐用长焦拍建筑弧线。",
+              "date": "2026-04-15",
+              "highlight": "9点光线最柔"
+            },
+            {
+              "author": "沪上散步",
+              "avatar": "散",
+              "rating": 5,
+              "text": "梧桐叶子最好看是四月底五月初，整条路金绿交织。建议从南往北走，逆光拍人像绝了。",
+              "date": "2026-05-02",
+              "highlight": "梧桐逆光拍人像"
+            },
+            {
+              "author": "周末探路",
+              "avatar": "探",
+              "rating": 4,
+              "text": "11 点之后旅游团就来了，整条路都是举旗子的。要拍照一定趁早。",
+              "date": "2026-03-22",
+              "highlight": "11点后旅游团高峰"
+            },
+            {
+              "author": "本地阿姨",
+              "avatar": "阿",
+              "rating": 5,
+              "text": "住在附近三十年了，最近被各种博主发掘，人确实多了。但清晨的武康路依然属于邻居们。",
+              "date": "2026-04-01",
+              "highlight": "清晨属于邻居"
+            },
+            {
+              "author": "摄影老法师",
+              "avatar": "法",
+              "rating": 5,
+              "text": "武康大楼拍过几百次了，最好的机位是对面花店门口，用 35mm 焦段刚好框住整栋楼的弧线。",
+              "date": "2026-02-18",
+              "highlight": "花店门口35mm最佳机位"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "衡复"
+          ]
+        },
+        {
+          "poi_id": "dp_anfu_road",
+          "stayMin": 45,
+          "reason": "文艺街拍，感受上海小资生活。",
+          "transitMode": "walk",
+          "transitMin": 10,
+          "name": "安福路",
+          "branch_name": "文艺街区",
+          "address": "上海市徐汇区安福路（武康路-常熟路段）",
+          "longitude": 121.4408,
+          "latitude": 31.2125,
+          "categories": [
+            "景点",
+            "街拍",
+            "文艺"
+          ],
+          "avg_rating": 5,
+          "avg_price": 0,
+          "review_count": 5644,
+          "business_hours": [
+            "全天开放"
+          ],
+          "type": "photo",
+          "dp_image": "https://img.meituan.net/kylisean/f196bf4d7c5424819db649418a00a35f15270335.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/G6Q03iCRQqaUI5uZ",
+          "reviews": [
+            {
+              "author": "黄昏猎手",
+              "avatar": "猎",
+              "rating": 5,
+              "text": "17:00-18:30 的光是金色的，打在老洋房立面上特别温柔。这条路就是为黄昏存在的。",
+              "date": "2026-04-22",
+              "highlight": "17-18:30黄金时段"
+            },
+            {
+              "author": "周末漫步",
+              "avatar": "漫",
+              "rating": 4,
+              "text": "好看是真好看，但周五晚上人流恐怖。建议工作日下午来，安静得像私人花园。",
+              "date": "2026-05-08",
+              "highlight": "周五晚人流拥挤"
+            },
+            {
+              "author": "话剧迷",
+              "avatar": "话",
+              "rating": 5,
+              "text": "安福路 288 号话剧中心门口是全路最好的拍照点，有台阶有光影有质感。",
+              "date": "2026-03-30",
+              "highlight": "话剧中心门口最佳拍照点"
+            },
+            {
+              "author": "精酿爱好者",
+              "avatar": "精",
+              "rating": 5,
+              "text": "路边有家站立精酿 bar，一杯 IPA 才 30 块。端着酒杯看夕阳是安福路的正确打开方式。",
+              "date": "2026-04-18",
+              "highlight": "站立精酿30元看夕阳"
+            },
+            {
+              "author": "本地居民",
+              "avatar": "居",
+              "rating": 4,
+              "text": "19 点以后人潮涌入，整条路变成步行街了。想安静体验一定要赶在 18 点前。",
+              "date": "2026-05-15",
+              "highlight": "19点后人潮拥挤"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "安福路"
+          ],
+          "distanceKm": 0.6
+        },
+        {
+          "poi_id": "dp_yongkang_coffee",
+          "stayMin": 40,
+          "reason": "在独立咖啡馆享受亲子时光。",
+          "transitMode": "walk",
+          "transitMin": 15,
+          "name": "永康路咖啡",
+          "branch_name": "老克勒咖啡馆",
+          "address": "上海市徐汇区永康路 67 号",
+          "longitude": 121.4475,
+          "latitude": 31.2105,
+          "categories": [
+            "咖啡",
+            "音乐学院/五官科医院",
+            "独立咖啡馆"
+          ],
+          "avg_rating": 4,
+          "avg_price": 56,
+          "review_count": 4163,
+          "business_hours": [
+            "08:30-18:00"
+          ],
+          "type": "rest",
+          "dp_image": "http://p1.meituan.net/merchant/aa20f9b671354897ba4ac673a202de02934486.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/H1i49HzO1nxLgK2c",
+          "reviews": [
+            {
+              "author": "咖啡续命",
+              "avatar": "续",
+              "rating": 5,
+              "text": "美式 35 可以续杯一下午。老板是个特别老克勒的爷叔，偶尔会跟你聊聊老上海。",
+              "date": "2026-04-15",
+              "highlight": "美式35续杯一下午"
+            },
+            {
+              "author": "安静角落",
+              "avatar": "角",
+              "rating": 5,
+              "text": "没有网红打卡的喧闹，就是一个安安静静喝咖啡的地方。位子不多但翻台快。",
+              "date": "2026-03-08",
+              "highlight": "安静不网红"
+            },
+            {
+              "author": "常客",
+              "avatar": "常",
+              "rating": 5,
+              "text": "来了三年了，每周至少一次。拿铁拉花虽然一般，但豆子烘焙度刚好，不酸不苦。",
+              "date": "2026-05-18",
+              "highlight": "豆子烘焙度刚好"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "永康路"
+          ],
+          "distanceKm": 0.7
+        },
+        {
+          "poi_id": "dp_binjiang",
+          "stayMin": 90,
+          "reason": "滨江绿地遛娃，野餐或骑行，亲近自然。",
+          "transitMode": "taxi",
+          "transitMin": 20,
+          "name": "徐汇滨江",
+          "branch_name": "龙腾大道段",
+          "address": "上海市徐汇区龙腾大道（云锦路-丰谷路段）",
+          "longitude": 121.4545,
+          "latitude": 31.1825,
+          "categories": [
+            "商场",
+            "龙华/西岸",
+            "公园",
+            "骑行",
+            "遛娃",
+            "野餐"
+          ],
+          "avg_rating": 4.5,
+          "avg_price": 97,
+          "review_count": 2688,
+          "business_hours": [
+            "全天开放"
+          ],
+          "type": "photo",
+          "dp_image": "https://img.meituan.net/content/e7e05be59f019d8d82feb1d75bdfbb52166809.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+          "dp_url": "https://www.dianping.com/shop/k4Cd6dTAE9XIkppx",
+          "reviews": [
+            {
+              "author": "野餐族",
+              "avatar": "餐",
+              "rating": 5,
+              "text": "草坪超大，铺毯子野餐完全不会挤。周末有时有集市，氛围很好。",
+              "date": "2026-04-22",
+              "highlight": "草坪野餐不挤"
+            },
+            {
+              "author": "带娃妈妈",
+              "avatar": "妈",
+              "rating": 5,
+              "text": "对小朋友特别友好，有专门的儿童游乐区。厕所也很干净。旁边就有便利店补给。",
+              "date": "2026-05-15",
+              "highlight": "儿童游乐区+便利店"
+            },
+            {
+              "author": "骑行客",
+              "avatar": "骑",
+              "rating": 5,
+              "text": "骑行道和步行道分开的，不用担心被自行车吓到。落日时分面朝浦江骑一圈太治愈了。",
+              "date": "2026-03-30",
+              "highlight": "落日骑行治愈"
+            }
+          ],
+          "regions": [
+            "徐汇区",
+            "滨江"
+          ],
+          "distanceKm": 3.2
+        }
+      ],
+      "totalDistanceKm": 4.5
+    }
+  ]
+}

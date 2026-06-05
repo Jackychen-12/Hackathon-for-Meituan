@@ -1,0 +1,81 @@
+{
+  "city": "杭州",
+  "pois": [
+    {
+      "poi_id": "dp_%_arabica阿拉比卡咖啡_德基广场店_",
+      "name": "% Arabica阿拉比卡咖啡(德基广场店)",
+      "city": "杭州",
+      "categories": [
+        "咖啡",
+        "新街口地区"
+      ],
+      "avg_rating": 3.5,
+      "review_count": 4826,
+      "avg_price": 43,
+      "dp_image": "http://p0.meituan.net/biztone/189756977_1706247050347.jpeg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "type": "rest",
+      "reviews": []
+    },
+    {
+      "poi_id": "dp_j_cafe_熙南里四合院店_",
+      "name": "J CAFE(熙南里四合院店)",
+      "city": "杭州",
+      "categories": [
+        "咖啡",
+        "升州路/集庆路"
+      ],
+      "avg_rating": 4,
+      "review_count": 1443,
+      "avg_price": 45,
+      "dp_image": "http://p0.meituan.net/biztone/e7172f1e471e89371d098339c9cabad461492.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "type": "rest",
+      "reviews": []
+    },
+    {
+      "poi_id": "dp_clip_coffee",
+      "name": "clip coffee",
+      "city": "杭州",
+      "categories": [
+        "咖啡",
+        "珠江路沿线"
+      ],
+      "avg_rating": 4.5,
+      "review_count": 4100,
+      "avg_price": 30,
+      "dp_image": "http://p0.meituan.net/merchant/b4b9528989fedc89eb421c250c1bc899929990.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "type": "rest",
+      "reviews": []
+    },
+    {
+      "poi_id": "dp_桐月春至_熙南里店_",
+      "name": "桐月春至(熙南里店)",
+      "city": "杭州",
+      "categories": [
+        "咖啡",
+        "新街口地区"
+      ],
+      "avg_rating": 4.5,
+      "review_count": 689,
+      "avg_price": 26,
+      "dp_image": "http://p0.meituan.net/merchant/64ec037d201f696d1b8544c3ca67928a658579.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "type": "rest",
+      "reviews": []
+    },
+    {
+      "poi_id": "dp_瑞幸咖啡_景枫店_",
+      "name": "瑞幸咖啡(景枫店)",
+      "city": "杭州",
+      "categories": [
+        "咖啡",
+        "百家湖"
+      ],
+      "avg_rating": 4,
+      "review_count": 703,
+      "avg_price": 15,
+      "dp_image": "https://img.meituan.net/content/19b01782ff213e777e28b847fc4647eb28602.png%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "type": "rest",
+      "reviews": []
+    }
+  ],
+  "scraped_at": "2026-06-05T14:38:11.891Z"
+}

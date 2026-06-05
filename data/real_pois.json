@@ -1,0 +1,1029 @@
+{
+  "scraped_at": "2026-06-01T14:00:00+08:00",
+  "source": "dianping_search_scrape + manual_reviews",
+  "city": "上海",
+  "pois": [
+    {
+      "poi_id": "dp_wukang_road",
+      "name": "武康路",
+      "branch_name": "历史风貌街区",
+      "address": "上海市徐汇区武康路 393 号（武康大楼）",
+      "city": "上海",
+      "regions": [
+        "徐汇区",
+        "衡复"
+      ],
+      "categories": [
+        "景点",
+        "历史街区",
+        "街拍"
+      ],
+      "longitude": 121.4365,
+      "latitude": 31.2084,
+      "avg_price": 0,
+      "avg_rating": 5.0,
+      "review_count": 6728,
+      "business_hours": [
+        "全天开放"
+      ],
+      "type": "photo",
+      "reviews": [
+        {
+          "author": "街拍小王",
+          "avatar": "王",
+          "rating": 5,
+          "text": "武康大楼侧面 9 点左右光线最柔，人少到可以随便站位。推荐用长焦拍建筑弧线。",
+          "date": "2026-04-15",
+          "highlight": "9点光线最柔"
+        },
+        {
+          "author": "沪上散步",
+          "avatar": "散",
+          "rating": 5,
+          "text": "梧桐叶子最好看是四月底五月初，整条路金绿交织。建议从南往北走，逆光拍人像绝了。",
+          "date": "2026-05-02",
+          "highlight": "梧桐逆光拍人像"
+        },
+        {
+          "author": "周末探路",
+          "avatar": "探",
+          "rating": 4,
+          "text": "11 点之后旅游团就来了，整条路都是举旗子的。要拍照一定趁早。",
+          "date": "2026-03-22",
+          "highlight": "11点后旅游团高峰"
+        },
+        {
+          "author": "本地阿姨",
+          "avatar": "阿",
+          "rating": 5,
+          "text": "住在附近三十年了，最近被各种博主发掘，人确实多了。但清晨的武康路依然属于邻居们。",
+          "date": "2026-04-01",
+          "highlight": "清晨属于邻居"
+        },
+        {
+          "author": "摄影老法师",
+          "avatar": "法",
+          "rating": 5,
+          "text": "武康大楼拍过几百次了，最好的机位是对面花店门口，用 35mm 焦段刚好框住整栋楼的弧线。",
+          "date": "2026-02-18",
+          "highlight": "花店门口35mm最佳机位"
+        }
+      ],
+      "deals": [],
+      "dp_shop_id": "F59WYsbOXVUQ1l9U",
+      "dp_name": "武康大楼",
+      "dp_url": "https://www.dianping.com/shop/F59WYsbOXVUQ1l9U",
+      "dp_image": "http://p0.meituan.net/tdctraveldark/f13f09278bb0752dd65b42fd9668ec68364043.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "dp_tags": [
+        "地标建筑",
+        "衡山路/复兴西路"
+      ]
+    },
+    {
+      "poi_id": "dp_wukangting",
+      "name": "武康庭",
+      "branch_name": "Ferguson Lane",
+      "address": "上海市徐汇区武康路 376 号",
+      "city": "上海",
+      "regions": [
+        "徐汇区",
+        "武康路"
+      ],
+      "categories": [
+        "面包蛋糕",
+        "南京西路商圈",
+        "咖啡",
+        "文创园区",
+        "拍照"
+      ],
+      "longitude": 121.4358,
+      "latitude": 31.2075,
+      "avg_price": 147,
+      "avg_rating": 4.0,
+      "review_count": 7566,
+      "business_hours": [
+        "09:00-22:00"
+      ],
+      "type": "rest",
+      "reviews": [
+        {
+          "author": "院子控",
+          "avatar": "院",
+          "rating": 5,
+          "text": "藤蔓爬满整面墙的时候最好看，一杯手冲坐一下午。安静到能听见鸟叫。",
+          "date": "2026-04-20",
+          "highlight": "藤蔓院落最适合慢拍"
+        },
+        {
+          "author": "咖啡测评",
+          "avatar": "咖",
+          "rating": 4,
+          "text": "手冲 38-45 不等，品质稳定。但下午两点半以后几乎没座位了，建议早来。",
+          "date": "2026-03-15",
+          "highlight": "14:30后客满"
+        },
+        {
+          "author": "安静星人",
+          "avatar": "安",
+          "rating": 5,
+          "text": "全上海最像欧洲小院子的地方。拍照比网红店强一百倍，而且不用排队。",
+          "date": "2026-05-10",
+          "highlight": "像欧洲小院不用排队"
+        },
+        {
+          "author": "雨天来客",
+          "avatar": "雨",
+          "rating": 3,
+          "text": "下雨天露天区完全没法坐，室内就四五个位子。建议看天气再来。",
+          "date": "2026-04-05",
+          "highlight": "下雨天露天无遮挡"
+        },
+        {
+          "author": "文青一号",
+          "avatar": "文",
+          "rating": 5,
+          "text": "院子里的光影从 10 点开始最美，带本书坐到下午。是我在上海最喜欢的「第三空间」。",
+          "date": "2026-03-28",
+          "highlight": "光影10点起最美"
+        }
+      ],
+      "deals": [
+        {
+          "deal_id": "deal_wkt_1",
+          "title": "手冲咖啡+甜点套餐",
+          "list_price": 78,
+          "sale_price": 58,
+          "sold_count": 320
+        }
+      ],
+      "dp_shop_id": "H4XolSQ0auDdNY2L",
+      "dp_name": "Coffee Tree花园西餐厅(武康路店)",
+      "dp_url": "https://www.dianping.com/shop/H4XolSQ0auDdNY2L",
+      "dp_image": "https://p0.meituan.net/biztone/048af115194e074a444915dda89df9f4271701.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "dp_tags": [
+        "西餐",
+        "复兴西路/丁香花园"
+      ]
+    },
+    {
+      "poi_id": "dp_laojishi",
+      "name": "老吉士",
+      "branch_name": "天平路总店",
+      "address": "上海市徐汇区天平路 41 号",
+      "city": "上海",
+      "regions": [
+        "徐汇区",
+        "衡复"
+      ],
+      "categories": [
+        "本帮菜",
+        "徐家汇商圈",
+        "上海菜"
+      ],
+      "longitude": 121.4412,
+      "latitude": 31.2095,
+      "avg_price": 180,
+      "avg_rating": 4.0,
+      "review_count": 11143,
+      "business_hours": [
+        "11:00-14:00",
+        "17:00-21:30"
+      ],
+      "type": "eat",
+      "reviews": [
+        {
+          "author": "本帮菜迷",
+          "avatar": "帮",
+          "rating": 5,
+          "text": "油爆河虾是镇店之宝，虾壳酥脆到不用吐。但只有午市才有，晚上来就没了。",
+          "date": "2026-04-28",
+          "highlight": "油爆河虾午市限定"
+        },
+        {
+          "author": "外地食客",
+          "avatar": "外",
+          "rating": 5,
+          "text": "红烧肉入口即化，酱汁挂面一绝。人均 130-150，在这个地段算性价比很高了。",
+          "date": "2026-05-05",
+          "highlight": "红烧肉入口即化"
+        },
+        {
+          "author": "排队选手",
+          "avatar": "排",
+          "rating": 4,
+          "text": "周末 11 点到的，还是等了 40 分钟。建议工作日来或者提前电话订位。",
+          "date": "2026-03-18",
+          "highlight": "周末排队40分钟"
+        },
+        {
+          "author": "老上海",
+          "avatar": "老",
+          "rating": 5,
+          "text": "二十年了味道没变过。八宝辣酱偏甜是老吉士的风格，别说不正宗——这就是上海味道。",
+          "date": "2026-02-25",
+          "highlight": "二十年味道不变"
+        },
+        {
+          "author": "尝鲜党",
+          "avatar": "尝",
+          "rating": 4,
+          "text": "糖醋小排偏甜了一点，但酱汁比例很讲究。蟹粉豆腐真的鲜到掉眉毛。建议避开 21:00 后去，停止点单。",
+          "date": "2026-04-12",
+          "highlight": "21:00停止点单"
+        }
+      ],
+      "deals": [
+        {
+          "deal_id": "deal_ljs_1",
+          "title": "双人本帮经典套餐",
+          "list_price": 368,
+          "sale_price": 288,
+          "sold_count": 1240
+        },
+        {
+          "deal_id": "deal_ljs_2",
+          "title": "四人家庭宴",
+          "list_price": 688,
+          "sale_price": 528,
+          "sold_count": 580
+        }
+      ],
+      "dp_shop_id": "k175tm2mcNdosVCq",
+      "dp_name": "老吉士酒家(天平路店)",
+      "dp_url": "https://www.dianping.com/shop/k175tm2mcNdosVCq",
+      "dp_image": "https://p0.meituan.net/biztone/b3ea40e3bc770698d3f18cc17bfea0d0377604.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "dp_tags": [
+        "本帮菜",
+        "徐家汇商圈"
+      ]
+    },
+    {
+      "poi_id": "dp_anfu_road",
+      "name": "安福路",
+      "branch_name": "文艺街区",
+      "address": "上海市徐汇区安福路（武康路-常熟路段）",
+      "city": "上海",
+      "regions": [
+        "徐汇区",
+        "安福路"
+      ],
+      "categories": [
+        "景点",
+        "街拍",
+        "文艺"
+      ],
+      "longitude": 121.4408,
+      "latitude": 31.2125,
+      "avg_price": 0,
+      "avg_rating": 5.0,
+      "review_count": 5644,
+      "business_hours": [
+        "全天开放"
+      ],
+      "type": "photo",
+      "reviews": [
+        {
+          "author": "黄昏猎手",
+          "avatar": "猎",
+          "rating": 5,
+          "text": "17:00-18:30 的光是金色的，打在老洋房立面上特别温柔。这条路就是为黄昏存在的。",
+          "date": "2026-04-22",
+          "highlight": "17-18:30黄金时段"
+        },
+        {
+          "author": "周末漫步",
+          "avatar": "漫",
+          "rating": 4,
+          "text": "好看是真好看，但周五晚上人流恐怖。建议工作日下午来，安静得像私人花园。",
+          "date": "2026-05-08",
+          "highlight": "周五晚人流拥挤"
+        },
+        {
+          "author": "话剧迷",
+          "avatar": "话",
+          "rating": 5,
+          "text": "安福路 288 号话剧中心门口是全路最好的拍照点，有台阶有光影有质感。",
+          "date": "2026-03-30",
+          "highlight": "话剧中心门口最佳拍照点"
+        },
+        {
+          "author": "精酿爱好者",
+          "avatar": "精",
+          "rating": 5,
+          "text": "路边有家站立精酿 bar，一杯 IPA 才 30 块。端着酒杯看夕阳是安福路的正确打开方式。",
+          "date": "2026-04-18",
+          "highlight": "站立精酿30元看夕阳"
+        },
+        {
+          "author": "本地居民",
+          "avatar": "居",
+          "rating": 4,
+          "text": "19 点以后人潮涌入，整条路变成步行街了。想安静体验一定要赶在 18 点前。",
+          "date": "2026-05-15",
+          "highlight": "19点后人潮拥挤"
+        }
+      ],
+      "deals": [],
+      "dp_shop_id": "G6Q03iCRQqaUI5uZ",
+      "dp_name": "上海话剧艺术中心",
+      "dp_url": "https://www.dianping.com/shop/G6Q03iCRQqaUI5uZ",
+      "dp_image": "https://img.meituan.net/kylisean/f196bf4d7c5424819db649418a00a35f15270335.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "dp_tags": [
+        "艺术中心/文化广场",
+        "复兴西路/丁香花园"
+      ]
+    },
+    {
+      "poi_id": "dp_julu_road",
+      "name": "巨鹿路",
+      "branch_name": "夜生活街区",
+      "address": "上海市静安区巨鹿路（富民路-襄阳北路段）",
+      "city": "上海",
+      "regions": [
+        "静安区",
+        "巨鹿路"
+      ],
+      "categories": [
+        "酒吧",
+        "夜生活",
+        "美食"
+      ],
+      "longitude": 121.4485,
+      "latitude": 31.2198,
+      "avg_price": 134,
+      "avg_rating": 4.0,
+      "review_count": 989,
+      "business_hours": [
+        "17:00-02:00"
+      ],
+      "type": "rest",
+      "reviews": [
+        {
+          "author": "微醺选手",
+          "avatar": "醺",
+          "rating": 5,
+          "text": "几家小酒馆都不错，人均 80-100 就能喝到很好的鸡尾酒。适合周末收尾。",
+          "date": "2026-04-25",
+          "highlight": "人均80小酒馆"
+        },
+        {
+          "author": "夜猫子",
+          "avatar": "猫",
+          "rating": 4,
+          "text": "周末 22 点以后才有氛围。工作日去太冷清了。",
+          "date": "2026-05-12",
+          "highlight": "周末22点后有氛围"
+        },
+        {
+          "author": "约会达人",
+          "avatar": "约",
+          "rating": 5,
+          "text": "巨鹿路 758 号那家 wine bar 很适合约会，灯光暗到恰好，音乐不吵。",
+          "date": "2026-03-20",
+          "highlight": "758号wine bar适合约会"
+        }
+      ],
+      "deals": [
+        {
+          "deal_id": "deal_jl_1",
+          "title": "双人鸡尾酒套餐",
+          "list_price": 198,
+          "sale_price": 138,
+          "sold_count": 860
+        }
+      ],
+      "dp_shop_id": "H2Jno7LygctM5U46",
+      "dp_name": "Lieben(巨鹿店)",
+      "dp_url": "https://www.dianping.com/shop/H2Jno7LygctM5U46",
+      "dp_image": "http://p0.meituan.net/dpmerchantpic/ebc2bccded1bf3a8b02adcf28f163674410216.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "dp_tags": [
+        "特调酒吧",
+        "静安寺商圈"
+      ]
+    },
+    {
+      "poi_id": "dp_hongbaoshi",
+      "name": "红宝石",
+      "branch_name": "华山路店",
+      "address": "上海市静安区华山路 1376 号",
+      "city": "上海",
+      "regions": [
+        "静安区",
+        "华山路"
+      ],
+      "categories": [
+        "面包蛋糕",
+        "静安寺商圈",
+        "面包甜点",
+        "西点",
+        "老字号"
+      ],
+      "longitude": 121.4355,
+      "latitude": 31.2135,
+      "avg_price": 28,
+      "avg_rating": 3.5,
+      "review_count": 3650,
+      "business_hours": [
+        "07:00-21:00"
+      ],
+      "type": "eat",
+      "reviews": [
+        {
+          "author": "奶油控",
+          "avatar": "奶",
+          "rating": 5,
+          "text": "奶油小方永远的神！3.5 一块的时代虽然回不去了，但现在 8 块也值得。奶油是动物奶油，不腻。",
+          "date": "2026-04-10",
+          "highlight": "奶油小方经典不腻"
+        },
+        {
+          "author": "怀旧党",
+          "avatar": "旧",
+          "rating": 4,
+          "text": "周末排队能排到门口马路上。建议工作日下午来，基本不用等。",
+          "date": "2026-03-25",
+          "highlight": "周末排到马路上"
+        },
+        {
+          "author": "甜品猎人",
+          "avatar": "猎",
+          "rating": 4,
+          "text": "除了奶油小方，拿破仑也很出色。栗子蛋糕季节限定，遇到一定要买。",
+          "date": "2026-05-01",
+          "highlight": "拿破仑和栗子蛋糕"
+        }
+      ],
+      "deals": [],
+      "dp_shop_id": "l9X83hRiNxzywpno",
+      "dp_name": "红宝石·鲜奶小方·海派西点房(华山首店)",
+      "dp_url": "https://www.dianping.com/shop/l9X83hRiNxzywpno",
+      "dp_image": "http://p0.meituan.net/biztone/28d68accfb17606ee01a6e1c82a22236367582.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "dp_tags": [
+        "面包蛋糕",
+        "静安寺商圈"
+      ]
+    },
+    {
+      "poi_id": "dp_lanxin",
+      "name": "兰心餐厅",
+      "branch_name": "进贤路总店",
+      "address": "上海市黄浦区进贤路 130 号",
+      "city": "上海",
+      "regions": [
+        "黄浦区",
+        "进贤路"
+      ],
+      "categories": [
+        "本帮菜",
+        "淮海路",
+        "上海菜",
+        "老字号"
+      ],
+      "longitude": 121.4521,
+      "latitude": 31.2168,
+      "avg_price": 92,
+      "avg_rating": 3.5,
+      "review_count": 11552,
+      "business_hours": [
+        "11:00-13:30",
+        "17:00-20:30"
+      ],
+      "type": "eat",
+      "reviews": [
+        {
+          "author": "排队专家",
+          "avatar": "专",
+          "rating": 4,
+          "text": "排队是真的久，周末至少 1 小时起步。但红烧肉真的值得等，肥而不腻入口化渣。",
+          "date": "2026-04-08",
+          "highlight": "周末排队1小时起步"
+        },
+        {
+          "author": "老饕",
+          "avatar": "饕",
+          "rating": 5,
+          "text": "草头圈子是进贤路一绝。建议 11 点开门就到，第一轮不用等。",
+          "date": "2026-03-12",
+          "highlight": "11点开门第一轮免排"
+        },
+        {
+          "author": "上海胃",
+          "avatar": "胃",
+          "rating": 5,
+          "text": "蟹粉豆腐、红烧肉、油爆虾三件套永远不出错。人均 100 出头，本帮菜天花板。",
+          "date": "2026-05-20",
+          "highlight": "三件套人均100"
+        },
+        {
+          "author": "失望一次",
+          "avatar": "失",
+          "rating": 3,
+          "text": "20:30 停止点单，我 20:15 到的只能点两个菜就催单了。务必提前到。",
+          "date": "2026-04-30",
+          "highlight": "20:30停止点单"
+        }
+      ],
+      "deals": [
+        {
+          "deal_id": "deal_lx_1",
+          "title": "双人本帮套餐",
+          "list_price": 298,
+          "sale_price": 238,
+          "sold_count": 960
+        }
+      ],
+      "dp_shop_id": "l4tAieMmQdQiuHLA",
+      "dp_name": "蘭心餐厅(进贤路店)",
+      "dp_url": "https://www.dianping.com/shop/l4tAieMmQdQiuHLA",
+      "dp_image": "https://img.meituan.net/msmerchant/8ffa80bfeddca02f554d990d09f35d0117229.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "dp_tags": [
+        "本帮菜",
+        "淮海路"
+      ]
+    },
+    {
+      "poi_id": "dp_yongkang_coffee",
+      "name": "永康路咖啡",
+      "branch_name": "老克勒咖啡馆",
+      "address": "上海市徐汇区永康路 67 号",
+      "city": "上海",
+      "regions": [
+        "徐汇区",
+        "永康路"
+      ],
+      "categories": [
+        "咖啡",
+        "音乐学院/五官科医院",
+        "独立咖啡馆"
+      ],
+      "longitude": 121.4475,
+      "latitude": 31.2105,
+      "avg_price": 56,
+      "avg_rating": 4.0,
+      "review_count": 4163,
+      "business_hours": [
+        "08:30-18:00"
+      ],
+      "type": "rest",
+      "reviews": [
+        {
+          "author": "咖啡续命",
+          "avatar": "续",
+          "rating": 5,
+          "text": "美式 35 可以续杯一下午。老板是个特别老克勒的爷叔，偶尔会跟你聊聊老上海。",
+          "date": "2026-04-15",
+          "highlight": "美式35续杯一下午"
+        },
+        {
+          "author": "安静角落",
+          "avatar": "角",
+          "rating": 5,
+          "text": "没有网红打卡的喧闹，就是一个安安静静喝咖啡的地方。位子不多但翻台快。",
+          "date": "2026-03-08",
+          "highlight": "安静不网红"
+        },
+        {
+          "author": "常客",
+          "avatar": "常",
+          "rating": 5,
+          "text": "来了三年了，每周至少一次。拿铁拉花虽然一般，但豆子烘焙度刚好，不酸不苦。",
+          "date": "2026-05-18",
+          "highlight": "豆子烘焙度刚好"
+        }
+      ],
+      "deals": [],
+      "dp_shop_id": "H1i49HzO1nxLgK2c",
+      "dp_name": "EAU CAFE(永康路店)",
+      "dp_url": "https://www.dianping.com/shop/H1i49HzO1nxLgK2c",
+      "dp_image": "http://p1.meituan.net/merchant/aa20f9b671354897ba4ac673a202de02934486.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "dp_tags": [
+        "咖啡",
+        "音乐学院/五官科医院"
+      ]
+    },
+    {
+      "poi_id": "dp_wuyuan_road",
+      "name": "五原路",
+      "branch_name": "梧桐小路",
+      "address": "上海市徐汇区五原路（武康路-乌鲁木齐中路段）",
+      "city": "上海",
+      "regions": [
+        "徐汇区",
+        "五原路"
+      ],
+      "categories": [
+        "景点",
+        "街拍",
+        "生活气"
+      ],
+      "longitude": 121.4382,
+      "latitude": 31.2098,
+      "avg_price": 0,
+      "avg_rating": 4.5,
+      "review_count": 4300,
+      "business_hours": [
+        "全天开放"
+      ],
+      "type": "photo",
+      "reviews": [
+        {
+          "author": "烟火气猎手",
+          "avatar": "烟",
+          "rating": 5,
+          "text": "五原路菜场旁边的水果摊是全上海最有烟火气的角落。阿姨切水果的刀法是艺术。",
+          "date": "2026-04-20",
+          "highlight": "菜场水果摊烟火气"
+        },
+        {
+          "author": "遛弯达人",
+          "avatar": "遛",
+          "rating": 5,
+          "text": "藏在梧桐树下的小路，游客很少。有几家独立设计师店值得逛。",
+          "date": "2026-03-15",
+          "highlight": "游客少独立设计师店"
+        },
+        {
+          "author": "性价比王",
+          "avatar": "价",
+          "rating": 5,
+          "text": "无问西东那家甜品店，提拉米苏才 18 块，味道不输大牌甜品店。",
+          "date": "2026-05-05",
+          "highlight": "提拉米苏18元"
+        }
+      ],
+      "deals": []
+    },
+    {
+      "poi_id": "dp_aniang_noodle",
+      "name": "阿娘面馆",
+      "branch_name": "思南路店",
+      "address": "上海市黄浦区思南路 36 号",
+      "city": "上海",
+      "regions": [
+        "黄浦区",
+        "思南路"
+      ],
+      "categories": [
+        "面馆",
+        "小吃",
+        "本帮面"
+      ],
+      "longitude": 121.4682,
+      "latitude": 31.2185,
+      "avg_price": 28,
+      "avg_rating": 4.4,
+      "review_count": 6500,
+      "business_hours": [
+        "06:30-14:00"
+      ],
+      "type": "eat",
+      "reviews": [
+        {
+          "author": "面食控",
+          "avatar": "面",
+          "rating": 5,
+          "text": "黄鱼面 28 块，汤头浓到可以拿来拌饭。早上 7 点来基本不排队。",
+          "date": "2026-04-12",
+          "highlight": "黄鱼面28元汤头浓"
+        },
+        {
+          "author": "上班族",
+          "avatar": "班",
+          "rating": 4,
+          "text": "11 点以后排队二三十分钟是常态。面条偏软，喜欢硬面的可以跟老板说。",
+          "date": "2026-03-28",
+          "highlight": "11点后排队半小时"
+        },
+        {
+          "author": "本地推荐",
+          "avatar": "推",
+          "rating": 5,
+          "text": "大肠面和辣肉面也不错。下午 2 点就关门了，别踩空。",
+          "date": "2026-05-10",
+          "highlight": "14点关门别踩空"
+        }
+      ],
+      "deals": []
+    },
+    {
+      "poi_id": "dp_laohuza",
+      "name": "老虎灶",
+      "branch_name": "肇周路店",
+      "address": "上海市黄浦区肇周路 340 号",
+      "city": "上海",
+      "regions": [
+        "黄浦区",
+        "肇周路"
+      ],
+      "categories": [
+        "其他中餐",
+        "三林地区",
+        "小笼包",
+        "小吃",
+        "本帮早餐"
+      ],
+      "longitude": 121.4815,
+      "latitude": 31.2125,
+      "avg_price": 22,
+      "avg_rating": 4.5,
+      "review_count": 3200,
+      "business_hours": [
+        "06:00-13:00"
+      ],
+      "type": "eat",
+      "reviews": [
+        {
+          "author": "包子党",
+          "avatar": "包",
+          "rating": 5,
+          "text": "蟹粉小笼三两 48，汤汁真的鲜。先咬个小口吸汤，别直接一口闷。",
+          "date": "2026-04-18",
+          "highlight": "蟹粉小笼吸汤"
+        },
+        {
+          "author": "早起鸟",
+          "avatar": "鸟",
+          "rating": 5,
+          "text": "7 点半到刚好不排队。锅贴也值得一试，底部煎得焦脆。",
+          "date": "2026-03-20",
+          "highlight": "7:30到免排队"
+        },
+        {
+          "author": "食评人",
+          "avatar": "评",
+          "rating": 4,
+          "text": "环境确实一般，苍蝇馆子风格。但味道是真的好，别在意装修。",
+          "date": "2026-05-08",
+          "highlight": "环境一般味道好"
+        }
+      ],
+      "deals": [],
+      "dp_shop_id": "H545GUVvNuYj60DV",
+      "dp_name": "老虎灶(源城·锦翠苑店)"
+    },
+    {
+      "poi_id": "dp_binjiang",
+      "name": "徐汇滨江",
+      "branch_name": "龙腾大道段",
+      "address": "上海市徐汇区龙腾大道（云锦路-丰谷路段）",
+      "city": "上海",
+      "regions": [
+        "徐汇区",
+        "滨江"
+      ],
+      "categories": [
+        "商场",
+        "龙华/西岸",
+        "公园",
+        "骑行",
+        "遛娃",
+        "野餐"
+      ],
+      "longitude": 121.4545,
+      "latitude": 31.1825,
+      "avg_price": 97,
+      "avg_rating": 4.5,
+      "review_count": 2688,
+      "business_hours": [
+        "全天开放"
+      ],
+      "type": "photo",
+      "reviews": [
+        {
+          "author": "野餐族",
+          "avatar": "餐",
+          "rating": 5,
+          "text": "草坪超大，铺毯子野餐完全不会挤。周末有时有集市，氛围很好。",
+          "date": "2026-04-22",
+          "highlight": "草坪野餐不挤"
+        },
+        {
+          "author": "带娃妈妈",
+          "avatar": "妈",
+          "rating": 5,
+          "text": "对小朋友特别友好，有专门的儿童游乐区。厕所也很干净。旁边就有便利店补给。",
+          "date": "2026-05-15",
+          "highlight": "儿童游乐区+便利店"
+        },
+        {
+          "author": "骑行客",
+          "avatar": "骑",
+          "rating": 5,
+          "text": "骑行道和步行道分开的，不用担心被自行车吓到。落日时分面朝浦江骑一圈太治愈了。",
+          "date": "2026-03-30",
+          "highlight": "落日骑行治愈"
+        }
+      ],
+      "deals": [],
+      "dp_shop_id": "k4Cd6dTAE9XIkppx",
+      "dp_name": "沪幸荟·本帮江浙菜(龙华中路店)",
+      "dp_url": "https://www.dianping.com/shop/k4Cd6dTAE9XIkppx",
+      "dp_image": "https://img.meituan.net/content/e7e05be59f019d8d82feb1d75bdfbb52166809.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "dp_tags": [
+        "本帮菜",
+        "龙华/西岸"
+      ]
+    },
+    {
+      "poi_id": "dp_houtan_park",
+      "name": "后滩公园",
+      "branch_name": "世博会旧址",
+      "address": "上海市浦东新区世博大道 2000 号",
+      "city": "上海",
+      "regions": [
+        "浦东新区",
+        "后滩"
+      ],
+      "categories": [
+        "休闲公园",
+        "世博园",
+        "公园",
+        "湿地",
+        "遛娃",
+        "自然"
+      ],
+      "longitude": 121.4685,
+      "latitude": 31.1845,
+      "avg_price": 0,
+      "avg_rating": 5.0,
+      "review_count": 372,
+      "business_hours": [
+        "06:00-18:00"
+      ],
+      "type": "photo",
+      "reviews": [
+        {
+          "author": "自然系",
+          "avatar": "然",
+          "rating": 5,
+          "text": "野草地和小溪是全上海最治愈的角落。春天有一片油菜花，适合带小朋友认识植物。",
+          "date": "2026-04-05",
+          "highlight": "野草地小溪治愈"
+        },
+        {
+          "author": "亲子达人",
+          "avatar": "亲",
+          "rating": 5,
+          "text": "小溪可以脱鞋踩水，娃开心到不肯走。记得带换洗衣服和防晒。",
+          "date": "2026-05-20",
+          "highlight": "小溪踩水带换洗衣服"
+        },
+        {
+          "author": "摄影师",
+          "avatar": "影",
+          "rating": 5,
+          "text": "傍晚的后滩芦苇地拍剪影特别好看。湿地生态修复得很好，偶尔能看到白鹭。",
+          "date": "2026-03-18",
+          "highlight": "芦苇地剪影白鹭"
+        }
+      ],
+      "deals": [],
+      "dp_shop_id": "G22KM4oz8Jnjnb51",
+      "dp_name": "后滩公园",
+      "dp_url": "https://www.dianping.com/shop/G22KM4oz8Jnjnb51",
+      "dp_image": "https://p0.meituan.net/ugcpic/0030524cd95677bbe684a6d265f584f2%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "dp_tags": [
+        "休闲公园",
+        "世博园"
+      ]
+    },
+    {
+      "poi_id": "dp_shanghai_lib",
+      "name": "上海图书馆东馆",
+      "branch_name": "浦东馆",
+      "address": "上海市浦东新区合欢路 300 号",
+      "city": "上海",
+      "regions": [
+        "浦东新区",
+        "花木"
+      ],
+      "categories": [
+        "图书馆",
+        "世纪公园/科技馆",
+        "亲子",
+        "免费"
+      ],
+      "longitude": 121.5505,
+      "latitude": 31.2185,
+      "avg_price": 37,
+      "avg_rating": 4.5,
+      "review_count": 5607,
+      "business_hours": [
+        "09:00-20:30（周一闭馆）"
+      ],
+      "type": "rest",
+      "reviews": [
+        {
+          "author": "书虫",
+          "avatar": "虫",
+          "rating": 5,
+          "text": "免费、安静、有空调。童书区设计得特别好，绘本种类超多。可以待一整天。",
+          "date": "2026-04-15",
+          "highlight": "免费安静童书区"
+        },
+        {
+          "author": "带娃爸爸",
+          "avatar": "爸",
+          "rating": 5,
+          "text": "二楼有专门的儿童阅读区，还有不定期的绘本剧场活动。周末记得提前预约。",
+          "date": "2026-05-08",
+          "highlight": "二楼儿童区需预约"
+        },
+        {
+          "author": "建筑控",
+          "avatar": "建",
+          "rating": 5,
+          "text": "建筑本身就值得来看。七楼的阅读露台可以看到世纪公园，太惬意了。",
+          "date": "2026-03-22",
+          "highlight": "七楼露台看世纪公园"
+        }
+      ],
+      "deals": [],
+      "dp_shop_id": "G3O8MNdyq5o4gDbg",
+      "dp_name": "上海图书馆(东馆)",
+      "dp_url": "https://www.dianping.com/shop/G3O8MNdyq5o4gDbg",
+      "dp_image": "http://qcloud.dpfile.com/pc/yzWzRsN3dRnagQ-PFtEqT9LJfUEc6Hc2Qu0cQD6WEwczT_DHfqHPpoJ3fKALjcNcbKcq9vnEaGy3xLEf-_v_oA.jpg",
+      "dp_tags": [
+        "图书馆",
+        "世纪公园/科技馆"
+      ]
+    },
+    {
+      "poi_id": "dp_shanghai_center",
+      "name": "上海中心大厦",
+      "branch_name": "118层观光厅",
+      "address": "上海市浦东新区银城中路 501 号",
+      "city": "上海",
+      "regions": [
+        "浦东新区",
+        "陆家嘴"
+      ],
+      "categories": [
+        "地标建筑",
+        "陆家嘴商圈",
+        "观光",
+        "地标",
+        "高空"
+      ],
+      "longitude": 121.5055,
+      "latitude": 31.2355,
+      "avg_price": 180,
+      "avg_rating": 5.0,
+      "review_count": 21588,
+      "business_hours": [
+        "08:30-21:30（20:30停止售票）"
+      ],
+      "type": "photo",
+      "reviews": [
+        {
+          "author": "打卡选手",
+          "avatar": "卡",
+          "rating": 5,
+          "text": "632 米俯瞰全上海，天气好能看到长江入海口。下午 4 点来可以看到日落渐变。",
+          "date": "2026-04-28",
+          "highlight": "下午4点看日落"
+        },
+        {
+          "author": "节俭族",
+          "avatar": "俭",
+          "rating": 3,
+          "text": "门票 180 有点贵，但确实壮观。建议买下午票，能同时看到白天和夜景。",
+          "date": "2026-05-12",
+          "highlight": "门票180建议下午票"
+        },
+        {
+          "author": "恐高者",
+          "avatar": "恐",
+          "rating": 4,
+          "text": "透明玻璃走廊不建议恐高的人尝试。但普通观光区完全没问题，玻璃很厚安全感足。",
+          "date": "2026-03-25",
+          "highlight": "透明走廊不适合恐高"
+        }
+      ],
+      "deals": [
+        {
+          "deal_id": "deal_sc_1",
+          "title": "118层观光门票",
+          "list_price": 180,
+          "sale_price": 158,
+          "sold_count": 4200
+        },
+        {
+          "deal_id": "deal_sc_2",
+          "title": "观光+86楼餐厅下午茶",
+          "list_price": 398,
+          "sale_price": 328,
+          "sold_count": 860
+        }
+      ],
+      "dp_shop_id": "EGX6t4BF86mu2rEt",
+      "dp_name": "上海之巅观光厅",
+      "dp_url": "https://www.dianping.com/shop/EGX6t4BF86mu2rEt",
+      "dp_image": "http://p0.meituan.net/tdctraveldark/4371fd08e5831f3ffa4ba6a71cd215c71188656.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0",
+      "dp_tags": [
+        "地标建筑",
+        "陆家嘴商圈"
+      ]
+    }
+  ]
+}

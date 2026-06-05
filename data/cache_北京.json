@@ -1,0 +1,541 @@
+{
+  "city": "北京",
+  "pois": [
+    {
+      "poi_id": "dp_001",
+      "name": "故宫博物院",
+      "branch_name": "世界文化遗产",
+      "address": "北京市东城区景山前街4号",
+      "city": "北京",
+      "regions": [
+        "东城区"
+      ],
+      "categories": [
+        "景点",
+        "历史古迹"
+      ],
+      "longitude": 116.397,
+      "latitude": 39.916,
+      "avg_price": 60,
+      "avg_rating": 4.8,
+      "review_count": 50000,
+      "business_hours": [
+        "08:30-17:00"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "旅行者小张",
+          "avatar": "张",
+          "rating": 5,
+          "text": "故宫太震撼了，红墙黄瓦，每一处都透着历史的厚重。建议租个讲解器，能了解很多故事。",
+          "date": "2026-05-15",
+          "highlight": "历史厚重"
+        },
+        {
+          "author": "摄影爱好者",
+          "avatar": "摄",
+          "rating": 5,
+          "text": "拍照圣地，尤其是夕阳下的角楼，美到窒息。人虽多但值得一去。",
+          "date": "2026-05-10",
+          "highlight": "拍照圣地"
+        },
+        {
+          "author": "文化迷",
+          "avatar": "文",
+          "rating": 4,
+          "text": "每次来北京必去，珍宝馆和钟表馆特别精彩，就是节假日人太多。",
+          "date": "2026-05-05",
+          "highlight": "珍宝馆"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_002",
+      "name": "南锣鼓巷",
+      "branch_name": "老北京胡同",
+      "address": "北京市东城区南锣鼓巷",
+      "city": "北京",
+      "regions": [
+        "东城区"
+      ],
+      "categories": [
+        "景点",
+        "购物"
+      ],
+      "longitude": 116.403,
+      "latitude": 39.938,
+      "avg_price": 0,
+      "avg_rating": 4.3,
+      "review_count": 30000,
+      "business_hours": [
+        "全天开放"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "吃货小胖",
+          "avatar": "胖",
+          "rating": 4,
+          "text": "各种小吃和创意小店，文宇奶酪和炸酱面都不错，就是周末人挤人。",
+          "date": "2026-05-12",
+          "highlight": "文宇奶酪"
+        },
+        {
+          "author": "文艺青年",
+          "avatar": "艺",
+          "rating": 5,
+          "text": "很有北京味儿，逛胡同看灰砖红门，还能淘到有趣的手工艺品。",
+          "date": "2026-05-08",
+          "highlight": "手工艺品"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_003",
+      "name": "四季民福烤鸭店(前门店)",
+      "branch_name": "北京烤鸭",
+      "address": "北京市东城区前门大街32号",
+      "city": "北京",
+      "regions": [
+        "东城区"
+      ],
+      "categories": [
+        "美食",
+        "烤鸭"
+      ],
+      "longitude": 116.397,
+      "latitude": 39.898,
+      "avg_price": 150,
+      "avg_rating": 4.6,
+      "review_count": 8000,
+      "business_hours": [
+        "10:30-21:30"
+      ],
+      "type": "food",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "美食猎人",
+          "avatar": "猎",
+          "rating": 5,
+          "text": "烤鸭皮脆肉嫩，蘸白糖吃绝了！芥末鸭掌和豌豆黄也很地道，服务热情。",
+          "date": "2026-05-14",
+          "highlight": "皮脆肉嫩"
+        },
+        {
+          "author": "北京老饕",
+          "avatar": "饕",
+          "rating": 4,
+          "text": "老字号品质稳定，每次来都排队，但值得等。鸭架做汤鲜美。",
+          "date": "2026-05-09",
+          "highlight": "老字号"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_004",
+      "name": "鼓楼馒头店",
+      "branch_name": "网红馒头",
+      "address": "北京市东城区鼓楼东大街139号",
+      "city": "北京",
+      "regions": [
+        "东城区"
+      ],
+      "categories": [
+        "美食",
+        "小吃"
+      ],
+      "longitude": 116.395,
+      "latitude": 39.94,
+      "avg_price": 5,
+      "avg_rating": 4.5,
+      "review_count": 2000,
+      "business_hours": [
+        "06:00-19:00"
+      ],
+      "type": "food",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "碳水达人",
+          "avatar": "碳",
+          "rating": 5,
+          "text": "馒头超大一个，松软有嚼劲，豆包馅料香甜，每次路过都要买几个。",
+          "date": "2026-05-13",
+          "highlight": "松软有嚼劲"
+        },
+        {
+          "author": "排队专业户",
+          "avatar": "排",
+          "rating": 4,
+          "text": "永远在排队，但拿到热腾腾的馒头时觉得值了。推荐红糖馒头。",
+          "date": "2026-05-07",
+          "highlight": "红糖馒头"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_005",
+      "name": "PageOne书店(北京坊店)",
+      "branch_name": "最美书店",
+      "address": "北京市西城区廊房头条13号院北京坊东区E11号楼",
+      "city": "北京",
+      "regions": [
+        "西城区"
+      ],
+      "categories": [
+        "购物",
+        "书店"
+      ],
+      "longitude": 116.394,
+      "latitude": 39.894,
+      "avg_price": 50,
+      "avg_rating": 4.7,
+      "review_count": 5000,
+      "business_hours": [
+        "10:00-22:00"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "书虫小雅",
+          "avatar": "雅",
+          "rating": 5,
+          "text": "空间设计超棒，落地窗能看到前门箭楼，书种类丰富，还有文创区。",
+          "date": "2026-05-11",
+          "highlight": "落地窗景观"
+        },
+        {
+          "author": "文艺青年",
+          "avatar": "艺",
+          "rating": 5,
+          "text": "北京最美书店之一，二楼观景位绝佳，适合静心阅读或拍照。",
+          "date": "2026-05-06",
+          "highlight": "最美书店"
+        },
+        {
+          "author": "咖啡控",
+          "avatar": "咖",
+          "rating": 4,
+          "text": "书店里的咖啡也不错，拿铁拉花精致，逛累了歇脚好去处。",
+          "date": "2026-05-02",
+          "highlight": "咖啡不错"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_006",
+      "name": "雍和宫",
+      "branch_name": "藏传佛教寺院",
+      "address": "北京市东城区雍和宫大街12号",
+      "city": "北京",
+      "regions": [
+        "东城区"
+      ],
+      "categories": [
+        "景点",
+        "宗教场所"
+      ],
+      "longitude": 116.417,
+      "latitude": 39.947,
+      "avg_price": 25,
+      "avg_rating": 4.7,
+      "review_count": 15000,
+      "business_hours": [
+        "09:00-16:30"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "祈福者",
+          "avatar": "福",
+          "rating": 5,
+          "text": "香火很旺，每次来都感觉内心平静。万福阁的弥勒大佛非常震撼。",
+          "date": "2026-05-16",
+          "highlight": "内心平静"
+        },
+        {
+          "author": "建筑迷",
+          "avatar": "建",
+          "rating": 5,
+          "text": "建筑精美，汉藏结合风格独特，尤其喜欢金瓦殿和铜铸佛像。",
+          "date": "2026-05-04",
+          "highlight": "建筑精美"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_007",
+      "name": "牛街清真小吃街",
+      "branch_name": "清真美食",
+      "address": "北京市西城区牛街",
+      "city": "北京",
+      "regions": [
+        "西城区"
+      ],
+      "categories": [
+        "美食",
+        "小吃"
+      ],
+      "longitude": 116.36,
+      "latitude": 39.885,
+      "avg_price": 30,
+      "avg_rating": 4.5,
+      "review_count": 10000,
+      "business_hours": [
+        "06:00-22:00"
+      ],
+      "type": "food",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "小吃货",
+          "avatar": "吃",
+          "rating": 5,
+          "text": "牛街的羊肉串和牛肉饼一绝，白记年糕软糯香甜，每次去都撑到走不动。",
+          "date": "2026-05-14",
+          "highlight": "羊肉串"
+        },
+        {
+          "author": "回民朋友",
+          "avatar": "回",
+          "rating": 4,
+          "text": "正宗清真美食，聚宝源涮肉排队也要吃，烧饼夹牛肉太香了。",
+          "date": "2026-05-09",
+          "highlight": "聚宝源"
+        },
+        {
+          "author": "游客小李",
+          "avatar": "李",
+          "rating": 5,
+          "text": "第一次来牛街，被各种小吃惊呆了，强烈推荐炸松肉和豌豆黄。",
+          "date": "2026-05-03",
+          "highlight": "炸松肉"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_008",
+      "name": "Metallica Coffee",
+      "branch_name": "精品咖啡",
+      "address": "北京市东城区五道营胡同64号",
+      "city": "北京",
+      "regions": [
+        "东城区"
+      ],
+      "categories": [
+        "咖啡",
+        "甜品"
+      ],
+      "longitude": 116.415,
+      "latitude": 39.948,
+      "avg_price": 45,
+      "avg_rating": 4.3,
+      "review_count": 800,
+      "business_hours": [
+        "09:00-19:00"
+      ],
+      "type": "rest",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "咖啡达人",
+          "avatar": "咖",
+          "rating": 5,
+          "text": "手冲咖啡很棒，豆子新鲜，环境安静适合办公，老板还会讲解咖啡知识。",
+          "date": "2026-05-12",
+          "highlight": "手冲咖啡"
+        },
+        {
+          "author": "胡同漫步者",
+          "avatar": "漫",
+          "rating": 4,
+          "text": "藏在胡同里的小店，拿铁拉花漂亮，提拉米苏也推荐，很温馨。",
+          "date": "2026-05-08",
+          "highlight": "提拉米苏"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_009",
+      "name": "西单大悦城",
+      "branch_name": "购物中心",
+      "address": "北京市西城区西单北大街131号",
+      "city": "北京",
+      "regions": [
+        "西城区"
+      ],
+      "categories": [
+        "购物",
+        "商场"
+      ],
+      "longitude": 116.373,
+      "latitude": 39.911,
+      "avg_price": 200,
+      "avg_rating": 4.4,
+      "review_count": 20000,
+      "business_hours": [
+        "10:00-22:00"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "购物狂",
+          "avatar": "购",
+          "rating": 5,
+          "text": "品牌齐全，从快时尚到高端应有尽有，经常有折扣，美食层也很棒。",
+          "date": "2026-05-13",
+          "highlight": "品牌齐全"
+        },
+        {
+          "author": "年轻妈妈",
+          "avatar": "妈",
+          "rating": 4,
+          "text": "带孩子来玩，儿童区很大，还有电影院，一站式搞定。",
+          "date": "2026-05-06",
+          "highlight": "儿童区"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_010",
+      "name": "什刹海冰场",
+      "branch_name": "冬季限定",
+      "address": "北京市西城区什刹海",
+      "city": "北京",
+      "regions": [
+        "西城区"
+      ],
+      "categories": [
+        "景点",
+        "娱乐"
+      ],
+      "longitude": 116.385,
+      "latitude": 39.938,
+      "avg_price": 60,
+      "avg_rating": 4.6,
+      "review_count": 12000,
+      "business_hours": [
+        "09:00-17:00"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "溜冰爱好者",
+          "avatar": "溜",
+          "rating": 5,
+          "text": "冬天必去，冰面很大，可以滑冰车、冰刀，感觉回到了老北京。",
+          "date": "2026-05-11",
+          "highlight": "滑冰车"
+        },
+        {
+          "author": "亲子家庭",
+          "avatar": "家",
+          "rating": 4,
+          "text": "孩子玩得超开心，冰上自行车很有趣，就是周末人太多要排队。",
+          "date": "2026-05-05",
+          "highlight": "冰上自行车"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_011",
+      "name": "天坛公园",
+      "branch_name": "皇家祭坛",
+      "address": "北京市东城区天坛内东里7号",
+      "city": "北京",
+      "regions": [
+        "东城区"
+      ],
+      "categories": [
+        "景点",
+        "公园"
+      ],
+      "longitude": 116.406,
+      "latitude": 39.882,
+      "avg_price": 15,
+      "avg_rating": 4.7,
+      "review_count": 40000,
+      "business_hours": [
+        "06:00-21:00"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "晨练大爷",
+          "avatar": "爷",
+          "rating": 5,
+          "text": "早晨来遛弯儿，看大爷大妈踢毽子、打太极，祈年殿特别壮观。",
+          "date": "2026-05-15",
+          "highlight": "祈年殿"
+        },
+        {
+          "author": "历史学生",
+          "avatar": "史",
+          "rating": 5,
+          "text": "回音壁和圜丘坛设计巧妙，古代建筑智慧令人惊叹，门票超值。",
+          "date": "2026-05-10",
+          "highlight": "回音壁"
+        },
+        {
+          "author": "摄影小白",
+          "avatar": "白",
+          "rating": 4,
+          "text": "拍照很美，尤其是柏树林和长廊，但注意要避开人潮。",
+          "date": "2026-05-01",
+          "highlight": "柏树林"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_012",
+      "name": "护国寺小吃(护国寺总店)",
+      "branch_name": "老北京小吃",
+      "address": "北京市西城区护国寺大街93号",
+      "city": "北京",
+      "regions": [
+        "西城区"
+      ],
+      "categories": [
+        "美食",
+        "小吃"
+      ],
+      "longitude": 116.374,
+      "latitude": 39.931,
+      "avg_price": 25,
+      "avg_rating": 4.4,
+      "review_count": 6000,
+      "business_hours": [
+        "06:00-20:00"
+      ],
+      "type": "food",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "老北京人",
+          "avatar": "京",
+          "rating": 5,
+          "text": "从小吃到大，豆汁儿焦圈、面茶、豌豆黄，都是记忆里的味道。",
+          "date": "2026-05-16",
+          "highlight": "豆汁儿焦圈"
+        },
+        {
+          "author": "外地游客",
+          "avatar": "游",
+          "rating": 4,
+          "text": "第一次尝试豆汁儿，酸爽！奶油炸糕和糖耳朵也推荐，价格实惠。",
+          "date": "2026-05-07",
+          "highlight": "奶油炸糕"
+        }
+      ]
+    }
+  ]
+}

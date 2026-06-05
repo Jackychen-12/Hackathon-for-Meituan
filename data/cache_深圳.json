@@ -1,0 +1,509 @@
+{
+  "city": "深圳",
+  "pois": [
+    {
+      "poi_id": "dp_001",
+      "name": "世界之窗",
+      "branch_name": "深圳地标景点",
+      "address": "深圳市南山区深南大道9037号",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "景点",
+        "主题公园"
+      ],
+      "longitude": 113.9772,
+      "latitude": 22.5431,
+      "avg_price": 220,
+      "avg_rating": 4.5,
+      "review_count": 8500,
+      "business_hours": [
+        "09:00-22:00"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "游客A",
+          "avatar": "游",
+          "rating": 5,
+          "text": "世界之窗太大了，一天根本逛不完，每个微缩景观都很精致，特别是晚上的埃菲尔铁塔灯光秀很震撼，建议早点去。",
+          "date": "2026-05-12",
+          "highlight": "灯光秀震撼"
+        },
+        {
+          "author": "旅行达人",
+          "avatar": "旅",
+          "rating": 4,
+          "text": "门票价格不低，但能看到世界各地著名景点也算值得。就是节假日人太多，排队时间长，建议工作日去。",
+          "date": "2026-05-08",
+          "highlight": "节假日人多"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_002",
+      "name": "欢乐谷",
+      "branch_name": "大型游乐场",
+      "address": "深圳市南山区侨城西街1号",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "景点",
+        "游乐场"
+      ],
+      "longitude": 113.9856,
+      "latitude": 22.5372,
+      "avg_price": 230,
+      "avg_rating": 4.6,
+      "review_count": 12000,
+      "business_hours": [
+        "09:30-21:00"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "游乐控",
+          "avatar": "乐",
+          "rating": 5,
+          "text": "过山车超级刺激，特别是雪域雄鹰，速度极快，失重感强。还有水公园夏天去很凉快，适合年轻人。",
+          "date": "2026-05-15",
+          "highlight": "雪域雄鹰刺激"
+        },
+        {
+          "author": "家庭用户",
+          "avatar": "家",
+          "rating": 4,
+          "text": "带孩子去的，儿童区项目很多，孩子玩得很开心。就是园内餐饮贵，建议自带零食。",
+          "date": "2026-05-10",
+          "highlight": "儿童区好玩"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_003",
+      "name": "深圳湾公园",
+      "branch_name": "海滨休闲公园",
+      "address": "深圳市南山区滨海大道",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "景点",
+        "公园"
+      ],
+      "longitude": 113.9742,
+      "latitude": 22.5213,
+      "avg_price": 0,
+      "avg_rating": 4.7,
+      "review_count": 15000,
+      "business_hours": [
+        "全天开放"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "骑行爱好者",
+          "avatar": "骑",
+          "rating": 5,
+          "text": "深圳湾公园是骑行圣地，沿海岸线十几公里，风景优美，可以看到香港的山。周末很多人来跑步散步，很惬意。",
+          "date": "2026-05-14",
+          "highlight": "骑行圣地"
+        },
+        {
+          "author": "摄影控",
+          "avatar": "摄",
+          "rating": 5,
+          "text": "日落时分美极了，海面金光闪闪，还有海鸥飞翔。公园很大，可以野餐，强烈推荐。",
+          "date": "2026-05-09",
+          "highlight": "日落绝美"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_004",
+      "name": "华侨城创意文化园",
+      "branch_name": "文艺打卡地",
+      "address": "深圳市南山区锦绣北街2号",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "景点",
+        "文化园区"
+      ],
+      "longitude": 113.9905,
+      "latitude": 22.5402,
+      "avg_price": 0,
+      "avg_rating": 4.4,
+      "review_count": 6000,
+      "business_hours": [
+        "全天开放"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "文艺青年",
+          "avatar": "文",
+          "rating": 5,
+          "text": "这里有很多创意小店、画廊和咖啡馆，很适合拍照。周末还有创意市集，淘到不少有趣的手工艺品。",
+          "date": "2026-05-13",
+          "highlight": "创意市集"
+        },
+        {
+          "author": "咖啡控",
+          "avatar": "咖",
+          "rating": 4,
+          "text": "园区里的咖啡馆很有特色，工业风装修，咖啡味道也不错。就是位置稍微有点偏，但值得一逛。",
+          "date": "2026-05-07",
+          "highlight": "工业风咖啡"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_005",
+      "name": "海岸城",
+      "branch_name": "南山购物中心",
+      "address": "深圳市南山区文心五路33号",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "购物",
+        "商场"
+      ],
+      "longitude": 113.9503,
+      "latitude": 22.5176,
+      "avg_price": 200,
+      "avg_rating": 4.3,
+      "review_count": 10000,
+      "business_hours": [
+        "10:00-22:00"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "购物狂",
+          "avatar": "购",
+          "rating": 4,
+          "text": "海岸城品牌齐全，从快时尚到奢侈品都有，餐饮也很丰富。就是周末人太多，停车位难找。",
+          "date": "2026-05-11",
+          "highlight": "品牌齐全"
+        },
+        {
+          "author": "吃货",
+          "avatar": "吃",
+          "rating": 5,
+          "text": "美食选择超多，从日料到火锅，每次来都能尝新。推荐负一楼的茶餐厅，菠萝包很好吃。",
+          "date": "2026-05-06",
+          "highlight": "美食选择多"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_006",
+      "name": "南头古城",
+      "branch_name": "历史古迹",
+      "address": "深圳市南山区南头天桥北",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "景点",
+        "历史建筑"
+      ],
+      "longitude": 113.9207,
+      "latitude": 22.5372,
+      "avg_price": 0,
+      "avg_rating": 4.2,
+      "review_count": 4000,
+      "business_hours": [
+        "全天开放"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "历史迷",
+          "avatar": "史",
+          "rating": 5,
+          "text": "南头古城是深圳的历史发源地，保留了很多古建筑，里面的博物馆介绍了深圳的前世今生，很有教育意义。",
+          "date": "2026-05-10",
+          "highlight": "历史发源地"
+        },
+        {
+          "author": "游客B",
+          "avatar": "客",
+          "rating": 4,
+          "text": "古城改造后很有特色，既有历史感又有时尚小店。但有些区域还在施工，期待完全开放。",
+          "date": "2026-05-05",
+          "highlight": "特色小店"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_007",
+      "name": "星巴克臻选（深圳万象天地店）",
+      "branch_name": "万象天地旗舰店",
+      "address": "深圳市南山区深南大道9668号万象天地L1层",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "咖啡",
+        "饮品"
+      ],
+      "longitude": 113.9665,
+      "latitude": 22.5395,
+      "avg_price": 45,
+      "avg_rating": 4.3,
+      "review_count": 3200,
+      "business_hours": [
+        "07:00-23:00"
+      ],
+      "type": "food",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "咖啡达人",
+          "avatar": "达",
+          "rating": 5,
+          "text": "臻选店的咖啡豆品质确实更好，手冲咖啡口感醇厚，环境也很棒，适合和朋友聊天或办公。",
+          "date": "2026-05-11",
+          "highlight": "手冲咖啡醇厚"
+        },
+        {
+          "author": "上班族",
+          "avatar": "上",
+          "rating": 4,
+          "text": "位置在万象天地一楼，很方便。但高峰期人很多，座位紧张，建议错峰来。",
+          "date": "2026-05-08",
+          "highlight": "高峰人多"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_008",
+      "name": "gaga鲜语（万象天地店）",
+      "branch_name": "轻食简餐",
+      "address": "深圳市南山区深南大道9668号万象天地B1层",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "美食",
+        "轻食"
+      ],
+      "longitude": 113.9668,
+      "latitude": 22.5392,
+      "avg_price": 80,
+      "avg_rating": 4.4,
+      "review_count": 2800,
+      "business_hours": [
+        "10:00-22:00"
+      ],
+      "type": "food",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "健康饮食者",
+          "avatar": "健",
+          "rating": 5,
+          "text": "gaga的沙拉很新鲜，食材搭配健康，酱汁低脂。水果茶也很好喝，适合减脂期来吃。",
+          "date": "2026-05-12",
+          "highlight": "沙拉新鲜"
+        },
+        {
+          "author": "情侣",
+          "avatar": "情",
+          "rating": 4,
+          "text": "环境小清新，适合约会。推荐三明治和薯条，分量足。就是价格稍贵，人均80左右。",
+          "date": "2026-05-09",
+          "highlight": "适合约会"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_009",
+      "name": "陈鹏鹏鹅肉饭店（海岸城店）",
+      "branch_name": "潮汕卤鹅",
+      "address": "深圳市南山区文心五路33号海岸城B1层",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "美食",
+        "潮汕菜"
+      ],
+      "longitude": 113.9506,
+      "latitude": 22.5173,
+      "avg_price": 65,
+      "avg_rating": 4.5,
+      "review_count": 4500,
+      "business_hours": [
+        "11:00-21:00"
+      ],
+      "type": "food",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "吃货A",
+          "avatar": "吃",
+          "rating": 5,
+          "text": "招牌卤鹅饭超级好吃，鹅肉软烂入味，卤汁拌饭绝了。还送例汤，性价比很高，每次来都排队。",
+          "date": "2026-05-14",
+          "highlight": "卤鹅饭绝了"
+        },
+        {
+          "author": "潮汕人",
+          "avatar": "潮",
+          "rating": 5,
+          "text": "正宗的潮汕味道，鹅肉新鲜，搭配的酸菜解腻。就是店面有点小，等位时间长。",
+          "date": "2026-05-07",
+          "highlight": "正宗潮汕味"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_010",
+      "name": "万象天地",
+      "branch_name": "高端购物中心",
+      "address": "深圳市南山区深南大道9668号",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "购物",
+        "商场"
+      ],
+      "longitude": 113.9662,
+      "latitude": 22.5398,
+      "avg_price": 300,
+      "avg_rating": 4.6,
+      "review_count": 9000,
+      "business_hours": [
+        "10:00-22:00"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "时尚达人",
+          "avatar": "时",
+          "rating": 5,
+          "text": "万象天地品牌很全，还有很多网红店和艺术装置，很适合逛街拍照。每次来都有新发现。",
+          "date": "2026-05-13",
+          "highlight": "艺术装置"
+        },
+        {
+          "author": "美食家",
+          "avatar": "美",
+          "rating": 4,
+          "text": "餐饮选择丰富，从高端餐厅到小吃都有。但价格偏高，周末人流量大，建议工作日去。",
+          "date": "2026-05-06",
+          "highlight": "餐饮丰富"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_011",
+      "name": "海上世界",
+      "branch_name": "滨海商业区",
+      "address": "深圳市南山区蛇口望海路1128号",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "景点",
+        "商业区"
+      ],
+      "longitude": 113.9145,
+      "latitude": 22.4876,
+      "avg_price": 150,
+      "avg_rating": 4.4,
+      "review_count": 7000,
+      "business_hours": [
+        "全天开放"
+      ],
+      "type": "photo",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "夜景爱好者",
+          "avatar": "夜",
+          "rating": 5,
+          "text": "晚上的海上世界灯光璀璨，明华轮很壮观。周围有很多酒吧和餐厅，氛围很好，适合夜生活。",
+          "date": "2026-05-11",
+          "highlight": "夜景璀璨"
+        },
+        {
+          "author": "家庭游客",
+          "avatar": "家",
+          "rating": 4,
+          "text": "带孩子来看明华轮，孩子很喜欢。还有女娲补天雕像，旁边就是海滨公园，可以散步。",
+          "date": "2026-05-04",
+          "highlight": "明华轮壮观"
+        }
+      ]
+    },
+    {
+      "poi_id": "dp_012",
+      "name": "蛇口渔人码头",
+      "branch_name": "海鲜市场",
+      "address": "深圳市南山区蛇口湾厦路",
+      "city": "深圳",
+      "regions": [
+        "南山区"
+      ],
+      "categories": [
+        "美食",
+        "海鲜"
+      ],
+      "longitude": 113.909,
+      "latitude": 22.482,
+      "avg_price": 120,
+      "avg_rating": 4.2,
+      "review_count": 3000,
+      "business_hours": [
+        "09:00-21:00"
+      ],
+      "type": "food",
+      "dp_image": "",
+      "reviews": [
+        {
+          "author": "海鲜控",
+          "avatar": "海",
+          "rating": 5,
+          "text": "这里海鲜新鲜又便宜，可以自己挑选然后加工。椒盐皮皮虾和清蒸石斑鱼都很好吃，很地道。",
+          "date": "2026-05-10",
+          "highlight": "海鲜新鲜"
+        },
+        {
+          "author": "本地人",
+          "avatar": "本",
+          "rating": 4,
+          "text": "虽然环境一般，但味道确实好。推荐蒜蓉生蚝，肥美多汁。就是加工费有点贵。",
+          "date": "2026-05-03",
+          "highlight": "蒜蓉生蚝"
+        }
+      ]
+    }
+  ]
+}

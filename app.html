@@ -875,6 +875,54 @@ body {
 .p-mine .menu-text { flex: 1; font-size: 14px; color: #1a1a2e; font-weight: 500; }
 .p-mine .menu-arrow { font-size: 14px; color: #c0c0c8; }
 
+/* ===================== p-settings ===================== */
+.p-settings.app-container { padding: 56px 24px 84px; overflow-y: auto; }
+.p-settings .top-bar {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+}
+.p-settings .back-btn {
+    background: rgba(255,255,255,0.7); border: 1px solid rgba(140,180,240,0.3);
+    width: 36px; height: 36px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; color: #5a5a62;
+}
+.p-settings .page-title { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+.p-settings .settings-group {
+    background: rgba(255,255,255,0.85); border-radius: 18px; padding: 4px 0;
+    border: 1px solid rgba(140,180,240,0.3); backdrop-filter: blur(10px);
+    margin-bottom: 14px;
+}
+.p-settings .settings-group-title {
+    font-size: 13px; font-weight: 700; color: #1a1a2e; padding: 14px 18px 8px;
+    display: flex; align-items: center; gap: 6px;
+}
+.p-settings .settings-group-title .dot {
+    width: 4px; height: 14px; background: linear-gradient(180deg, #1e5fd8, #5b9eff); border-radius: 2px;
+}
+.p-settings .setting-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px; border-bottom: 1px solid rgba(140,180,240,0.15);
+}
+.p-settings .setting-item:last-child { border-bottom: none; }
+.p-settings .setting-label { font-size: 14px; color: #1a1a2e; font-weight: 500; }
+.p-settings .setting-desc { font-size: 11px; color: #8e8e93; margin-top: 2px; }
+.p-settings .toggle {
+    width: 44px; height: 26px; border-radius: 13px; background: #d1d5db;
+    position: relative; cursor: pointer; transition: background 0.25s; flex-shrink: 0;
+}
+.p-settings .toggle.on { background: linear-gradient(135deg, #1e5fd8, #5b9eff); }
+.p-settings .toggle::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 20px; height: 20px; border-radius: 50%; background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15); transition: transform 0.25s;
+}
+.p-settings .toggle.on::after { transform: translateX(18px); }
+.p-settings .setting-select {
+    padding: 6px 12px; border-radius: 10px; background: rgba(232,242,255,0.65);
+    border: 1px solid rgba(140,180,240,0.3); font-size: 13px; color: #5b9eff;
+    font-weight: 600; cursor: pointer;
+}
+
 /* ===================== Shared bottom tab ===================== */
 .tab-bar {
     position: fixed; bottom: 0; left: 50%;
@@ -897,6 +945,8 @@ body {
 .tab-icon { font-size: 22px; }
 </style>
 <link rel="stylesheet" href="./explore-tailwind.css">
+<script>window._AMapSecurityConfig={securityJsCode:'ef586227f730ac06d8c75d02f379ecf0'}</script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=6f73fab73ee2df39d1476ec92436a542"></script>
 </head>
 <body>
 
@@ -1023,7 +1073,7 @@ body {
     <div class="top-status">
         <div class="location-pill">
             <span class="dot-pulse"></span>
-            <span>📍 <span id="cityName">深圳 · 南山区</span></span>
+            <span>📍 <span id="cityName">上海 · 徐汇区</span></span>
         </div>
         <div class="user-avatar" id="userAvatar">🐱</div>
     </div>
@@ -1047,6 +1097,15 @@ body {
         </div>
     </div>
 
+    <div class="persona-bar" style="margin:12px 24px 0;display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="persona-chip-btn" data-persona="photographer" style="padding:6px 12px;border-radius:16px;background:rgba(232,242,255,0.65);border:1.5px solid transparent;font-size:12px;color:#5a5a62;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:4px;">📷 拍照党</button>
+        <button class="persona-chip-btn" data-persona="foodie" style="padding:6px 12px;border-radius:16px;background:rgba(232,242,255,0.65);border:1.5px solid transparent;font-size:12px;color:#5a5a62;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:4px;">🍜 美食家</button>
+        <button class="persona-chip-btn" data-persona="value" style="padding:6px 12px;border-radius:16px;background:rgba(232,242,255,0.65);border:1.5px solid transparent;font-size:12px;color:#5a5a62;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:4px;">💰 性价比</button>
+        <button class="persona-chip-btn" data-persona="literary" style="padding:6px 12px;border-radius:16px;background:rgba(232,242,255,0.65);border:1.5px solid transparent;font-size:12px;color:#5a5a62;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:4px;">📚 文青</button>
+        <button class="persona-chip-btn" data-persona="local" style="padding:6px 12px;border-radius:16px;background:rgba(232,242,255,0.65);border:1.5px solid transparent;font-size:12px;color:#5a5a62;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:4px;">🏠 老饕</button>
+        <button class="persona-chip-btn" data-persona="parent" style="padding:6px 12px;border-radius:16px;background:rgba(232,242,255,0.65);border:1.5px solid transparent;font-size:12px;color:#5a5a62;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:4px;">👶 带娃</button>
+    </div>
+
     <div class="inspire-bar" id="inspireBar">
         <div class="inspire-icon">🎲</div>
         <div class="inspire-content" id="inspireContent"></div>
@@ -1059,7 +1118,7 @@ body {
     <div class="sec-header">
         <div class="title">
             为你推荐
-            <span class="city-tag" id="cityTag">深圳</span>
+            <span class="city-tag" id="cityTag">上海</span>
         </div>
         <div class="more" id="recRefreshBtn"><span>⟳</span> 换一批</div>
     </div>
@@ -1068,7 +1127,7 @@ body {
 </div>
 
 <!-- ============== p-route ============== -->
-<div class="page app-container" id="page-route" style="padding-bottom:0;overflow:hidden;background:#edf1f4;">
+<div class="page app-container" id="page-route" style="padding-bottom:0;overflow:hidden;background:#f5f9ff;">
     <div id="exploreRouteRoot" style="min-height:100vh;"></div>
 </div>
 
@@ -1089,7 +1148,7 @@ body {
         <div class="profile-avatar" id="mineAvatar">🐱</div>
         <div class="profile-name">
             <h2 id="mineUserName">朋友</h2>
-            <p id="mineUserSub">已加入 CityWalk · 探索深圳中</p>
+            <p id="mineUserSub">已加入 CityWalk · 探索上海中</p>
         </div>
     </div>
 
@@ -1113,19 +1172,19 @@ body {
 
     <div class="section">
         <div class="menu-list">
-            <div class="menu-item" onclick="alert('待开发')">
+            <div class="menu-item" onclick="(function(){ var ids = JSON.parse(localStorage.getItem('cw_checkins') || '[]'); if (!ids.length) { alert('还没有打卡记录，去探索页打卡吧~'); return; } alert('已打卡 ' + ids.length + ' 个地点：\n' + ids.join('、')); })()">
                 <div class="menu-icon">📍</div>
                 <div class="menu-text">我去过的地方</div>
                 <div class="menu-arrow">›</div>
             </div>
-            <div class="menu-item" onclick="alert('待开发')">
+            <div class="menu-item" onclick="(function(){ var ids = JSON.parse(localStorage.getItem('cw_favorites') || '[]'); if (!ids.length) { alert('还没有收藏，去探索页收藏喜欢的地点吧~'); return; } alert('已收藏 ' + ids.length + ' 个地点：\n' + ids.join('、')); })()">
                 <div class="menu-icon">⭐</div>
                 <div class="menu-text">收藏的路线</div>
                 <div class="menu-arrow">›</div>
             </div>
-            <div class="menu-item" onclick="alert('待开发')">
-                <div class="menu-icon">🔔</div>
-                <div class="menu-text">通知设置</div>
+            <div class="menu-item" onclick="location.hash='settings'">
+                <div class="menu-icon">⚙️</div>
+                <div class="menu-text">设置</div>
                 <div class="menu-arrow">›</div>
             </div>
             <div class="menu-item" id="mineResetBtn">
@@ -1133,6 +1192,83 @@ body {
                 <div class="menu-text">重置 demo 数据</div>
                 <div class="menu-arrow">›</div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============== p-settings ============== -->
+<div class="page p-settings app-container" id="page-settings">
+    <div class="top-bar">
+        <button class="back-btn" id="settingsBackBtn">←</button>
+        <div class="page-title">设置</div>
+        <div style="width:36px"></div>
+    </div>
+
+    <div class="settings-group">
+        <div class="settings-group-title"><span class="dot"></span>数据源</div>
+        <div class="setting-item">
+            <div><div class="setting-label">大众点评评论</div><div class="setting-desc">展示真实用户评论和评分</div></div>
+            <div class="toggle on" data-key="dp_reviews"></div>
+        </div>
+        <div class="setting-item">
+            <div><div class="setting-label">AI 路线规划</div><div class="setting-desc">使用 DeepSeek 智能生成路线</div></div>
+            <div class="toggle on" data-key="ai_plan"></div>
+        </div>
+        <div class="setting-item">
+            <div><div class="setting-label">多 Agent 方案</div><div class="setting-desc">生成多条差异化路线供对比</div></div>
+            <div class="toggle on" data-key="multi_agent"></div>
+        </div>
+    </div>
+
+    <div class="settings-group">
+        <div class="settings-group-title"><span class="dot"></span>AI 说话方式</div>
+        <div class="setting-item">
+            <div><div class="setting-label">措辞正式度</div></div>
+            <select class="setting-select" data-key="tone">
+                <option value="casual">轻松随意</option>
+                <option value="neutral" selected>中性平衡</option>
+                <option value="formal">正式专业</option>
+            </select>
+        </div>
+        <div class="setting-item">
+            <div><div class="setting-label">描述风格</div></div>
+            <select class="setting-select" data-key="style">
+                <option value="literary">文艺故事感</option>
+                <option value="direct" selected>直白实用</option>
+                <option value="playful">俏皮活泼</option>
+            </select>
+        </div>
+        <div class="setting-item">
+            <div><div class="setting-label">推荐篇幅</div></div>
+            <select class="setting-select" data-key="length">
+                <option value="concise">精简扼要</option>
+                <option value="standard" selected>标准</option>
+                <option value="detailed">详细丰富</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="settings-group">
+        <div class="settings-group-title"><span class="dot"></span>隐私</div>
+        <div class="setting-item">
+            <div><div class="setting-label">本地模式</div><div class="setting-desc">所有数据仅保存在本机</div></div>
+            <div class="toggle on" data-key="local_mode"></div>
+        </div>
+        <div class="setting-item">
+            <div><div class="setting-label">记录浏览互动</div><div class="setting-desc">用于个性化推荐（可随时清除）</div></div>
+            <div class="toggle on" data-key="track_interaction"></div>
+        </div>
+    </div>
+
+    <div class="settings-group">
+        <div class="settings-group-title"><span class="dot"></span>关于</div>
+        <div class="setting-item">
+            <div><div class="setting-label">版本</div></div>
+            <div style="font-size:13px;color:#8e8e93;">Demo v1.0 · 美团黑客松</div>
+        </div>
+        <div class="setting-item" style="cursor:pointer;" id="settingsClearBtn">
+            <div><div class="setting-label" style="color:#D95A7B;">清空所有数据</div><div class="setting-desc">清除画像、收藏、浏览记录</div></div>
+            <div style="font-size:14px;color:#D95A7B;">›</div>
         </div>
     </div>
 </div>
@@ -1225,7 +1361,7 @@ body {
  * Router + Page lifecycle
  * ===================================================================== */
 const Router = (() => {
-    const PAGES = ['login', 'profile', 'home', 'route', 'plan', 'mine'];
+    const PAGES = ['login', 'profile', 'home', 'route', 'plan', 'mine', 'settings'];
     const inits = {};
 
     function show(name) {
@@ -1601,14 +1737,14 @@ Router.register('login', (() => {
             // 模拟基于大众点评足迹（美食、打卡等偏好）自动总结的画像
             const dpTags = {
                 source: 'dianping',
-                summary: '近 90 天在大众点评收藏 28 家、打卡 56 次，偏好潮汕菜 / 日料 / 精品咖啡，常出没于华侨城、蛇口、深圳湾',
+                summary: '近 90 天在大众点评收藏 28 家、打卡 56 次，偏好潮汕菜 / 日料 / 精品咖啡，常出没于武康路、安福路、徐汇滨江',
                 food: '尝鲜派',
                 pace: '舒适漫步',
                 companion: ['伴侣', '闺蜜'],
                 styles: ['☕ 咖啡', '📷 出片', '🍷 微醺', '🌃 夜景'],
                 // 用于"我的画像"额外展示的点评维度
                 cuisines: ['潮汕菜', '日式料理', '东南亚菜', '精品咖啡'],
-                hotspots: ['华侨城', '蛇口海上世界', '深圳湾', '南头古城'],
+                hotspots: ['武康路', '安福路', '永康路', '徐汇滨江', '巨鹿路'],
                 checkinLevel: '资深探店家 · Lv.6',
             };
             localStorage.setItem('cw_profile_tags', JSON.stringify(dpTags));
@@ -1820,14 +1956,14 @@ Router.register('home', (() => {
 
     // 推荐池（>2个，用于轮换）
     const REC_POOL = [
-        { title:'南头古城慢生活半日', desc:'600 年古城+独立咖啡+市集，刚好一下午', cover:'cover-1', meta:['📍 南山','⏱️ 3-4h','🚶 漫步'], match:t => t.pace==='不紧不慢' && '为你定制' },
-        { title:'深圳湾日落骑行环线', desc:'海风+晚霞+网红补给点，治愈感拉满',     cover:'cover-2', meta:['📍 后海','⏱️ 2h','🚴 骑行'],   match:t => (t.styles||[]).some(s=>s.includes('自然')||s.includes('海')) && '你的偏好' },
-        { title:'蛇口老街市集探店',   desc:'海鲜大排档 + 复古街区 + 独立小店',         cover:'cover-3', meta:['📍 蛇口','⏱️ 4h','🍜 美食'],    match:t => t.food==='尝鲜派' && '尝鲜推荐' },
-        { title:'华侨城 OCT 创意一日', desc:'艺术展 + 设计书店 + Livehouse 夜场',      cover:'cover-4', meta:['📍 华侨城','⏱️ 全天','🎨 文艺'], match:t => (t.styles||[]).some(s=>s.includes('艺术')||s.includes('文艺')) && '懂你' },
-        { title:'梧桐山日出徒步',     desc:'凌晨出发，云海日出，硬核但值得',           cover:'cover-2', meta:['📍 罗湖','⏱️ 5h','🥾 徒步'],    match:t => (t.styles||[]).some(s=>s.includes('自然')) && '你的偏好' },
-        { title:'盐田海鲜+栈道夜跑',  desc:'吃完海鲜沿海岸线 5 公里，夜风超舒服',     cover:'cover-3', meta:['📍 盐田','⏱️ 3h','🌃 夜景'],    match:t => (t.styles||[]).some(s=>s.includes('夜景')) && '夜猫推荐' },
-        { title:'东门老街扫街半日',   desc:'港式茶餐厅 + 复古港风街景 + 小吃',         cover:'cover-1', meta:['📍 罗湖','⏱️ 3h','📷 出片'],    match:t => (t.styles||[]).some(s=>s.includes('出片')) && '出片好去处' },
-        { title:'光明农场亲子一日',   desc:'萌宠互动 + 草地野餐 + 摘菜体验',           cover:'cover-4', meta:['📍 光明','⏱️ 全天','👨‍👩‍👧 亲子'], match:t => '家庭友好' }
+        { title:'武康路老洋房半日漫步', desc:'梧桐树下拍建筑弧线，咖啡馆轮着坐', cover:'cover-1', meta:['📍 衡复','⏱️ 3-4h','🚶 漫步'], match:t => t.pace==='不紧不慢' && '为你定制' },
+        { title:'安福路文艺小店探索', desc:'话剧院→独立书店→买手店→精品咖啡', cover:'cover-2', meta:['📍 徐汇','⏱️ 2-3h','☕ 文艺'], match:t => (t.styles||[]).some(s=>s.includes('文艺')||s.includes('艺术')) && '你的偏好' },
+        { title:'老上海弄堂美食之旅', desc:'老吉士本帮菜+红宝石奶油小方+阿娘面', cover:'cover-3', meta:['📍 徐汇','⏱️ 4h','🍜 美食'], match:t => t.food==='尝鲜派' && '尝鲜推荐' },
+        { title:'徐汇滨江艺术一日', desc:'龙美术馆+西岸艺术中心+江边骑行道', cover:'cover-4', meta:['📍 徐汇','⏱️ 全天','🎨 文艺'], match:t => (t.styles||[]).some(s=>s.includes('艺术')||s.includes('文艺')) && '懂你' },
+        { title:'永康路咖啡漫游', desc:'一条路集齐 5 家精品咖啡，边喝边走', cover:'cover-2', meta:['📍 徐汇','⏱️ 2h','☕ 咖啡'], match:t => (t.styles||[]).some(s=>s.includes('咖啡')) && '你的偏好' },
+        { title:'巨鹿路夜生活体验', desc:'法租界老街+鸡尾酒吧+深夜食堂', cover:'cover-3', meta:['📍 静安','⏱️ 3h','🌃 夜景'], match:t => (t.styles||[]).some(s=>s.includes('夜景')) && '夜猫推荐' },
+        { title:'衡复历史街区出片线', desc:'武康大楼→复兴西路→衡山路，光影最佳', cover:'cover-1', meta:['📍 衡复','⏱️ 3h','📷 出片'], match:t => (t.styles||[]).some(s=>s.includes('出片')) && '出片好去处' },
+        { title:'后滩公园亲子一日', desc:'生态湿地+滨江步道+大草坪野餐', cover:'cover-4', meta:['📍 浦东','⏱️ 全天','👨‍👩‍👧 亲子'], match:t => '家庭友好' }
     ];
 
     // 状态
@@ -2309,7 +2445,12 @@ Router.register('home', (() => {
         document.querySelectorAll('#recList .rec-card').forEach(el => {
             el.addEventListener('click', () => {
                 const r = list[+el.dataset.idx];
-                sessionStorage.setItem('cw_pending_query', r.title);
+                sessionStorage.setItem('cw_pending_query', JSON.stringify({
+                    text: r.title,
+                    source: 'recommend',
+                    city: '上海市',
+                    region: '衡复/徐汇',
+                }));
                 Router.go('plan');
             });
         });
@@ -2334,6 +2475,27 @@ Router.register('home', (() => {
         window.CityWalkHome = window.CityWalkHome || {};
         window.CityWalkHome.applyRefined = applyRefined;
 
+        // Persona chips
+        const selectedPersonas = new Set();
+        document.querySelectorAll('.persona-chip-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const p = btn.dataset.persona;
+                if (selectedPersonas.has(p)) {
+                    selectedPersonas.delete(p);
+                    btn.style.background = 'rgba(232,242,255,0.65)';
+                    btn.style.borderColor = 'transparent';
+                    btn.style.color = '#5a5a62';
+                    btn.style.boxShadow = 'none';
+                } else {
+                    selectedPersonas.add(p);
+                    btn.style.background = 'linear-gradient(135deg, #1e5fd8, #5b9eff)';
+                    btn.style.borderColor = '#fff';
+                    btn.style.color = '#fff';
+                    btn.style.boxShadow = '0 4px 12px rgba(30,95,216,0.28)';
+                }
+            });
+        });
+
         document.getElementById('userAvatar').addEventListener('click', () => Router.go('mine'));
         document.getElementById('voiceOpenBtn').addEventListener('click', Voice.open);
 
@@ -2355,9 +2517,12 @@ Router.register('home', (() => {
                 text: txt,
                 images: state.thumbs.map(t => t.url),
                 presets: { ...state.selected },
-                pois: state.confirmedPois.map(p => ({ name: p.name, desc: p.desc }))
+                pois: state.confirmedPois.map(p => ({ name: p.name, desc: p.desc })),
+                personas: [...selectedPersonas],
             };
             sessionStorage.setItem('cw_pending_query', JSON.stringify(payload));
+            const count = parseInt(localStorage.getItem('cw_route_count') || '0');
+            localStorage.setItem('cw_route_count', String(count + 1));
             Router.go('plan');
         });
 
@@ -2452,7 +2617,7 @@ Router.register('mine', (() => {
             if (basic.source === 'dianping') {
                 sub.innerHTML = '已绑定 <b style="color:#1e5fd8;">大众点评</b> · 画像由点评足迹自动生成';
             } else {
-                sub.textContent = '已加入 CityWalk · 探索深圳中';
+                sub.textContent = '已加入 CityWalk · 探索上海中';
             }
         }
 
@@ -2499,6 +2664,14 @@ Router.register('mine', (() => {
                     <div class="tag-values">${companionHTML}</div>
                 </div>
             `;
+            // 统计数字（大众点评用户）
+            const routesDP = JSON.parse(localStorage.getItem('cw_route_count') || '0');
+            const checkinsDP = JSON.parse(localStorage.getItem('cw_checkins') || '[]');
+            const favsDP = JSON.parse(localStorage.getItem('cw_favorites') || '[]');
+            const statNumsDP = document.querySelectorAll('#page-mine .stat-num');
+            if (statNumsDP[0]) statNumsDP[0].textContent = routesDP;
+            if (statNumsDP[1]) statNumsDP[1].textContent = checkinsDP.length;
+            if (statNumsDP[2]) statNumsDP[2].textContent = favsDP.length;
             return;
         }
 
@@ -2529,6 +2702,15 @@ Router.register('mine', (() => {
             });
             body.innerHTML = html;
         }
+
+        // 统计数字
+        const routes = JSON.parse(localStorage.getItem('cw_route_count') || '0');
+        const checkins = JSON.parse(localStorage.getItem('cw_checkins') || '[]');
+        const favs = JSON.parse(localStorage.getItem('cw_favorites') || '[]');
+        const statNums = document.querySelectorAll('#page-mine .stat-num');
+        if (statNums[0]) statNums[0].textContent = routes;
+        if (statNums[1]) statNums[1].textContent = checkins.length;
+        if (statNums[2]) statNums[2].textContent = favs.length;
     }
 
     return function init() {
@@ -2540,6 +2722,51 @@ Router.register('mine', (() => {
         document.getElementById('mineEditBtn').addEventListener('click', () => Router.go('profile'));
         document.getElementById('mineResetBtn').addEventListener('click', () => {
             if (!confirm('清空所有 demo 数据并回到登录页？')) return;
+            localStorage.clear();
+            sessionStorage.clear();
+            location.hash = 'login';
+            location.reload();
+        });
+    };
+})());
+
+/* =====================================================================
+ * p-settings
+ * ===================================================================== */
+Router.register('settings', (() => {
+    let bound = false;
+    return function init() {
+        if (bound) return;
+        bound = true;
+        document.getElementById('settingsBackBtn').addEventListener('click', () => Router.go('mine'));
+        // toggle 交互
+        document.querySelectorAll('#page-settings .toggle').forEach(el => {
+            el.addEventListener('click', () => {
+                el.classList.toggle('on');
+                const key = el.dataset.key;
+                const val = el.classList.contains('on');
+                localStorage.setItem('cw_setting_' + key, JSON.stringify(val));
+            });
+            // 初始化状态
+            const key = el.dataset.key;
+            const saved = localStorage.getItem('cw_setting_' + key);
+            if (saved !== null) {
+                const on = JSON.parse(saved);
+                el.classList.toggle('on', on);
+            }
+        });
+        // select 交互
+        document.querySelectorAll('#page-settings .setting-select').forEach(el => {
+            const key = el.dataset.key;
+            const saved = localStorage.getItem('cw_setting_' + key);
+            if (saved) el.value = JSON.parse(saved);
+            el.addEventListener('change', () => {
+                localStorage.setItem('cw_setting_' + key, JSON.stringify(el.value));
+            });
+        });
+        // 清空数据
+        document.getElementById('settingsClearBtn').addEventListener('click', () => {
+            if (!confirm('清空所有数据？此操作不可撤销。')) return;
             localStorage.clear();
             sessionStorage.clear();
             location.hash = 'login';
