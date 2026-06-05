@@ -95,11 +95,11 @@ const AMapView = React.memo(function AMapView({
   const markersRef = useRef<any[]>([]);
 
   useEffect(() => {
-    if (mapInstance.current || !mapRef.current || !(window as any).AMap) return;
+    if (mapInstance.current || !mapRef.current) return;
 
     const tryInit = () => {
       const el = mapRef.current;
-      if (!el || el.offsetWidth === 0) return false;
+      if (!el || el.offsetWidth === 0 || !(window as any).AMap) return false;
       const AMap = (window as any).AMap;
       const center = spots.length > 0 && spots[0].lng
         ? [spots[0].lng, spots[0].lat]
