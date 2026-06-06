@@ -466,11 +466,11 @@ const RouteMap = React.memo(function RouteMap({
   const mapInstance = useRef<any>(null);
 
   useEffect(() => {
-    if (!mapRef.current || !(window as any).AMap) return;
+    if (!mapRef.current) return;
 
     const initMap = () => {
       const el = mapRef.current;
-      if (!el || el.offsetWidth === 0 || mapInstance.current) return false;
+      if (!el || el.offsetWidth === 0 || mapInstance.current || !(window as any).AMap) return false;
       const AMap = (window as any).AMap;
       const validStops = stops.filter(s => s.lng && s.lat);
       const center = validStops.length > 0
@@ -535,7 +535,21 @@ const RouteMap = React.memo(function RouteMap({
 });
 
 
-function RoutePlanApp() {
+class PlanErrorBoundary extends React.Component<{children: React.ReactNode}, {error: string | null}> {
+  state = { error: null as string | null };
+  static getDerivedStateFromError(e: any) { return { error: e?.message || String(e) }; }
+  render() {
+    if (this.state.error) return (
+      <div style={{padding:'40px',textAlign:'center',color:'#d00'}}>
+        <h3>路线页渲染出错</h3>
+        <pre style={{fontSize:'12px',whiteSpace:'pre-wrap'}}>{this.state.error}</pre>
+      </div>
+    );
+    return this.props.children;
+  }
+}
+
+function RoutePlanAppInner() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const dragState = useRef<{ startY: number; startTop: number; moved: boolean } | null>(null);
   const drawerTopRef = useRef(0);
@@ -1521,10 +1535,20 @@ function RoutePlanApp() {
   );
 }
 
+function RoutePlanApp() {
+  return <PlanErrorBoundary><RoutePlanAppInner /></PlanErrorBoundary>;
+}
+
 function mount() {
   const rootElement = document.getElementById('routePlanRoot');
   if (!rootElement) return;
-  createRoot(rootElement).render(<RoutePlanApp />);
+  try {
+    createRoot(rootElement).render(<RoutePlanApp />);
+  } catch (e: any) {
+    rootElement.innerHTML = `<div style="padding:40px;text-align:center;color:#d00;">
+      <h3>路线页加载失败</h3><pre style="font-size:12px;white-space:pre-wrap;">${e?.message || e}</pre>
+    </div>`;
+  }
 }
 
 if (document.readyState === 'loading') {
