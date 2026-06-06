@@ -121,6 +121,7 @@ const AMapView = React.memo(function AMapView({
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
+  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
     if (mapInstance.current || !mapRef.current) return;
@@ -153,16 +154,14 @@ const AMapView = React.memo(function AMapView({
           geo.getCurrentPosition();
         }
       });
+      setMapReady(true);
       return true;
     };
 
     if (!tryInit()) {
-      const observer = new MutationObserver(() => {
-        if (tryInit()) observer.disconnect();
-      });
-      observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['class', 'style'] });
-      const fallback = setInterval(() => { if (tryInit()) clearInterval(fallback); }, 300);
-      return () => { observer.disconnect(); clearInterval(fallback); };
+      const fallback = setInterval(() => { if (tryInit()) clearInterval(fallback); }, 500);
+      const timeout = setTimeout(() => clearInterval(fallback), 8000);
+      return () => { clearInterval(fallback); clearTimeout(timeout); };
     }
 
     return () => {
@@ -208,7 +207,12 @@ const AMapView = React.memo(function AMapView({
     }
   }, [spots, activeCategory]);
 
-  return <div ref={mapRef} className="absolute inset-0" />;
+  return (
+    <div className="absolute inset-0">
+      {!mapReady && <ExploreStaticMapFallback spots={spots} />}
+      <div ref={mapRef} className="absolute inset-0" style={{opacity: mapReady ? 1 : 0}} />
+    </div>
+  );
 });
 
 const defaultSpots: Spot[] = [

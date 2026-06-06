@@ -500,6 +500,7 @@ const RouteMap = React.memo(function RouteMap({
 }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
+  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -552,18 +553,27 @@ const RouteMap = React.memo(function RouteMap({
       if (validStops.length > 0) {
         map.setFitView(null, false, [60, 80, 200, 60]);
       }
+      setMapReady(true);
       return true;
     };
 
     if (!initMap()) {
-      const iv = setInterval(() => { if (initMap()) clearInterval(iv); }, 200);
-      return () => clearInterval(iv);
+      const iv = setInterval(() => {
+        if (initMap()) clearInterval(iv);
+      }, 500);
+      const timeout = setTimeout(() => clearInterval(iv), 8000);
+      return () => { clearInterval(iv); clearTimeout(timeout); };
     }
 
     return () => { if (mapInstance.current) { mapInstance.current.destroy(); mapInstance.current = null; } };
   }, [stops, activeStopId]);
 
-  return <div ref={mapRef} className="h-full w-full" />;
+  return (
+    <div style={{width:'100%',height:'100%',position:'relative'}}>
+      {!mapReady && <StaticMapFallback stops={stops} />}
+      <div ref={mapRef} className="h-full w-full" style={{position: mapReady ? 'relative' : 'absolute', top:0, left:0, opacity: mapReady ? 1 : 0}} />
+    </div>
+  );
 });
 
 
