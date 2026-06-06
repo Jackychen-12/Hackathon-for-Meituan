@@ -2079,14 +2079,14 @@ Router.register('home', (() => {
 
     // 推荐池（>2个，用于轮换）
     const REC_POOL = [
-        { title:'武康路老洋房半日漫步', desc:'梧桐树下拍建筑弧线，咖啡馆轮着坐', cover:'cover-1', meta:['📍 衡复','⏱️ 3-4h','🚶 漫步'], match:t => t.pace==='不紧不慢' && '为你定制' },
-        { title:'安福路文艺小店探索', desc:'话剧院→独立书店→买手店→精品咖啡', cover:'cover-2', meta:['📍 徐汇','⏱️ 2-3h','☕ 文艺'], match:t => (t.styles||[]).some(s=>s.includes('文艺')||s.includes('艺术')) && '你的偏好' },
-        { title:'老上海弄堂美食之旅', desc:'老吉士本帮菜+红宝石奶油小方+阿娘面', cover:'cover-3', meta:['📍 徐汇','⏱️ 4h','🍜 美食'], match:t => t.food==='尝鲜派' && '尝鲜推荐' },
-        { title:'徐汇滨江艺术一日', desc:'龙美术馆+西岸艺术中心+江边骑行道', cover:'cover-4', meta:['📍 徐汇','⏱️ 全天','🎨 文艺'], match:t => (t.styles||[]).some(s=>s.includes('艺术')||s.includes('文艺')) && '懂你' },
-        { title:'永康路咖啡漫游', desc:'一条路集齐 5 家精品咖啡，边喝边走', cover:'cover-2', meta:['📍 徐汇','⏱️ 2h','☕ 咖啡'], match:t => (t.styles||[]).some(s=>s.includes('咖啡')) && '你的偏好' },
-        { title:'巨鹿路夜生活体验', desc:'法租界老街+鸡尾酒吧+深夜食堂', cover:'cover-3', meta:['📍 静安','⏱️ 3h','🌃 夜景'], match:t => (t.styles||[]).some(s=>s.includes('夜景')) && '夜猫推荐' },
-        { title:'衡复历史街区出片线', desc:'武康大楼→复兴西路→衡山路，光影最佳', cover:'cover-1', meta:['📍 衡复','⏱️ 3h','📷 出片'], match:t => (t.styles||[]).some(s=>s.includes('出片')) && '出片好去处' },
-        { title:'后滩公园亲子一日', desc:'生态湿地+滨江步道+大草坪野餐', cover:'cover-4', meta:['📍 浦东','⏱️ 全天','👨‍👩‍👧 亲子'], match:t => '家庭友好' }
+        { title:'武康路老洋房半日漫步', desc:'梧桐树下拍建筑弧线，咖啡馆轮着坐', cover:'cover-1', img:'http://p0.meituan.net/tdctraveldark/f13f09278bb0752dd65b42fd9668ec68364043.jpg@340w_255h_1e_1c_1l', meta:['📍 衡复','⏱️ 3-4h','🚶 漫步'], match:t => t.pace==='不紧不慢' && '为你定制' },
+        { title:'安福路文艺小店探索', desc:'话剧院→独立书店→买手店→精品咖啡', cover:'cover-2', img:'https://p0.meituan.net/biztone/4a2ce0fbf6bbeeb89e8fad24cdac59ce325786.jpg@340w_255h_1e_1c_1l', meta:['📍 徐汇','⏱️ 2-3h','☕ 文艺'], match:t => (t.styles||[]).some(s=>s.includes('文艺')||s.includes('艺术')) && '你的偏好' },
+        { title:'老上海弄堂美食之旅', desc:'老吉士本帮菜+红宝石奶油小方+阿娘面', cover:'cover-3', img:'https://p0.meituan.net/biztone/b3ea40e3bc770698d3f18cc17bfea0d0377604.jpg@340w_255h_1e_1c_1l', meta:['📍 徐汇','⏱️ 4h','🍜 美食'], match:t => t.food==='尝鲜派' && '尝鲜推荐' },
+        { title:'徐汇滨江艺术一日', desc:'龙美术馆+西岸艺术中心+江边骑行道', cover:'cover-4', img:'https://p0.meituan.net/biztone/c16c47b3e0f79d1f0b51cb96dd9c96b5267989.jpg@340w_255h_1e_1c_1l', meta:['📍 徐汇','⏱️ 全天','🎨 文艺'], match:t => (t.styles||[]).some(s=>s.includes('艺术')||s.includes('文艺')) && '懂你' },
+        { title:'永康路咖啡漫游', desc:'一条路集齐 5 家精品咖啡，边喝边走', cover:'cover-2', img:'https://p0.meituan.net/biztone/1d9b0e98e30a0ab9f3acd8c44b4c6a06218449.jpg@340w_255h_1e_1c_1l', meta:['📍 徐汇','⏱️ 2h','☕ 咖啡'], match:t => (t.styles||[]).some(s=>s.includes('咖啡')) && '你的偏好' },
+        { title:'巨鹿路夜生活体验', desc:'法租界老街+鸡尾酒吧+深夜食堂', cover:'cover-3', img:'https://p0.meituan.net/biztone/f36eabf1b20f0cc2a8cd38ecfb2c0e58316367.jpg@340w_255h_1e_1c_1l', meta:['📍 静安','⏱️ 3h','🌃 夜景'], match:t => (t.styles||[]).some(s=>s.includes('夜景')) && '夜猫推荐' },
+        { title:'衡复历史街区出片线', desc:'武康大楼→复兴西路→衡山路，光影最佳', cover:'cover-1', img:'http://p0.meituan.net/tdctraveldark/f13f09278bb0752dd65b42fd9668ec68364043.jpg@340w_255h_1e_1c_1l', meta:['📍 衡复','⏱️ 3h','📷 出片'], match:t => (t.styles||[]).some(s=>s.includes('出片')) && '出片好去处' },
+        { title:'后滩公园亲子一日', desc:'生态湿地+滨江步道+大草坪野餐', cover:'cover-4', img:'https://p0.meituan.net/biztone/d5e8e54a6cf1f70ec52c94b84c4c5c97388116.jpg@340w_255h_1e_1c_1l', meta:['📍 浦东','⏱️ 全天','👨‍👩‍👧 亲子'], match:t => '家庭友好' }
     ];
 
     // 状态
@@ -2552,7 +2552,7 @@ Router.register('home', (() => {
         }));
         document.getElementById('recList').innerHTML = list.map((r, idx) => `
             <div class="rec-card" data-idx="${idx}">
-                <div class="rec-cover ${r.cover}"></div>
+                <div class="rec-cover ${r.cover}" ${r.img ? `style="background-image:url('${r.img}');background-size:cover;background-position:center;"` : ''}></div>
                 ${r.personal ? `<div class="rec-tag-personal">✨ ${r.personal}</div>` : ''}
                 <div class="rec-body">
                     <div>
@@ -2590,6 +2590,12 @@ Router.register('home', (() => {
     }
 
     return function init() {
+        if (!localStorage.getItem('cw_demo_seeded')) {
+            localStorage.setItem('cw_route_count', '3');
+            localStorage.setItem('cw_checkins', JSON.stringify(['武康路','安福路','老吉士','徐汇滨江','永康路咖啡']));
+            localStorage.setItem('cw_favorites', JSON.stringify(['武康路安福路文艺漫步','本帮老饕经典味觉之旅','文艺滨江亲子游']));
+            localStorage.setItem('cw_demo_seeded', '1');
+        }
         render();
         if (bound) return;
         bound = true;
