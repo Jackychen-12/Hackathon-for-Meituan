@@ -81,6 +81,34 @@ const scenicPhoto = (title: string, palette: { top: string; bottom: string; acce
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
+const AMAP_KEY = '6f73fab73ee2df39d1476ec92436a542';
+
+function ExploreStaticMapFallback({ spots }: { spots: Array<{ lng?: number; lat?: number; title: string }> }) {
+  const valid = spots.filter(s => s.lng && s.lat).slice(0, 10);
+  const center = valid.length > 0 ? `${valid[0].lng},${valid[0].lat}` : '121.4365,31.2084';
+  const markers = valid.map((s, i) =>
+    `mid,0x5b9eff,${String.fromCharCode(65 + i)}:${s.lng},${s.lat}`
+  ).join('|');
+  const src = `https://restapi.amap.com/v3/staticmap?location=${center}&zoom=14&size=750*500&markers=${encodeURIComponent(markers)}&key=${AMAP_KEY}`;
+  return (
+    <div style={{width:'100%',height:'100%',background:'#eaf2ff'}}>
+      <img src={src} alt="地图" style={{width:'100%',height:'100%',objectFit:'cover'}} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+    </div>
+  );
+}
+
+class ExploreMapErrorBoundary extends React.Component<
+  { children: React.ReactNode; spots: Array<{ lng?: number; lat?: number; title: string }> },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() {
+    if (this.state.hasError) return <ExploreStaticMapFallback spots={this.props.spots} />;
+    return this.props.children;
+  }
+}
+
 const AMapView = React.memo(function AMapView({
   spots,
   activeCategory,
@@ -853,7 +881,7 @@ function ExploreRouteAppInner() {
       className="relative mx-auto h-screen max-w-[430px] overflow-hidden bg-[#f5f9ff] font-sans text-[#1a1a2e]"
       style={{ height: '100vh' }}
     >
-      <ErrorBoundary><AMapView spots={dynamicSpots} activeCategory={activeCategory} onSpotClick={openSpot} /></ErrorBoundary>
+      <ExploreMapErrorBoundary spots={dynamicSpots}><AMapView spots={dynamicSpots} activeCategory={activeCategory} onSpotClick={openSpot} /></ExploreMapErrorBoundary>
 
       {/* Top bar: city name + compact buttons */}
       <div className="absolute inset-x-0 top-0 z-40 pointer-events-none">

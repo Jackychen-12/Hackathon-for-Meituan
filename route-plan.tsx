@@ -453,6 +453,42 @@ function PlanningSkeleton() {
   );
 }
 
+const AMAP_KEY = '6f73fab73ee2df39d1476ec92436a542';
+
+function StaticMapFallback({ stops }: { stops: Array<{ lng?: number; lat?: number; title: string }> }) {
+  const valid = stops.filter(s => s.lng && s.lat);
+  const center = valid.length > 0 ? `${valid[0].lng},${valid[0].lat}` : '121.4365,31.2084';
+  const markers = valid.map((s, i) =>
+    `mid,0x1e5fd8,${String.fromCharCode(65 + i)}:${s.lng},${s.lat}`
+  ).join('|');
+  const path = valid.length > 1
+    ? `&paths=10,0x5b9eff,1,,:${valid.map(s => `${s.lng},${s.lat}`).join(';')}`
+    : '';
+  const src = `https://restapi.amap.com/v3/staticmap?location=${center}&zoom=14&size=750*400&markers=${encodeURIComponent(markers)}${path}&key=${AMAP_KEY}`;
+  return (
+    <div style={{width:'100%',height:'100%',background:'#eaf2ff',position:'relative'}}>
+      <img
+        src={src}
+        alt="路线地图"
+        style={{width:'100%',height:'100%',objectFit:'cover'}}
+        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+      />
+    </div>
+  );
+}
+
+class MapErrorBoundary extends React.Component<
+  { children: React.ReactNode; stops: Array<{ lng?: number; lat?: number; title: string }> },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  render() {
+    if (this.state.hasError) return <StaticMapFallback stops={this.props.stops} />;
+    return this.props.children;
+  }
+}
+
 const RouteMap = React.memo(function RouteMap({
   stops,
   activeStopId,
@@ -972,7 +1008,7 @@ function RoutePlanAppInner() {
     >
       <div className="absolute inset-0">
         {!loading && plan ? (
-            <PlanErrorBoundary><RouteMap stops={orderedStops} activeStopId={selectedStopId} onStopClick={setSelectedStopId} /></PlanErrorBoundary>
+            <MapErrorBoundary stops={orderedStops}><RouteMap stops={orderedStops} activeStopId={selectedStopId} onStopClick={setSelectedStopId} /></MapErrorBoundary>
         ) : (
           <div className="h-full w-full bg-[#eaf2ff]" />
         )}
