@@ -229,8 +229,8 @@ async function handleRefine(req, res) {
     if (!userText) return sendJson(res, 400, { error: 'missing text' });
 
     const providers = [];
-    if (ARK_API_KEY) providers.push({ url: ARK_API_URL_TEXT, key: ARK_API_KEY, model: ARK_TEXT_MODEL, name: 'ARK' });
     if (DEEPSEEK_API_KEY) providers.push({ url: DEEPSEEK_API_URL, key: DEEPSEEK_API_KEY, model: DEEPSEEK_MODEL, name: 'DeepSeek' });
+    if (ARK_API_KEY) providers.push({ url: ARK_API_URL_TEXT, key: ARK_API_KEY, model: ARK_TEXT_MODEL, name: 'ARK' });
 
     const messages = [
         { role: 'system', content: REFINE_SYSTEM_PROMPT },
@@ -458,8 +458,8 @@ async function handlePlan(req, res) {
     userMessage += `\n\n候选 POI 列表：\n${JSON.stringify(poiSummaries, null, 0)}`;
 
     const llmProviders = [];
-    if (ARK_API_KEY) llmProviders.push({ url: ARK_API_URL_TEXT, key: ARK_API_KEY, model: ARK_TEXT_MODEL, name: 'ARK' });
     if (DEEPSEEK_API_KEY) llmProviders.push({ url: DEEPSEEK_API_URL, key: DEEPSEEK_API_KEY, model: DEEPSEEK_MODEL, name: 'DeepSeek' });
+    if (ARK_API_KEY) llmProviders.push({ url: ARK_API_URL_TEXT, key: ARK_API_KEY, model: ARK_TEXT_MODEL, name: 'ARK' });
 
     const messages = [
         { role: 'system', content: PLAN_SYSTEM_PROMPT },
