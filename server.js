@@ -216,7 +216,7 @@ function normalizeRefine(raw) {
 
 async function handleRefine(req, res) {
     if (req.method !== 'POST') return sendJson(res, 405, { error: 'method not allowed' });
-    if (!ARK_API_KEY) return sendJson(res, 500, { error: 'server missing ARK_API_KEY' });
+    if (!HAS_LLM) return sendJson(res, 500, { error: 'server missing LLM API key' });
 
     let payload;
     try {
@@ -228,47 +228,41 @@ async function handleRefine(req, res) {
     const userText = (payload && payload.text || '').toString().trim();
     if (!userText) return sendJson(res, 400, { error: 'missing text' });
 
-    const arkBody = {
-        model: ARK_TEXT_MODEL,
-        messages: [
-            { role: 'system', content: REFINE_SYSTEM_PROMPT },
-            { role: 'user',   content: userText }
-        ],
-        temperature: 0.2,
-        response_format: { type: 'json_object' }
-    };
+    const providers = [];
+    if (ARK_API_KEY) providers.push({ url: ARK_API_URL_TEXT, key: ARK_API_KEY, model: ARK_TEXT_MODEL, name: 'ARK' });
+    if (DEEPSEEK_API_KEY) providers.push({ url: DEEPSEEK_API_URL, key: DEEPSEEK_API_KEY, model: DEEPSEEK_MODEL, name: 'DeepSeek' });
 
-    try {
-        const r = await fetch(ARK_API_URL_TEXT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + ARK_API_KEY
-            },
-            body: JSON.stringify(arkBody)
-        });
-        const text = await r.text();
-        if (!r.ok) {
-            console.error('[refine] upstream error', r.status, text.slice(0, 500));
-            return sendJson(res, 502, { error: 'upstream ' + r.status, detail: text });
+    const messages = [
+        { role: 'system', content: REFINE_SYSTEM_PROMPT },
+        { role: 'user',   content: userText }
+    ];
+
+    for (const provider of providers) {
+        try {
+            const r = await fetch(provider.url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + provider.key },
+                body: JSON.stringify({ model: provider.model, messages, temperature: 0.2, response_format: { type: 'json_object' } })
+            });
+            const text = await r.text();
+            if (!r.ok) { console.error(`[refine] ${provider.name} error ${r.status}`); continue; }
+            let data;
+            try { data = JSON.parse(text); } catch { continue; }
+            let outText = '';
+            if (data && Array.isArray(data.choices) && data.choices[0]) {
+                const m = data.choices[0].message;
+                if (m && typeof m.content === 'string') outText = m.content;
+            }
+            if (!outText && typeof data.output_text === 'string') outText = data.output_text;
+            const parsed = extractJson(outText);
+            const fields = normalizeRefine(parsed || {});
+            return sendJson(res, 200, { fields, rawText: outText, raw: data });
+        } catch (e) {
+            console.error(`[refine] ${provider.name} failed:`, e.message);
+            continue;
         }
-        let data;
-        try { data = JSON.parse(text); } catch { data = { raw: text }; }
-
-        let outText = '';
-        if (data && Array.isArray(data.choices) && data.choices[0]) {
-            const m = data.choices[0].message;
-            if (m && typeof m.content === 'string') outText = m.content;
-        }
-        if (!outText && typeof data.output_text === 'string') outText = data.output_text;
-
-        const parsed = extractJson(outText);
-        const fields = normalizeRefine(parsed || {});
-        sendJson(res, 200, { fields, rawText: outText, raw: data });
-    } catch (e) {
-        console.error('[refine] fetch failed:', e);
-        sendJson(res, 500, { error: 'fetch failed: ' + e.message });
     }
+    sendJson(res, 502, { error: 'all LLM providers failed' });
 }
 
 /* ============== /api/plan ============== */
@@ -463,68 +457,59 @@ async function handlePlan(req, res) {
     }
     userMessage += `\n\n候选 POI 列表：\n${JSON.stringify(poiSummaries, null, 0)}`;
 
-    const useDeepSeek = !ARK_API_KEY && DEEPSEEK_API_KEY;
-    const llmUrl   = useDeepSeek ? DEEPSEEK_API_URL : ARK_API_URL_TEXT;
-    const llmKey   = useDeepSeek ? DEEPSEEK_API_KEY : ARK_API_KEY;
-    const llmModel = useDeepSeek ? DEEPSEEK_MODEL   : ARK_TEXT_MODEL;
+    const llmProviders = [];
+    if (ARK_API_KEY) llmProviders.push({ url: ARK_API_URL_TEXT, key: ARK_API_KEY, model: ARK_TEXT_MODEL, name: 'ARK' });
+    if (DEEPSEEK_API_KEY) llmProviders.push({ url: DEEPSEEK_API_URL, key: DEEPSEEK_API_KEY, model: DEEPSEEK_MODEL, name: 'DeepSeek' });
 
-    const llmBody = {
-        model: llmModel,
-        messages: [
-            { role: 'system', content: PLAN_SYSTEM_PROMPT },
-            { role: 'user',   content: userMessage }
-        ],
-        temperature: 0.7,
-        response_format: { type: 'json_object' }
-    };
+    const messages = [
+        { role: 'system', content: PLAN_SYSTEM_PROMPT },
+        { role: 'user',   content: userMessage }
+    ];
 
-    try {
-        const r = await fetch(llmUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + llmKey
-            },
-            body: JSON.stringify(llmBody)
-        });
-        const text = await r.text();
-        if (!r.ok) {
-            console.error('[plan] upstream error', r.status, text.slice(0, 500));
-            // fallback
-            const fallback = buildFallbackPlan(allPois);
-            const enriched = enrichPlanWithPois(fallback, poisMap);
-            return sendJson(res, 200, { plans: [enriched], fallback: true, reason: 'upstream error ' + r.status });
+    let llmSuccess = false;
+    for (const provider of llmProviders) {
+        try {
+            console.log(`[plan] trying ${provider.name}...`);
+            const r = await fetch(provider.url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + provider.key },
+                body: JSON.stringify({ model: provider.model, messages, temperature: 0.7, response_format: { type: 'json_object' } })
+            });
+            const text = await r.text();
+            if (!r.ok) {
+                console.error(`[plan] ${provider.name} error ${r.status}:`, text.slice(0, 300));
+                continue;
+            }
+            let data;
+            try { data = JSON.parse(text); } catch { data = { raw: text }; }
+            let outText = '';
+            if (data && Array.isArray(data.choices) && data.choices[0]) {
+                const m = data.choices[0].message;
+                if (m && typeof m.content === 'string') outText = m.content;
+            }
+            if (!outText && typeof data.output_text === 'string') outText = data.output_text;
+            const parsed = extractJson(outText);
+            if (parsed && Array.isArray(parsed.plans) && parsed.plans.length > 0) {
+                const enrichedPlans = parsed.plans.map(p => enrichPlanWithPois(p, poisMap));
+                sendJson(res, 200, { plans: enrichedPlans, fallback: false });
+                llmSuccess = true; break;
+            } else if (parsed && Array.isArray(parsed.stops) && parsed.stops.length > 0) {
+                const enriched = enrichPlanWithPois(parsed, poisMap);
+                sendJson(res, 200, { plans: [enriched], fallback: false });
+                llmSuccess = true; break;
+            } else {
+                console.warn(`[plan] ${provider.name} returned unparseable, trying next...`);
+                continue;
+            }
+        } catch (e) {
+            console.error(`[plan] ${provider.name} fetch failed:`, e.message);
+            continue;
         }
-
-        let data;
-        try { data = JSON.parse(text); } catch { data = { raw: text }; }
-
-        let outText = '';
-        if (data && Array.isArray(data.choices) && data.choices[0]) {
-            const m = data.choices[0].message;
-            if (m && typeof m.content === 'string') outText = m.content;
-        }
-        if (!outText && typeof data.output_text === 'string') outText = data.output_text;
-
-        const parsed = extractJson(outText);
-        if (parsed && Array.isArray(parsed.plans) && parsed.plans.length > 0) {
-            const enrichedPlans = parsed.plans.map(p => enrichPlanWithPois(p, poisMap));
-            sendJson(res, 200, { plans: enrichedPlans, fallback: false });
-        } else if (parsed && Array.isArray(parsed.stops) && parsed.stops.length > 0) {
-            const enriched = enrichPlanWithPois(parsed, poisMap);
-            sendJson(res, 200, { plans: [enriched], fallback: false });
-        } else {
-            console.warn('[plan] LLM returned unparseable plan, using fallback. Raw:', outText.slice(0, 300));
-            const fallback = buildFallbackPlan(allPois);
-            const enriched = enrichPlanWithPois(fallback, poisMap);
-            sendJson(res, 200, { plans: [enriched], fallback: true, reason: 'unparseable LLM response' });
-        }
-    } catch (e) {
-        console.error('[plan] fetch failed:', e);
-        // fallback
+    }
+    if (!llmSuccess) {
         const fallback = buildFallbackPlan(allPois);
         const enriched = enrichPlanWithPois(fallback, poisMap);
-        sendJson(res, 200, { plans: [enriched], fallback: true, reason: 'fetch error: ' + e.message });
+        sendJson(res, 200, { plans: [enriched], fallback: true, reason: 'all LLM providers failed' });
     }
 }
 
