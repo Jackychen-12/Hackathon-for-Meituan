@@ -1258,43 +1258,14 @@ body {
         </div>
     </div>
 
-    <div class="section" id="agentDetailSection">
-        <div class="card">
-            <div class="card-head">
-                <div class="card-title"><span class="dot"></span>多 Agent 画像</div>
-            </div>
-            <div class="agent-detail-body">
-                <div class="agent-list" id="agentList"></div>
-                <div class="agent-divider"></div>
-                <div class="agent-sub-title">价格敏感度</div>
-                <div class="price-bar">
-                    <span class="price-label">随意</span>
-                    <input type="range" min="0" max="100" value="50" id="agentPriceSlider" class="agent-slider">
-                    <span class="price-label">严格</span>
-                    <span class="price-val" id="agentPriceVal">50</span>
-                </div>
-                <div class="agent-divider"></div>
-                <div class="agent-sub-title">偏好品类</div>
-                <div class="agent-chips" id="agentCatChips"></div>
-                <div class="agent-divider"></div>
-                <div class="agent-sub-title">不想被推到的</div>
-                <div class="agent-chips" id="agentDisChips"></div>
-                <input type="text" class="agent-dis-input" id="agentDisInput" placeholder="输入雷区，按回车添加">
-                <div class="agent-divider"></div>
-                <div class="agent-sub-title">飞轮统计</div>
-                <div class="agent-wheel" id="agentWheel"></div>
-            </div>
-        </div>
-    </div>
-
     <div class="section">
         <div class="menu-list">
-            <div class="menu-item" onclick="(function(){ var ids = JSON.parse(localStorage.getItem('cw_checkins') || '[]'); if (!ids.length) { alert('还没有打卡记录，去探索页打卡吧~'); return; } alert('已打卡 ' + ids.length + ' 个地点：\n' + ids.join('、')); })()">
+            <div class="menu-item" onclick="location.hash='checkins'">
                 <div class="menu-icon">📍</div>
                 <div class="menu-text">我去过的地方</div>
                 <div class="menu-arrow">›</div>
             </div>
-            <div class="menu-item" onclick="(function(){ var ids = JSON.parse(localStorage.getItem('cw_favorites') || '[]'); if (!ids.length) { alert('还没有收藏，去探索页收藏喜欢的地点吧~'); return; } alert('已收藏 ' + ids.length + ' 个地点：\n' + ids.join('、')); })()">
+            <div class="menu-item" onclick="location.hash='favorites'">
                 <div class="menu-icon">⭐</div>
                 <div class="menu-text">收藏的路线</div>
                 <div class="menu-arrow">›</div>
@@ -1311,6 +1282,26 @@ body {
             </div>
         </div>
     </div>
+</div>
+
+<!-- ============== p-checkins ============== -->
+<div class="page p-mine app-container" id="page-checkins" style="padding-bottom:84px;overflow-y:auto;">
+    <div class="top-bar">
+        <button class="back-btn" id="checkinsBackBtn">←</button>
+        <div class="page-title">我去过的地方</div>
+        <div style="width:36px"></div>
+    </div>
+    <div class="section" id="checkinsList" style="padding-top:12px;"></div>
+</div>
+
+<!-- ============== p-favorites ============== -->
+<div class="page p-mine app-container" id="page-favorites" style="padding-bottom:84px;overflow-y:auto;">
+    <div class="top-bar">
+        <button class="back-btn" id="favoritesBackBtn">←</button>
+        <div class="page-title">收藏的路线</div>
+        <div style="width:36px"></div>
+    </div>
+    <div class="section" id="favoritesList" style="padding-top:12px;"></div>
 </div>
 
 <!-- ============== p-settings ============== -->
@@ -1334,6 +1325,33 @@ body {
         <div class="setting-item">
             <div><div class="setting-label">多 Agent 方案</div><div class="setting-desc">生成多条差异化路线供对比</div></div>
             <div class="toggle on" data-key="multi_agent"></div>
+        </div>
+    </div>
+
+    <div class="settings-group">
+        <div class="settings-group-title"><span class="dot"></span>多 Agent 画像</div>
+        <div style="padding:0 18px 14px;">
+            <div class="agent-detail-body">
+                <div class="agent-list" id="agentList"></div>
+                <div class="agent-divider"></div>
+                <div class="agent-sub-title">价格敏感度</div>
+                <div class="price-bar">
+                    <span class="price-label">随意</span>
+                    <input type="range" min="0" max="100" value="50" id="agentPriceSlider" class="agent-slider">
+                    <span class="price-label">严格</span>
+                    <span class="price-val" id="agentPriceVal">50</span>
+                </div>
+                <div class="agent-divider"></div>
+                <div class="agent-sub-title">偏好品类</div>
+                <div class="agent-chips" id="agentCatChips"></div>
+                <div class="agent-divider"></div>
+                <div class="agent-sub-title">不想被推到的</div>
+                <div class="agent-chips" id="agentDisChips"></div>
+                <input type="text" class="agent-dis-input" id="agentDisInput" placeholder="输入雷区，按回车添加">
+                <div class="agent-divider"></div>
+                <div class="agent-sub-title">飞轮统计</div>
+                <div class="agent-wheel" id="agentWheel"></div>
+            </div>
         </div>
     </div>
 
@@ -1484,7 +1502,7 @@ body {
  * Router + Page lifecycle
  * ===================================================================== */
 const Router = (() => {
-    const PAGES = ['login', 'profile', 'home', 'route', 'plan', 'mine', 'settings'];
+    const PAGES = ['login', 'profile', 'home', 'route', 'plan', 'mine', 'settings', 'checkins', 'favorites'];
     const inits = {};
 
     function show(name) {
@@ -2883,142 +2901,6 @@ Router.register('mine', (() => {
             `;
         }
 
-        renderAgentDetail(tags);
-    }
-
-    const AGENTS_DEF = [
-        { id: 'photographer', emoji: '📷', name: '拍照党' },
-        { id: 'foodie',       emoji: '🍜', name: '美食家' },
-        { id: 'value',        emoji: '💰', name: '性价比' },
-        { id: 'literary',     emoji: '📚', name: '文青' },
-        { id: 'local',        emoji: '🏠', name: '老饕' },
-        { id: 'parent',       emoji: '👶', name: '带娃' },
-    ];
-    const KNOWN_CATS = ['咖啡','本帮菜','日料','火锅','面馆','美术馆','书店','酒吧','烘焙','茶','江浙菜','东南亚菜','西餐','烧烤'];
-
-    function inferWeights(tags) {
-        const w = { photographer: 40, foodie: 40, value: 40, literary: 40, local: 40, parent: 40 };
-        if (tags.food === '尝鲜派') { w.foodie = 80; w.local = 55; }
-        else if (tags.food === '恋旧派') { w.local = 75; w.foodie = 60; }
-        else if (tags.food === '兼容派') { w.foodie = 65; w.local = 60; }
-        if (tags.pace === '不紧不慢') w.literary = 65;
-        else if (tags.pace === '多打卡党') { w.photographer = 70; w.value = 60; }
-        const s = tags.styles || [];
-        s.forEach(st => {
-            if (/出片|📷/.test(st)) w.photographer = Math.max(w.photographer, 75);
-            if (/文艺|🏛|艺术|🎨/.test(st)) w.literary = Math.max(w.literary, 70);
-            if (/夜景|微醺|🌃|🍷/.test(st)) w.local = Math.max(w.local, 65);
-            if (/咖啡|☕/.test(st)) w.literary = Math.max(w.literary, 60);
-            if (/治愈|🧘/.test(st)) w.literary = Math.max(w.literary, 60);
-        });
-        const comp = Array.isArray(tags.companion) ? tags.companion : [];
-        if (comp.some(c => /带娃|宠物/.test(c))) w.parent = 75;
-        return w;
-    }
-
-    function saveTags(tags) {
-        localStorage.setItem('cw_profile_tags', JSON.stringify(tags));
-    }
-
-    function renderAgentDetail(tags) {
-        if (!tags.agentWeights) tags.agentWeights = inferWeights(tags);
-        if (tags.priceSensitivity === undefined) tags.priceSensitivity = 50;
-        if (!tags.preferredCategories) {
-            const auto = [];
-            if (tags.source === 'dianping' && tags.cuisines) auto.push(...tags.cuisines);
-            tags.preferredCategories = auto.length ? auto : [];
-        }
-        if (!tags.dislikeSignals) tags.dislikeSignals = [];
-
-        const $list = document.getElementById('agentList');
-        $list.innerHTML = AGENTS_DEF.map(a => {
-            const v = tags.agentWeights[a.id] || 40;
-            return `<div class="agent-row">
-                <span class="agent-emoji">${a.emoji}</span>
-                <span class="agent-name">${a.name}</span>
-                <input type="range" min="0" max="100" value="${v}" class="agent-slider-mini" data-agent="${a.id}">
-                <span class="agent-pct" data-agent-pct="${a.id}">${v}%</span>
-            </div>`;
-        }).join('');
-        $list.querySelectorAll('.agent-slider-mini').forEach(inp => {
-            inp.addEventListener('input', e => {
-                const aid = e.target.dataset.agent;
-                const v = +e.target.value;
-                tags.agentWeights[aid] = v;
-                document.querySelector(`[data-agent-pct="${aid}"]`).textContent = v + '%';
-                saveTags(tags);
-            });
-        });
-
-        const $price = document.getElementById('agentPriceSlider');
-        const $priceVal = document.getElementById('agentPriceVal');
-        $price.value = tags.priceSensitivity;
-        $priceVal.textContent = tags.priceSensitivity;
-        $price.oninput = e => {
-            tags.priceSensitivity = +e.target.value;
-            $priceVal.textContent = e.target.value;
-            saveTags(tags);
-        };
-
-        function renderCats() {
-            const $cats = document.getElementById('agentCatChips');
-            const active = tags.preferredCategories || [];
-            const extras = KNOWN_CATS.filter(c => !active.includes(c));
-            $cats.innerHTML =
-                active.map(c => `<span class="agent-chip active" data-cat="${c}">${c}</span>`).join('') +
-                extras.map(c => `<span class="agent-chip" data-cat="${c}">+ ${c}</span>`).join('');
-            $cats.querySelectorAll('.agent-chip').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    const name = chip.dataset.cat;
-                    if (chip.classList.contains('active')) {
-                        tags.preferredCategories = tags.preferredCategories.filter(x => x !== name);
-                    } else {
-                        tags.preferredCategories.push(name);
-                    }
-                    saveTags(tags);
-                    renderCats();
-                });
-            });
-        }
-        renderCats();
-
-        function renderDis() {
-            const $dis = document.getElementById('agentDisChips');
-            $dis.innerHTML = (tags.dislikeSignals || []).map((s, i) =>
-                `<span class="agent-chip active" style="background:#fde8ec;color:#c0392b;border-color:#f5c6cb;">
-                    ${s}<span class="chip-x" data-rm-dis="${i}">×</span>
-                </span>`
-            ).join('') || '<span style="font-size:12px;color:#b0b0b8;">还没有设置雷区</span>';
-            $dis.querySelectorAll('[data-rm-dis]').forEach(x => {
-                x.addEventListener('click', () => {
-                    tags.dislikeSignals.splice(+x.dataset.rmDis, 1);
-                    saveTags(tags);
-                    renderDis();
-                });
-            });
-        }
-        renderDis();
-
-        document.getElementById('agentDisInput').onkeydown = e => {
-            if (e.key === 'Enter' && e.target.value.trim()) {
-                tags.dislikeSignals = tags.dislikeSignals || [];
-                tags.dislikeSignals.push(e.target.value.trim());
-                e.target.value = '';
-                saveTags(tags);
-                renderDis();
-            }
-        };
-
-        const routes = parseInt(localStorage.getItem('cw_route_count') || '0');
-        const checkinCount = JSON.parse(localStorage.getItem('cw_checkins') || '[]').length;
-        const activeCats = (tags.preferredCategories || []).length;
-        const agentCount = Object.values(tags.agentWeights).filter(v => v > 50).length;
-        document.getElementById('agentWheel').innerHTML = `
-            <div class="agent-wheel-item"><div class="agent-wheel-num">v1</div><div class="agent-wheel-label">版本</div></div>
-            <div class="agent-wheel-item"><div class="agent-wheel-num">${routes + checkinCount}</div><div class="agent-wheel-label">累计互动</div></div>
-            <div class="agent-wheel-item"><div class="agent-wheel-num">${agentCount}</div><div class="agent-wheel-label">活跃 Agent</div></div>
-            <div class="agent-wheel-item"><div class="agent-wheel-num">${activeCats}</div><div class="agent-wheel-label">偏好品类</div></div>
-        `;
     }
 
     return function init() {
@@ -3039,11 +2921,136 @@ Router.register('mine', (() => {
 })());
 
 /* =====================================================================
+ * Agent Detail (global, used by settings page)
+ * ===================================================================== */
+const AGENTS_DEF = [
+    { id: 'photographer', emoji: '📷', name: '拍照党' },
+    { id: 'foodie',       emoji: '🍜', name: '美食家' },
+    { id: 'value',        emoji: '💰', name: '性价比' },
+    { id: 'literary',     emoji: '📚', name: '文青' },
+    { id: 'local',        emoji: '🏠', name: '老饕' },
+    { id: 'parent',       emoji: '👶', name: '带娃' },
+];
+const KNOWN_CATS = ['咖啡','本帮菜','日料','火锅','面馆','美术馆','书店','酒吧','烘焙','茶','江浙菜','东南亚菜','西餐','烧烤'];
+
+function inferWeights(tags) {
+    const w = { photographer: 40, foodie: 40, value: 40, literary: 40, local: 40, parent: 40 };
+    if (tags.food === '尝鲜派') { w.foodie = 80; w.local = 55; }
+    else if (tags.food === '恋旧派') { w.local = 75; w.foodie = 60; }
+    else if (tags.food === '兼容派') { w.foodie = 65; w.local = 60; }
+    if (tags.pace === '不紧不慢') w.literary = 65;
+    else if (tags.pace === '多打卡党') { w.photographer = 70; w.value = 60; }
+    (tags.styles || []).forEach(st => {
+        if (/出片|📷/.test(st)) w.photographer = Math.max(w.photographer, 75);
+        if (/文艺|🏛|艺术|🎨/.test(st)) w.literary = Math.max(w.literary, 70);
+        if (/夜景|微醺|🌃|🍷/.test(st)) w.local = Math.max(w.local, 65);
+        if (/咖啡|☕/.test(st)) w.literary = Math.max(w.literary, 60);
+        if (/治愈|🧘/.test(st)) w.literary = Math.max(w.literary, 60);
+    });
+    const comp = Array.isArray(tags.companion) ? tags.companion : [];
+    if (comp.some(c => /带娃|宠物/.test(c))) w.parent = 75;
+    return w;
+}
+function saveTags(tags) { localStorage.setItem('cw_profile_tags', JSON.stringify(tags)); }
+function renderAgentDetail(tags) {
+    if (!tags.agentWeights) tags.agentWeights = inferWeights(tags);
+    if (tags.priceSensitivity === undefined) tags.priceSensitivity = 50;
+    if (!tags.preferredCategories) {
+        const auto = [];
+        if (tags.source === 'dianping' && tags.cuisines) auto.push(...tags.cuisines);
+        tags.preferredCategories = auto.length ? auto : [];
+    }
+    if (!tags.dislikeSignals) tags.dislikeSignals = [];
+    const $list = document.getElementById('agentList');
+    if (!$list) return;
+    $list.innerHTML = AGENTS_DEF.map(a => {
+        const v = tags.agentWeights[a.id] || 40;
+        return `<div class="agent-row"><span class="agent-emoji">${a.emoji}</span><span class="agent-name">${a.name}</span><input type="range" min="0" max="100" value="${v}" class="agent-slider-mini" data-agent="${a.id}"><span class="agent-pct" data-agent-pct="${a.id}">${v}%</span></div>`;
+    }).join('');
+    $list.querySelectorAll('.agent-slider-mini').forEach(inp => {
+        inp.addEventListener('input', e => { const aid = e.target.dataset.agent; const v = +e.target.value; tags.agentWeights[aid] = v; document.querySelector(`[data-agent-pct="${aid}"]`).textContent = v + '%'; saveTags(tags); });
+    });
+    const $price = document.getElementById('agentPriceSlider');
+    const $priceVal = document.getElementById('agentPriceVal');
+    if ($price) { $price.value = tags.priceSensitivity; $priceVal.textContent = tags.priceSensitivity; $price.oninput = e => { tags.priceSensitivity = +e.target.value; $priceVal.textContent = e.target.value; saveTags(tags); }; }
+    function renderCats() {
+        const $cats = document.getElementById('agentCatChips'); if (!$cats) return;
+        const active = tags.preferredCategories || [];
+        const extras = KNOWN_CATS.filter(c => !active.includes(c));
+        $cats.innerHTML = active.map(c => `<span class="agent-chip active" data-cat="${c}">${c}</span>`).join('') + extras.map(c => `<span class="agent-chip" data-cat="${c}">+ ${c}</span>`).join('');
+        $cats.querySelectorAll('.agent-chip').forEach(chip => { chip.addEventListener('click', () => { const name = chip.dataset.cat; if (chip.classList.contains('active')) { tags.preferredCategories = tags.preferredCategories.filter(x => x !== name); } else { tags.preferredCategories.push(name); } saveTags(tags); renderCats(); }); });
+    }
+    renderCats();
+    function renderDis() {
+        const $dis = document.getElementById('agentDisChips'); if (!$dis) return;
+        $dis.innerHTML = (tags.dislikeSignals || []).map((s, i) => `<span class="agent-chip active" style="background:#fde8ec;color:#c0392b;border-color:#f5c6cb;">${s}<span class="chip-x" data-rm-dis="${i}">×</span></span>`).join('') || '<span style="font-size:12px;color:#b0b0b8;">还没有设置雷区</span>';
+        $dis.querySelectorAll('[data-rm-dis]').forEach(x => { x.addEventListener('click', () => { tags.dislikeSignals.splice(+x.dataset.rmDis, 1); saveTags(tags); renderDis(); }); });
+    }
+    renderDis();
+    const disInput = document.getElementById('agentDisInput');
+    if (disInput) disInput.onkeydown = e => { if (e.key === 'Enter' && e.target.value.trim()) { tags.dislikeSignals = tags.dislikeSignals || []; tags.dislikeSignals.push(e.target.value.trim()); e.target.value = ''; saveTags(tags); renderDis(); } };
+    const routes = parseInt(localStorage.getItem('cw_route_count') || '0');
+    const checkinCount = JSON.parse(localStorage.getItem('cw_checkins') || '[]').length;
+    const activeCats = (tags.preferredCategories || []).length;
+    const agentCount = Object.values(tags.agentWeights).filter(v => v > 50).length;
+    const $wheel = document.getElementById('agentWheel');
+    if ($wheel) $wheel.innerHTML = `<div class="agent-wheel-item"><div class="agent-wheel-num">v1</div><div class="agent-wheel-label">版本</div></div><div class="agent-wheel-item"><div class="agent-wheel-num">${routes + checkinCount}</div><div class="agent-wheel-label">累计互动</div></div><div class="agent-wheel-item"><div class="agent-wheel-num">${agentCount}</div><div class="agent-wheel-label">活跃 Agent</div></div><div class="agent-wheel-item"><div class="agent-wheel-num">${activeCats}</div><div class="agent-wheel-label">偏好品类</div></div>`;
+}
+
+/* =====================================================================
+ * p-checkins / p-favorites
+ * ===================================================================== */
+Router.register('checkins', (() => {
+    return function init() {
+        const checkins = JSON.parse(localStorage.getItem('cw_checkins') || '[]');
+        const $list = document.getElementById('checkinsList');
+        if (!checkins.length) {
+            $list.innerHTML = '<div style="text-align:center;padding:40px 0;color:#8e8e93;font-size:14px;">还没有打卡记录<br><span style="font-size:12px;">去探索页打卡吧~</span></div>';
+        } else {
+            $list.innerHTML = '<div class="menu-list">' + checkins.map((name, i) => `
+                <div class="menu-item">
+                    <div class="menu-icon" style="background:rgba(91,158,255,0.15);color:#5b9eff;font-size:14px;font-weight:700;">${i+1}</div>
+                    <div class="menu-text">${name}</div>
+                    <div class="menu-arrow" style="font-size:12px;color:#5b9eff;">✓ 已打卡</div>
+                </div>
+            `).join('') + '</div>';
+        }
+        document.getElementById('checkinsBackBtn').onclick = () => Router.go('mine');
+    };
+})());
+
+Router.register('favorites', (() => {
+    return function init() {
+        const favs = JSON.parse(localStorage.getItem('cw_favorites') || '[]');
+        const $list = document.getElementById('favoritesList');
+        if (!favs.length) {
+            $list.innerHTML = '<div style="text-align:center;padding:40px 0;color:#8e8e93;font-size:14px;">还没有收藏路线<br><span style="font-size:12px;">去首页生成路线后收藏吧~</span></div>';
+        } else {
+            $list.innerHTML = '<div class="menu-list">' + favs.map((name, i) => `
+                <div class="menu-item" style="cursor:pointer;" onclick="sessionStorage.setItem('cw_pending_query',JSON.stringify({text:'${name.replace(/'/g,"\\'")}',source:'favorite'}));location.hash='plan';">
+                    <div class="menu-icon" style="background:rgba(253,186,116,0.2);font-size:16px;">⭐</div>
+                    <div style="flex:1;min-width:0;">
+                        <div class="menu-text">${name}</div>
+                        <div style="font-size:11px;color:#8e8e93;margin-top:2px;">点击重新规划此路线</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            `).join('') + '</div>';
+        }
+        document.getElementById('favoritesBackBtn').onclick = () => Router.go('mine');
+    };
+})());
+
+/* =====================================================================
  * p-settings
  * ===================================================================== */
 Router.register('settings', (() => {
     let bound = false;
     return function init() {
+        // Agent detail 每次进入都渲染（数据可能变了）
+        const tags = JSON.parse(localStorage.getItem('cw_profile_tags') || '{}');
+        if (typeof renderAgentDetail === 'function') renderAgentDetail(tags);
+
         if (bound) return;
         bound = true;
 
