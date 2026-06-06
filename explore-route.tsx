@@ -85,14 +85,25 @@ const AMAP_KEY = '6f73fab73ee2df39d1476ec92436a542';
 
 function ExploreStaticMapFallback({ spots }: { spots: Array<{ lng?: number; lat?: number; title: string }> }) {
   const valid = spots.filter(s => s.lng && s.lat).slice(0, 10);
-  const center = valid.length > 0 ? `${valid[0].lng},${valid[0].lat}` : '121.4365,31.2084';
-  const markers = valid.map((s, i) =>
-    `mid,0x5b9eff,${String.fromCharCode(65 + i)}:${s.lng},${s.lat}`
-  ).join('|');
-  const src = `https://restapi.amap.com/v3/staticmap?location=${center}&zoom=14&size=750*500&markers=${encodeURIComponent(markers)}&key=${AMAP_KEY}`;
+  if (valid.length === 0) return <div style={{width:'100%',height:'100%',background:'linear-gradient(135deg,#eaf2ff,#dbeafe)'}} />;
+  const lngs = valid.map(s => s.lng!);
+  const lats = valid.map(s => s.lat!);
+  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
+  const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+  const pad = 0.3;
+  const pLng = (maxLng - minLng) * pad || 0.005;
+  const pLat = (maxLat - minLat) * pad || 0.005;
+  const toX = (lng: number) => ((lng - minLng + pLng) / (maxLng - minLng + pLng * 2)) * 700 + 25;
+  const toY = (lat: number) => (1 - (lat - minLat + pLat) / (maxLat - minLat + pLat * 2)) * 450 + 25;
+  const catColors: Record<string, string> = { sight:'#5b9eff', food:'#f59e0b', drink:'#a78bfa', shopping:'#f472b6', stay:'#818cf8' };
   return (
-    <div style={{width:'100%',height:'100%',background:'#eaf2ff'}}>
-      <img src={src} alt="地图" style={{width:'100%',height:'100%',objectFit:'cover'}} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+    <div style={{width:'100%',height:'100%',background:'linear-gradient(135deg,#eaf2ff 0%,#dbeafe 50%,#c7d8f4 100%)',overflow:'hidden'}}>
+      <svg viewBox="0 0 750 500" style={{width:'100%',height:'100%'}} xmlns="http://www.w3.org/2000/svg">
+        {valid.map((s: any, i) => {
+          const c = catColors[s.category] || '#5b9eff';
+          return <g key={i}><circle cx={toX(s.lng!)} cy={toY(s.lat!)} r="10" fill={c} opacity="0.85"/><circle cx={toX(s.lng!)} cy={toY(s.lat!)} r="6" fill="white"/></g>;
+        })}
+      </svg>
     </div>
   );
 }

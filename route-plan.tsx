@@ -457,22 +457,31 @@ const AMAP_KEY = '6f73fab73ee2df39d1476ec92436a542';
 
 function StaticMapFallback({ stops }: { stops: Array<{ lng?: number; lat?: number; title: string }> }) {
   const valid = stops.filter(s => s.lng && s.lat);
-  const center = valid.length > 0 ? `${valid[0].lng},${valid[0].lat}` : '121.4365,31.2084';
-  const markers = valid.map((s, i) =>
-    `mid,0x1e5fd8,${String.fromCharCode(65 + i)}:${s.lng},${s.lat}`
-  ).join('|');
-  const path = valid.length > 1
-    ? `&paths=10,0x5b9eff,1,,:${valid.map(s => `${s.lng},${s.lat}`).join(';')}`
-    : '';
-  const src = `https://restapi.amap.com/v3/staticmap?location=${center}&zoom=14&size=750*400&markers=${encodeURIComponent(markers)}${path}&key=${AMAP_KEY}`;
+  if (valid.length === 0) return <div style={{width:'100%',height:'100%',background:'linear-gradient(135deg,#eaf2ff,#dbeafe)'}} />;
+  const lngs = valid.map(s => s.lng!);
+  const lats = valid.map(s => s.lat!);
+  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
+  const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+  const padLng = (maxLng - minLng) * 0.3 || 0.005;
+  const padLat = (maxLat - minLat) * 0.3 || 0.005;
+  const toX = (lng: number) => ((lng - minLng + padLng) / (maxLng - minLng + padLng * 2)) * 700 + 25;
+  const toY = (lat: number) => (1 - (lat - minLat + padLat) / (maxLat - minLat + padLat * 2)) * 350 + 25;
+  const pathD = valid.map((s, i) => `${i === 0 ? 'M' : 'L'}${toX(s.lng!).toFixed(1)},${toY(s.lat!).toFixed(1)}`).join(' ');
   return (
-    <div style={{width:'100%',height:'100%',background:'#eaf2ff',position:'relative'}}>
-      <img
-        src={src}
-        alt="路线地图"
-        style={{width:'100%',height:'100%',objectFit:'cover'}}
-        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-      />
+    <div style={{width:'100%',height:'100%',background:'linear-gradient(135deg,#eaf2ff 0%,#dbeafe 50%,#c7d8f4 100%)',position:'relative',overflow:'hidden'}}>
+      <svg viewBox="0 0 750 400" style={{width:'100%',height:'100%'}} xmlns="http://www.w3.org/2000/svg">
+        <defs><filter id="s"><feDropShadow dx="0" dy="1" stdDeviation="2" floodOpacity="0.15"/></filter></defs>
+        <path d={pathD} fill="none" stroke="#93c5fd" strokeWidth="3" strokeDasharray="8,4" opacity="0.6"/>
+        <path d={pathD} fill="none" stroke="#5b9eff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        {valid.map((s, i) => (
+          <g key={i} filter="url(#s)">
+            <circle cx={toX(s.lng!)} cy={toY(s.lat!)} r="14" fill="#1e5fd8"/>
+            <circle cx={toX(s.lng!)} cy={toY(s.lat!)} r="11" fill="white"/>
+            <text x={toX(s.lng!)} y={toY(s.lat!) + 4.5} textAnchor="middle" fontSize="11" fontWeight="700" fill="#1e5fd8">{i + 1}</text>
+            <text x={toX(s.lng!) + 18} y={toY(s.lat!) + 4} fontSize="11" fontWeight="600" fill="#1a1a2e">{s.title.slice(0, 5)}</text>
+          </g>
+        ))}
+      </svg>
     </div>
   );
 }
