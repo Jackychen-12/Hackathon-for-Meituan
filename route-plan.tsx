@@ -578,8 +578,10 @@ const RouteMap = React.memo(function RouteMap({
   }, [stops, activeStopId]);
 
   return (
-    <div style={{width:'100%',height:'100%',position:'relative'}}>
-      <StaticMapFallback stops={stops} />
+    <div style={{position:'absolute',inset:0}}>
+      <div style={{position:'absolute',inset:0,zIndex:1}}>
+        <StaticMapFallback stops={stops} />
+      </div>
       <div ref={mapRef} style={{position:'absolute',inset:0,zIndex: mapReady ? 2 : 0, opacity: mapReady ? 1 : 0, transition:'opacity 0.3s'}} />
     </div>
   );
