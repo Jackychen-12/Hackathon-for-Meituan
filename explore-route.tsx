@@ -115,13 +115,15 @@ const AMapView = React.memo(function AMapView({
         zoomEnable: true,
         showIndoorMap: false,
       });
-      map.addControl(new AMap.Scale());
       mapInstance.current = map;
 
-      AMap.plugin('AMap.Geolocation', () => {
-        const geo = new AMap.Geolocation({ enableHighAccuracy: true, timeout: 5000, showCircle: true, showMarker: true, markerOptions: { offset: new AMap.Pixel(-8, -8), content: '<div style="width:16px;height:16px;border-radius:50%;background:#5b9eff;border:3px solid white;box-shadow:0 2px 8px rgba(91,158,255,0.4);"></div>' } });
-        map.addControl(geo);
-        geo.getCurrentPosition();
+      AMap.plugin(['AMap.Scale', 'AMap.Geolocation'], () => {
+        if (AMap.Scale) map.addControl(new AMap.Scale());
+        if (AMap.Geolocation) {
+          const geo = new AMap.Geolocation({ enableHighAccuracy: true, timeout: 5000, showCircle: true, showMarker: true, markerOptions: { offset: new AMap.Pixel(-8, -8), content: '<div style="width:16px;height:16px;border-radius:50%;background:#5b9eff;border:3px solid white;box-shadow:0 2px 8px rgba(91,158,255,0.4);"></div>' } });
+          map.addControl(geo);
+          geo.getCurrentPosition();
+        }
       });
       return true;
     };
