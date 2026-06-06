@@ -220,8 +220,8 @@ const AMapView = React.memo(function AMapView({
 
   return (
     <div className="absolute inset-0">
-      {!mapReady && <ExploreStaticMapFallback spots={spots} />}
-      <div ref={mapRef} className="absolute inset-0" style={{opacity: mapReady ? 1 : 0}} />
+      <ExploreStaticMapFallback spots={spots} />
+      <div ref={mapRef} className="absolute inset-0" style={{zIndex: mapReady ? 2 : 0, opacity: mapReady ? 1 : 0, transition:'opacity 0.3s'}} />
     </div>
   );
 });
