@@ -35,6 +35,16 @@ const path = require('path');
     }
 })();
 
+process.on('unhandledRejection', (err) => { console.error('[unhandledRejection]', err); });
+process.on('uncaughtException', (err) => { console.error('[uncaughtException]', err); });
+
+const FETCH_TIMEOUT = 30000;
+function fetchWithTimeout(url, opts = {}) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), opts.timeout || FETCH_TIMEOUT);
+    return fetch(url, { ...opts, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const ARK_API_KEY = process.env.ARK_API_KEY || '';
 const ARK_API_URL = process.env.ARK_API_URL || 'https://ark.cn-beijing.volces.com/api/v3/responses';
@@ -132,7 +142,7 @@ async function handleVision(req, res) {
     };
 
     try {
-        const r = await fetch(ARK_API_URL, {
+        const r = await fetchWithTimeout(ARK_API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -239,7 +249,7 @@ async function handleRefine(req, res) {
 
     for (const provider of providers) {
         try {
-            const r = await fetch(provider.url, {
+            const r = await fetchWithTimeout(provider.url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + provider.key },
                 body: JSON.stringify({ model: provider.model, messages, temperature: 0.2, response_format: { type: 'json_object' } })
@@ -470,7 +480,7 @@ async function handlePlan(req, res) {
     for (const provider of llmProviders) {
         try {
             console.log(`[plan] trying ${provider.name}...`);
-            const r = await fetch(provider.url, {
+            const r = await fetchWithTimeout(provider.url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + provider.key },
                 body: JSON.stringify({ model: provider.model, messages, temperature: 0.7, response_format: { type: 'json_object' } })
@@ -532,7 +542,7 @@ async function scrapeDianping(keyword, city, limit = 5) {
     const cid = getCityId(city);
     const url = `https://www.dianping.com/search/keyword/${cid}/0_${encodeURIComponent(keyword)}`;
     try {
-        const r = await fetch(url, {
+        const r = await fetchWithTimeout(url, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
