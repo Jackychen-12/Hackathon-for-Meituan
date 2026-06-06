@@ -879,31 +879,23 @@ body {
 .agent-detail-body { padding-top: 4px; }
 .agent-divider { height: 1px; background: rgba(140,180,240,0.18); margin: 14px 0; }
 .agent-sub-title { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 10px; }
-.agent-row {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+.agent-grid {
+    display: flex; flex-wrap: wrap; gap: 8px;
 }
-.agent-row .agent-emoji { font-size: 18px; width: 26px; text-align: center; flex-shrink: 0; }
-.agent-row .agent-name { font-size: 13px; color: #1a1a2e; font-weight: 500; width: 52px; flex-shrink: 0; }
-.agent-row .agent-bar-wrap {
-    flex: 1; height: 6px; border-radius: 3px; background: rgba(232,242,255,0.65); overflow: hidden;
+.agent-toggle {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border-radius: 16px;
+    background: rgba(232,242,255,0.65);
+    border: 1.5px solid transparent;
+    font-size: 13px; color: #5a5a62; cursor: pointer;
+    transition: all 0.2s; user-select: none;
 }
-.agent-row .agent-bar {
-    height: 100%; border-radius: 3px;
-    background: linear-gradient(90deg, #1e5fd8, #5b9eff);
-    transition: width 0.3s;
-}
-.agent-row .agent-pct { font-size: 12px; color: #5b9eff; font-weight: 600; width: 32px; text-align: right; flex-shrink: 0; }
-.agent-row .agent-slider-mini {
-    flex: 1; -webkit-appearance: none; appearance: none;
-    height: 6px; border-radius: 3px; background: rgba(232,242,255,0.65);
-    outline: none;
-}
-.agent-row .agent-slider-mini::-webkit-slider-thumb {
-    -webkit-appearance: none; appearance: none;
-    width: 16px; height: 16px; border-radius: 50%;
+.agent-toggle.active {
     background: linear-gradient(135deg, #1e5fd8, #5b9eff);
-    box-shadow: 0 2px 6px rgba(30,95,216,0.3); cursor: pointer;
+    color: #fff; border-color: #fff;
+    box-shadow: 0 3px 10px rgba(30,95,216,0.28);
 }
+.agent-toggle .agent-emoji { font-size: 16px; }
 .price-bar {
     display: flex; align-items: center; gap: 8px;
 }
@@ -2934,21 +2926,18 @@ const AGENTS_DEF = [
 const KNOWN_CATS = ['咖啡','本帮菜','日料','火锅','面馆','美术馆','书店','酒吧','烘焙','茶','江浙菜','东南亚菜','西餐','烧烤'];
 
 function inferWeights(tags) {
-    const w = { photographer: 40, foodie: 40, value: 40, literary: 40, local: 40, parent: 40 };
-    if (tags.food === '尝鲜派') { w.foodie = 80; w.local = 55; }
-    else if (tags.food === '恋旧派') { w.local = 75; w.foodie = 60; }
-    else if (tags.food === '兼容派') { w.foodie = 65; w.local = 60; }
-    if (tags.pace === '不紧不慢') w.literary = 65;
-    else if (tags.pace === '多打卡党') { w.photographer = 70; w.value = 60; }
+    const w = { photographer: 1, foodie: 1, value: 0, literary: 0, local: 0, parent: 0 };
+    if (tags.food === '尝鲜派') { w.foodie = 1; w.local = 1; }
+    else if (tags.food === '恋旧派') { w.local = 1; w.foodie = 1; }
+    if (tags.pace === '多打卡党') { w.photographer = 1; w.value = 1; }
     (tags.styles || []).forEach(st => {
-        if (/出片|📷/.test(st)) w.photographer = Math.max(w.photographer, 75);
-        if (/文艺|🏛|艺术|🎨/.test(st)) w.literary = Math.max(w.literary, 70);
-        if (/夜景|微醺|🌃|🍷/.test(st)) w.local = Math.max(w.local, 65);
-        if (/咖啡|☕/.test(st)) w.literary = Math.max(w.literary, 60);
-        if (/治愈|🧘/.test(st)) w.literary = Math.max(w.literary, 60);
+        if (/出片|📷/.test(st)) w.photographer = 1;
+        if (/文艺|🏛|艺术|🎨/.test(st)) w.literary = 1;
+        if (/夜景|微醺|🌃|🍷/.test(st)) w.local = 1;
+        if (/咖啡|☕/.test(st)) w.literary = 1;
     });
     const comp = Array.isArray(tags.companion) ? tags.companion : [];
-    if (comp.some(c => /带娃|宠物/.test(c))) w.parent = 75;
+    if (comp.some(c => /带娃|宠物/.test(c))) w.parent = 1;
     return w;
 }
 function saveTags(tags) { localStorage.setItem('cw_profile_tags', JSON.stringify(tags)); }
@@ -2963,13 +2952,16 @@ function renderAgentDetail(tags) {
     if (!tags.dislikeSignals) tags.dislikeSignals = [];
     const $list = document.getElementById('agentList');
     if (!$list) return;
-    $list.innerHTML = AGENTS_DEF.map(a => {
-        const v = tags.agentWeights[a.id] || 40;
-        return `<div class="agent-row"><span class="agent-emoji">${a.emoji}</span><span class="agent-name">${a.name}</span><input type="range" min="0" max="100" value="${v}" class="agent-slider-mini" data-agent="${a.id}"><span class="agent-pct" data-agent-pct="${a.id}">${v}%</span></div>`;
-    }).join('');
-    $list.querySelectorAll('.agent-slider-mini').forEach(inp => {
-        inp.addEventListener('input', e => { const aid = e.target.dataset.agent; const v = +e.target.value; tags.agentWeights[aid] = v; document.querySelector(`[data-agent-pct="${aid}"]`).textContent = v + '%'; saveTags(tags); });
-    });
+    function renderAgentGrid() {
+        $list.innerHTML = AGENTS_DEF.map(a => {
+            const on = !!tags.agentWeights[a.id];
+            return `<div class="agent-toggle ${on ? 'active' : ''}" data-agent="${a.id}"><span class="agent-emoji">${a.emoji}</span>${a.name}</div>`;
+        }).join('');
+        $list.querySelectorAll('.agent-toggle').forEach(el => {
+            el.addEventListener('click', () => { const aid = el.dataset.agent; tags.agentWeights[aid] = tags.agentWeights[aid] ? 0 : 1; saveTags(tags); renderAgentGrid(); });
+        });
+    }
+    renderAgentGrid();
     const $price = document.getElementById('agentPriceSlider');
     const $priceVal = document.getElementById('agentPriceVal');
     if ($price) { $price.value = tags.priceSensitivity; $priceVal.textContent = tags.priceSensitivity; $price.oninput = e => { tags.priceSensitivity = +e.target.value; $priceVal.textContent = e.target.value; saveTags(tags); }; }
@@ -2992,7 +2984,7 @@ function renderAgentDetail(tags) {
     const routes = parseInt(localStorage.getItem('cw_route_count') || '0');
     const checkinCount = JSON.parse(localStorage.getItem('cw_checkins') || '[]').length;
     const activeCats = (tags.preferredCategories || []).length;
-    const agentCount = Object.values(tags.agentWeights).filter(v => v > 50).length;
+    const agentCount = Object.values(tags.agentWeights).filter(v => !!v).length;
     const $wheel = document.getElementById('agentWheel');
     if ($wheel) $wheel.innerHTML = `<div class="agent-wheel-item"><div class="agent-wheel-num">v1</div><div class="agent-wheel-label">版本</div></div><div class="agent-wheel-item"><div class="agent-wheel-num">${routes + checkinCount}</div><div class="agent-wheel-label">累计互动</div></div><div class="agent-wheel-item"><div class="agent-wheel-num">${agentCount}</div><div class="agent-wheel-label">活跃 Agent</div></div><div class="agent-wheel-item"><div class="agent-wheel-num">${activeCats}</div><div class="agent-wheel-label">偏好品类</div></div>`;
 }
