@@ -853,7 +853,7 @@ function ExploreRouteAppInner() {
       className="relative mx-auto h-screen max-w-[430px] overflow-hidden bg-[#f5f9ff] font-sans text-[#1a1a2e]"
       style={{ height: '100vh' }}
     >
-      <AMapView spots={dynamicSpots} activeCategory={activeCategory} onSpotClick={openSpot} />
+      <ErrorBoundary><AMapView spots={dynamicSpots} activeCategory={activeCategory} onSpotClick={openSpot} /></ErrorBoundary>
 
       {/* Top bar: city name + compact buttons */}
       <div className="absolute inset-x-0 top-0 z-40 pointer-events-none">

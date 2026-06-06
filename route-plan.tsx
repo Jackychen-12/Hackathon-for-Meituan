@@ -972,7 +972,7 @@ function RoutePlanAppInner() {
     >
       <div className="absolute inset-0">
         {!loading && plan ? (
-            <RouteMap stops={orderedStops} activeStopId={selectedStopId} onStopClick={setSelectedStopId} />
+            <PlanErrorBoundary><RouteMap stops={orderedStops} activeStopId={selectedStopId} onStopClick={setSelectedStopId} /></PlanErrorBoundary>
         ) : (
           <div className="h-full w-full bg-[#eaf2ff]" />
         )}
