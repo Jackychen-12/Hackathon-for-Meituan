@@ -903,12 +903,11 @@ function ExploreRouteAppInner() {
         <div className="pointer-events-auto px-5 pt-[env(safe-area-inset-top,12px)]" style={{ paddingTop: 'max(env(safe-area-inset-top), 12px)' }}>
           <div className="flex items-center justify-between">
             <div className="relative">
-              <button type="button" className="flex items-center gap-1 text-left" onClick={() => setShowCityPanel(p => !p)}>
+              <div className="flex items-center gap-1 text-left">
                 <span className="text-[18px] font-bold tracking-[0.01em] text-[#1a1a2e]">{city.name}</span>
-                <ChevronDown className="mt-0.5 h-4 w-4 text-[#8e8e93]" strokeWidth={2.3} />
-              </button>
+              </div>
               <div className="mt-0.5 text-[12px] font-medium text-[#8e8e93]">{city.weather}</div>
-              {showCityPanel && (
+              {false && showCityPanel && (
                 <div className="absolute left-0 top-12 w-40 rounded-[18px] bg-white/95 p-2 shadow-[0_12px_32px_rgba(30,95,216,0.15)] backdrop-blur-xl z-50">
                   {cityOptions.map(item => (
                     <button key={item.name} type="button"

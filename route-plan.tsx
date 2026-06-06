@@ -413,15 +413,15 @@ function getCurrentQuery(): PendingQuery {
 function PlanningSkeleton() {
   return (
     <div className="relative h-full animate-pulse">
-      <div className="absolute inset-x-0 top-0 h-[44%] bg-[#eaf2ff]" />
-      <div className="absolute top-[35%] inset-x-0 text-center z-10">
+      <div className="absolute inset-x-0 top-0 h-[28%] bg-[#eaf2ff]" />
+      <div className="absolute top-[15%] inset-x-0 text-center z-10">
         <div className="text-[14px] font-semibold text-[#1a1a2e]">AI 正在为你规划路线</div>
         <div className="text-[12px] text-[#8e8e93] mt-1">多个 Agent 正在讨论最佳方案…</div>
         <div className="mt-3 flex justify-center">
           <div className="w-5 h-5 border-2 border-[rgba(91,158,255,0.3)] border-t-[#5b9eff] rounded-full animate-spin" />
         </div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 top-[40%] rounded-t-[34px] bg-white/[0.92] backdrop-blur-xl border-t border-[rgba(140,180,240,0.3)] px-5 pb-28 pt-4 shadow-[0_-18px_48px_rgba(30,95,216,0.15)]">
+      <div className="absolute inset-x-0 bottom-0 top-[28%] rounded-t-[34px] bg-white/[0.92] backdrop-blur-xl border-t border-[rgba(140,180,240,0.3)] px-5 pb-28 pt-4 shadow-[0_-18px_48px_rgba(30,95,216,0.15)]">
         <div className="mx-auto h-1 w-10 rounded-full bg-[rgba(140,180,240,0.3)]" />
         <div className="mt-4 h-7 w-2/3 rounded-full bg-[rgba(140,180,240,0.3)]" />
         <div className="mt-3 h-4 w-5/6 rounded-full bg-[rgba(140,180,240,0.3)]" />
@@ -620,7 +620,7 @@ function RoutePlanAppInner() {
   const [showToast, setShowToast] = useState(false);
   const [currentQuery, setCurrentQuery] = useState<PendingQuery>(getCurrentQuery());
   const [containerHeight, setContainerHeight] = useState(844);
-  const [drawerTop, setDrawerTop] = useState(420);
+  const [drawerTop, setDrawerTop] = useState(240);
   const suppressTapRef = useRef(false);
   const [expanded, setExpanded] = useState(false);
   const [detailStop, setDetailStop] = useState<RouteStop | null>(null);
@@ -637,7 +637,7 @@ function RoutePlanAppInner() {
   const [showCityPanel, setShowCityPanel] = useState(false);
 
   const expandedTop = 48;
-  const collapsedTop = Math.max(containerHeight * 0.58, 420);
+  const collapsedTop = Math.max(containerHeight * 0.30, 240);
 
   useEffect(() => {
     fetch('/data/real_pois.json')
@@ -1042,12 +1042,11 @@ function RoutePlanAppInner() {
         <div className="px-6 pt-4">
           <div className="flex items-start justify-between">
             <div className="relative">
-              <button type="button" className="flex items-center gap-1 text-left" onClick={() => setShowCityPanel(p => !p)}>
+              <div className="flex items-center gap-1 text-left">
                 <span className="text-[18px] font-bold tracking-[0.01em] text-[#1a1a2e]">{cityName}</span>
-                <ChevronDown className="mt-0.5 h-4 w-4 text-[#8e8e93]" strokeWidth={2.3} />
-              </button>
+              </div>
               <div className="mt-0.5 text-[12px] font-medium text-[#8e8e93]">{cityOptions.find(c => c.name === cityName)?.weather || ''}</div>
-              {showCityPanel && (
+              {false && showCityPanel && (
                 <div className="absolute left-0 top-12 w-40 rounded-[18px] bg-white/95 p-2 shadow-[0_12px_32px_rgba(30,95,216,0.15)] backdrop-blur-xl z-50">
                   {cityOptions.map(item => (
                     <button key={item.name} type="button"
