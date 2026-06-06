@@ -486,6 +486,36 @@ const RouteMap = React.memo(function RouteMap({
         dragEnable: true,
       });
       mapInstance.current = map;
+
+      validStops.forEach((stop, i) => {
+        const active = stop.id === activeStopId;
+        const marker = new AMap.Marker({
+          position: [stop.lng!, stop.lat!],
+          offset: new AMap.Pixel(-16, -16),
+          content: `<div style="display:flex;flex-direction:column;align-items:center;">
+            <div style="width:32px;height:32px;border-radius:50%;background:${active ? 'linear-gradient(135deg,#1e5fd8,#5b9eff)' : '#5b9eff'};border:3px solid white;color:white;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(30,95,216,0.3);transform:scale(${active ? 1.15 : 1});transition:all 0.2s;">${i + 1}</div>
+            <div style="margin-top:2px;padding:1px 5px;border-radius:6px;background:${active ? '#1e5fd8' : 'white'};color:${active ? 'white' : '#1a1a2e'};font-size:10px;font-weight:600;box-shadow:0 2px 4px rgba(0,0,0,0.1);white-space:nowrap;">${stop.title.slice(0, 5)}</div>
+          </div>`,
+        });
+        marker.on('click', () => onStopClick(stop.id));
+        map.add(marker);
+      });
+
+      if (validStops.length > 1) {
+        new AMap.Polyline({
+          path: validStops.map(s => [s.lng!, s.lat!]),
+          strokeColor: '#5b9eff',
+          strokeWeight: 4,
+          strokeOpacity: 0.8,
+          lineJoin: 'round',
+          lineCap: 'round',
+          strokeStyle: 'solid',
+        }).setMap(map);
+      }
+
+      if (validStops.length > 0) {
+        map.setFitView(null, false, [60, 80, 200, 60]);
+      }
       return true;
     };
 
@@ -494,41 +524,7 @@ const RouteMap = React.memo(function RouteMap({
       return () => clearInterval(iv);
     }
 
-    const map = mapInstance.current!;
-
-    // 编号 markers
-    validStops.forEach((stop, i) => {
-      const active = stop.id === activeStopId;
-      const marker = new AMap.Marker({
-        position: [stop.lng!, stop.lat!],
-        offset: new AMap.Pixel(-16, -16),
-        content: `<div style="display:flex;flex-direction:column;align-items:center;">
-          <div style="width:32px;height:32px;border-radius:50%;background:${active ? 'linear-gradient(135deg,#1e5fd8,#5b9eff)' : '#5b9eff'};border:3px solid white;color:white;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;box-shadow:0 4px 12px rgba(30,95,216,0.3);transform:scale(${active ? 1.15 : 1});transition:all 0.2s;">${i + 1}</div>
-          <div style="margin-top:2px;padding:1px 5px;border-radius:6px;background:${active ? '#1e5fd8' : 'white'};color:${active ? 'white' : '#1a1a2e'};font-size:10px;font-weight:600;box-shadow:0 2px 4px rgba(0,0,0,0.1);white-space:nowrap;">${stop.title.slice(0, 5)}</div>
-        </div>`,
-      });
-      marker.on('click', () => onStopClick(stop.id));
-      map.add(marker);
-    });
-
-    // 路线折线
-    if (validStops.length > 1) {
-      new AMap.Polyline({
-        path: validStops.map(s => [s.lng!, s.lat!]),
-        strokeColor: '#5b9eff',
-        strokeWeight: 4,
-        strokeOpacity: 0.8,
-        lineJoin: 'round',
-        lineCap: 'round',
-        strokeStyle: 'solid',
-      }).setMap(map);
-    }
-
-    if (validStops.length > 0) {
-      map.setFitView(null, false, [60, 80, 200, 60]);
-    }
-
-    return () => { map.destroy(); mapInstance.current = null; };
+    return () => { if (mapInstance.current) { mapInstance.current.destroy(); mapInstance.current = null; } };
   }, [stops, activeStopId]);
 
   return <div ref={mapRef} className="h-full w-full" />;
