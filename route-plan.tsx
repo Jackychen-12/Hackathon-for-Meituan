@@ -4,7 +4,6 @@ import {
   ChevronDown,
   ChevronRight,
   Footprints,
-  PenLine,
   Share2,
   Route,
   Sparkles,
@@ -91,6 +90,19 @@ const scenicPhoto = (title: string, palette: { top: string; bottom: string; acce
       <text x="30" y="37" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="white">${title}</text>
     </svg>
   `);
+
+const cardPaletteMap: Record<CategoryId, { top: string; bottom: string; accent: string; accent2: string }> = {
+  sight: { top: '#89CFF0', bottom: '#4E87B7', accent: '#B9D98D', accent2: '#E7C97F' },
+  food: { top: '#D9C3A4', bottom: '#A16207', accent: '#FDE68A', accent2: '#A3E635' },
+  drink: { top: '#A7F3D0', bottom: '#059669', accent: '#FDE68A', accent2: '#99F6E4' },
+  shopping: { top: '#7D8D9F', bottom: '#334155', accent: '#D8B4FE', accent2: '#C084FC' },
+  stay: { top: '#1E3A8A', bottom: '#0F172A', accent: '#F5D061', accent2: '#F59E0B' },
+};
+
+function getStableCardImage(item: { title: string; category: CategoryId; image?: string }) {
+  if (item.image?.startsWith('data:image/')) return item.image;
+  return scenicPhoto(item.title.slice(0, 6), cardPaletteMap[item.category] || cardPaletteMap.sight);
+}
 
 const catalog: CatalogPoi[] = [
   {
@@ -393,6 +405,154 @@ function buildRoutePlan(query: PendingQuery, adjustmentText: string) {
   };
 }
 
+function scoreDemoCase(planData: any, query: PendingQuery, adjustmentText: string) {
+  const selectedPoiNames = (query.pois || []).map((item) => item.name);
+  const text = [query.text || '', adjustmentText || '', selectedPoiNames.join(' '), (query.personas || []).join(' ')].join(' ').toLowerCase();
+  let score = 0;
+
+  const corpus = [
+    planData.title || '',
+    planData.dayTitle || '',
+    planData.summary || '',
+    planData.stance || '',
+    ...(planData.personas || []),
+    ...((planData.stops || []).flatMap((stop: any) => [
+      stop.name || '',
+      stop.branch_name || '',
+      ...(stop.categories || []),
+      ...(stop.regions || []),
+      stop.reason || '',
+    ]))
+  ].join(' ').toLowerCase();
+
+  if (!text.trim()) return 0;
+
+  selectedPoiNames.forEach((name) => {
+    if ((planData.stops || []).some((stop: any) => stop.name === name)) score += 10;
+  });
+  (query.personas || []).forEach((persona) => {
+    if ((planData.personas || []).includes(persona)) score += 6;
+  });
+
+  if (/徐汇|衡复|武康|安福/.test(text) && /徐汇|衡复|武康|安福/.test(corpus)) score += 6;
+  if (/咖啡|饮品|下午茶/.test(text) && /咖啡|饮品|甜品/.test(corpus)) score += 5;
+  if (/拍照|出片|街拍/.test(text) && /拍照|街拍|地标/.test(corpus)) score += 5;
+  if (/美食|吃|本帮菜|餐厅/.test(text) && /本帮菜|美食|餐厅/.test(corpus)) score += 5;
+  if (/亲子|带娃/.test(text) && /parent|亲子/.test(corpus)) score += 5;
+  if (/江|日落|夜景|散步/.test(text) && /滨江|日落|夜景/.test(corpus)) score += 5;
+  if (/文艺|人文|老洋房/.test(text) && /文艺|人文|老洋房/.test(corpus)) score += 5;
+
+  return score;
+}
+
+function mapPayloadPlansToRoutePlans(plansData: any[], query: PendingQuery, realPois: any[]): RoutePlan[] {
+  const poiMap = new Map<string, any>();
+  realPois.forEach(p => poiMap.set(p.poi_id, p));
+  catalog.forEach(p => poiMap.set(p.id, p));
+
+  const palettes = [
+    { top: '#89CFF0', bottom: '#4E87B7', accent: '#B9D98D', accent2: '#E7C97F' },
+    { top: '#D9C3A4', bottom: '#A16207', accent: '#FDE68A', accent2: '#A3E635' },
+    { top: '#7D8D9F', bottom: '#334155', accent: '#D8B4FE', accent2: '#C084FC' },
+    { top: '#1E3A8A', bottom: '#0F172A', accent: '#F5D061', accent2: '#F59E0B' },
+    { top: '#B6E0FE', bottom: '#7DD3FC', accent: '#93C5FD', accent2: '#FDE68A' },
+    { top: '#A7F3D0', bottom: '#059669', accent: '#FDE68A', accent2: '#99F6E4' },
+  ];
+
+  return plansData.map((planData: any, planIdx: number) => {
+    const apiStops = planData.stops || [];
+    let cursor = estimateStartMinutes(query.text || '');
+
+    const routeStops: RouteStop[] = apiStops.map((s: any, i: number) => {
+      const poi = poiMap.get(s.poi_id);
+      const stayMin = s.stayMin || 60;
+      const transitMin = i > 0 ? (s.transitMin || 15) : 0;
+      if (i > 0) cursor += transitMin;
+      const arriveAt = minutesToTime(cursor);
+      cursor += stayMin;
+      const departAt = minutesToTime(cursor);
+
+      let catId: CategoryId = 'sight';
+      if (poi) {
+        if (poi.category) catId = poi.category;
+        else if (poi.type === 'food' || poi.type === 'eat' || poi.categories?.some((c: string) => /餐|面|菜|食/.test(c))) catId = 'food';
+        else if (poi.type === 'rest' || poi.categories?.some((c: string) => /咖啡|茶|饮|甜品/.test(c))) catId = 'drink';
+      }
+
+      return {
+        id: s.poi_id,
+        title: s.name || poi?.name || poi?.title || s.poi_id,
+        category: catId,
+        area: s.regions?.[0] || poi?.regions?.[0] || poi?.area || '',
+        desc: s.reviews?.[0]?.text?.slice(0, 60) || poi?.reviews?.[0]?.text?.slice(0, 60) || poi?.desc || s.branch_name || '',
+        vibe: s.branch_name || poi?.branch_name || '',
+        image: (s.dp_image ? decodeURIComponent(s.dp_image) : '') || (poi?.dp_image ? decodeURIComponent(poi.dp_image) : '') || scenicPhoto((s.name || poi?.name || '').slice(0, 6), palettes[(i + planIdx) % palettes.length]),
+        x: 0, y: 0,
+        stayMin,
+        keywords: s.categories || poi?.categories || poi?.keywords || [],
+        lng: s.longitude || poi?.longitude || poi?.lng,
+        lat: s.latitude || poi?.latitude || poi?.lat,
+        order: i + 1,
+        arriveAt,
+        departAt,
+        transitMode: i > 0 ? (s.transitMode || 'walk') as TravelMode : undefined,
+        transitMin: i > 0 ? transitMin : undefined,
+        transitText: i > 0 ? `${travelModeLabel[(s.transitMode || 'walk') as TravelMode]} · ${transitMin}分钟${s.distanceKm ? ` · ${s.distanceKm}km` : ''}` : undefined,
+        reason: s.reason || '根据你的偏好推荐',
+        avg_rating: s.avg_rating || poi?.avg_rating,
+        review_count: s.review_count || poi?.review_count,
+        avg_price: s.avg_price || poi?.avg_price,
+        business_hours: s.business_hours || poi?.business_hours,
+        reviews: s.reviews || poi?.reviews || [],
+        dp_url: s.dp_url || poi?.dp_url || '',
+      };
+    });
+
+    const totalTransit = routeStops.reduce((sum, s) => sum + (s.transitMin || 0), 0);
+    const totalStay = routeStops.reduce((sum, s) => sum + s.stayMin, 0);
+
+    return {
+      title: planData.title || '城市漫游路线',
+      dayTitle: planData.dayTitle || '推荐路线',
+      daysText: '半天',
+      subtitle: routeStops.length > 0 ? `${routeStops[0].title} → ${routeStops[routeStops.length - 1].title}` : '',
+      summary: planData.summary || '已根据本地路线库生成推荐路线',
+      startTime: routeStops[0]?.arriveAt || '10:30',
+      totalDurationText: formatDuration(totalTransit + totalStay),
+      totalDistanceText: planData.totalDistanceKm
+        ? `${planData.totalDistanceKm}km`
+        : `${(1.4 + routeStops.length * 1.18).toFixed(1)}km`,
+      stops: routeStops,
+      personas: planData.personas || [],
+      stance: planData.stance || '',
+    };
+  });
+}
+
+function pickLocalMockPlans(query: PendingQuery, adjustmentText: string, realPois: any[]): RoutePlan[] {
+  const rankedCases = [..._demoCases]
+    .map((planData) => ({ planData, score: scoreDemoCase(planData, query, adjustmentText) }))
+    .sort((a, b) => b.score - a.score)
+    .filter((item) => item.score > 0)
+    .slice(0, 3)
+    .map((item) => item.planData);
+
+  const localPlans = rankedCases.length > 0
+    ? mapPayloadPlansToRoutePlans(rankedCases, query, realPois)
+    : [];
+
+  const generatedPlan = buildRoutePlan(query, adjustmentText);
+
+  if (localPlans.length === 0) return [generatedPlan];
+  if (adjustmentText) return [generatedPlan, ...localPlans.slice(0, 1)];
+
+  const firstLocal = localPlans[0];
+  if (generatedPlan.subtitle && generatedPlan.subtitle !== firstLocal.subtitle) {
+    return [...localPlans.slice(0, 2), generatedPlan];
+  }
+  return localPlans;
+}
+
 function getCurrentQuery(): PendingQuery {
   const raw = sessionStorage.getItem('cw_pending_query');
   if (!raw) return { text: '帮我安排一条上海徐汇半日路线', source: 'home', city: '上海市', region: '衡复/徐汇' };
@@ -655,132 +815,17 @@ function RoutePlanAppInner() {
     setCurrentQuery(query);
 
     try {
-      let data: any;
-      const matchCase = _demoCases.find(c => {
-        const q = (query.text || '').toLowerCase();
-        const t = (c.title || '').toLowerCase();
-        return q.length >= 3 && t.length >= 3 && (q.includes(t.slice(0, 3)) || t.includes(q.slice(0, 3)));
-      });
-
-      if (matchCase && !adjustment) {
-        data = { plans: [matchCase], fallback: false };
-      } else {
-        const res = await fetch('/api/plan', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            text: [query.text || '', adjustment].filter(Boolean).join(' '),
-            city: query.city || '上海',
-            pois: query.pois,
-            profile: parseMaybeJson(localStorage.getItem('cw_profile_tags'), {}),
-            personas: query.personas || [],
-          }),
-        });
-
-        if (!res.ok) throw new Error('api failed');
-        data = await res.json();
-      }
-
-      // 将 API 返回的 stops 映射为完整的 RouteStop
-      const poiMap = new Map<string, any>();
-      realPois.forEach(p => poiMap.set(p.poi_id, p));
-      // 也将旧的 catalog POI 加入
-      catalog.forEach(p => poiMap.set(p.id, p));
-
-      const palettes = [
-        { top: '#89CFF0', bottom: '#4E87B7', accent: '#B9D98D', accent2: '#E7C97F' },
-        { top: '#D9C3A4', bottom: '#A16207', accent: '#FDE68A', accent2: '#A3E635' },
-        { top: '#7D8D9F', bottom: '#334155', accent: '#D8B4FE', accent2: '#C084FC' },
-        { top: '#1E3A8A', bottom: '#0F172A', accent: '#F5D061', accent2: '#F59E0B' },
-        { top: '#B6E0FE', bottom: '#7DD3FC', accent: '#93C5FD', accent2: '#FDE68A' },
-        { top: '#A7F3D0', bottom: '#059669', accent: '#FDE68A', accent2: '#99F6E4' },
-      ];
-
-      const plansData = data.plans || (data.plan ? [data.plan] : []);
-
-      const allRoutePlans: RoutePlan[] = plansData.map((planData: any, planIdx: number) => {
-        const apiStops = planData.stops || [];
-        let cursor = estimateStartMinutes(query.text || '');
-
-        const routeStops: RouteStop[] = apiStops.map((s: any, i: number) => {
-          const poi = poiMap.get(s.poi_id);
-          const stayMin = s.stayMin || 60;
-          const transitMin = i > 0 ? (s.transitMin || 15) : 0;
-          if (i > 0) cursor += transitMin;
-          const arriveAt = minutesToTime(cursor);
-          cursor += stayMin;
-          const departAt = minutesToTime(cursor);
-
-          // 映射分类
-          let catId: CategoryId = 'sight';
-          if (poi) {
-            if (poi.category) catId = poi.category;
-            else if (poi.type === 'food' || poi.categories?.some((c: string) => /餐|面|菜|食/.test(c))) catId = 'food';
-            else if (poi.type === 'rest' || poi.categories?.some((c: string) => /咖啡|茶|饮/.test(c))) catId = 'drink';
-          }
-
-          return {
-            id: s.poi_id,
-            title: s.name || poi?.name || poi?.title || s.poi_id,
-            category: catId,
-            area: s.regions?.[0] || poi?.regions?.[0] || poi?.area || '',
-            desc: s.reviews?.[0]?.text?.slice(0, 60) || poi?.reviews?.[0]?.text?.slice(0, 60) || poi?.desc || s.branch_name || '',
-            vibe: s.branch_name || poi?.branch_name || '',
-            image: (s.dp_image ? decodeURIComponent(s.dp_image) : '') || (poi?.dp_image ? decodeURIComponent(poi.dp_image) : '') || scenicPhoto((s.name || poi?.name || '').slice(0, 6), palettes[i % palettes.length]),
-            x: 0, y: 0,
-            stayMin,
-            keywords: s.categories || poi?.categories || poi?.keywords || [],
-            lng: s.longitude || poi?.longitude || poi?.lng,
-            lat: s.latitude || poi?.latitude || poi?.lat,
-            order: i + 1,
-            arriveAt,
-            departAt,
-            transitMode: i > 0 ? (s.transitMode || 'walk') as TravelMode : undefined,
-            transitMin: i > 0 ? transitMin : undefined,
-            transitText: i > 0 ? `${travelModeLabel[(s.transitMode || 'walk') as TravelMode]} · ${transitMin}分钟${s.distanceKm ? ` · ${s.distanceKm}km` : ''}` : undefined,
-            reason: s.reason || '根据你的偏好推荐',
-            avg_rating: s.avg_rating || poi?.avg_rating,
-            review_count: s.review_count || poi?.review_count,
-            avg_price: s.avg_price || poi?.avg_price,
-            business_hours: s.business_hours || poi?.business_hours,
-            reviews: s.reviews || poi?.reviews || [],
-            dp_url: s.dp_url || poi?.dp_url || '',
-          };
-        });
-
-        const totalTransit = routeStops.reduce((sum, s) => sum + (s.transitMin || 0), 0);
-        const totalStay = routeStops.reduce((sum, s) => sum + s.stayMin, 0);
-
-        return {
-          title: planData.title || '城市漫游路线',
-          dayTitle: planData.dayTitle || '推荐路线',
-          daysText: '半天',
-          subtitle: routeStops.length > 0 ? `${routeStops[0].title} → ${routeStops[routeStops.length - 1].title}` : '',
-          summary: planData.summary || 'AI 为你规划的路线',
-          startTime: routeStops[0]?.arriveAt || '10:30',
-          totalDurationText: formatDuration(totalTransit + totalStay),
-          totalDistanceText: planData.totalDistanceKm
-            ? `${planData.totalDistanceKm}km`
-            : `${(1.4 + routeStops.length * 1.18).toFixed(1)}km`,
-          stops: routeStops,
-          personas: planData.personas || [],
-          stance: planData.stance || '',
-        };
-      });
-
+      const allRoutePlans = pickLocalMockPlans(query, adjustment, realPois);
       setAllPlans(allRoutePlans);
-      if (data.fallback) {
-        showToastMessage('AI 暂时繁忙，已用默认排列');
-      }
       setActivePlanIdx(0);
       setPlan(allRoutePlans[0] || null);
       setSelectedStopId(allRoutePlans[0]?.stops[0]?.id || null);
     } catch (e) {
-      // Fallback: 使用本地 buildRoutePlan
       const nextPlan = buildRoutePlan(query, adjustment);
+      setAllPlans([nextPlan]);
       setPlan(nextPlan);
       setSelectedStopId(nextPlan.stops[0]?.id || null);
-      showToastMessage('AI 暂时繁忙，已用本地算法生成路线');
+      showToastMessage('已用本地路线库生成推荐路线');
     }
 
     setLoading(false);
@@ -1023,29 +1068,32 @@ function RoutePlanAppInner() {
   return (
     <div
       ref={containerRef}
-      className="relative mx-auto h-screen max-w-[430px] overflow-hidden bg-[#f5f9ff] font-sans text-[#1a1a2e]"
-      style={{ height: '100vh' }}
+      className="relative mx-auto h-screen max-w-[430px] overflow-hidden bg-[#f3f3f4] text-[#111318]"
+      style={{
+        height: '100vh',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif'
+      }}
       onClick={() => {}}
     >
       <div className="absolute inset-0">
         {!loading && plan ? (
             <MapErrorBoundary stops={orderedStops}><RouteMap stops={orderedStops} activeStopId={selectedStopId} onStopClick={setSelectedStopId} /></MapErrorBoundary>
         ) : (
-          <div className="h-full w-full bg-[#eaf2ff]" />
+          <div className="h-full w-full bg-[#eceef1]" />
         )}
       </div>
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-[#f5f9ff]/80 via-[#f5f9ff]/30 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-[#f3f3f4]/84 via-[#f3f3f4]/36 to-transparent" />
 
       {loading ? <PlanningSkeleton /> : null}
 
-      <div className="absolute inset-x-0 top-0 z-20">
-        <div className="px-6 pt-4">
+      <div className="absolute inset-x-0 top-0 z-40">
+        <div className="px-6 pt-6">
           <div className="flex items-start justify-between">
             <div className="relative">
               <div className="flex items-center gap-1 text-left">
-                <span className="text-[18px] font-bold tracking-[0.01em] text-[#1a1a2e]">{cityName}</span>
+                <span className="text-[17px] font-semibold tracking-[-0.01em] text-[#111318]">{cityName}</span>
               </div>
-              <div className="mt-0.5 text-[12px] font-medium text-[#8e8e93]">{cityOptions.find(c => c.name === cityName)?.weather || ''}</div>
+              <div className="mt-0.5 text-[11px] font-medium text-[#8c9098]">{cityOptions.find(c => c.name === cityName)?.weather || ''}</div>
               {false && showCityPanel && (
                 <div className="absolute left-0 top-12 w-40 rounded-[18px] bg-white/95 p-2 shadow-[0_12px_32px_rgba(30,95,216,0.15)] backdrop-blur-xl z-50">
                   {cityOptions.map(item => (
@@ -1071,10 +1119,10 @@ function RoutePlanAppInner() {
               )}
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <button
                 type="button"
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/[0.9] text-[#1a1a2e] shadow-md backdrop-blur"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-black/[0.05] bg-white/90 text-[#111318] shadow-[0_4px_10px_rgba(15,23,42,0.06)] backdrop-blur"
                 onClick={(event) => {
                   event.stopPropagation();
                   window.location.hash = 'route';
@@ -1085,7 +1133,7 @@ function RoutePlanAppInner() {
               </button>
               <button
                 type="button"
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/[0.9] text-[#1a1a2e] shadow-md backdrop-blur"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-black/[0.05] bg-white/90 text-[#111318] shadow-[0_4px_10px_rgba(15,23,42,0.06)] backdrop-blur"
                 onClick={(event) => {
                   event.stopPropagation();
                   setShareOpen(true);
@@ -1100,36 +1148,56 @@ function RoutePlanAppInner() {
       </div>
 
       <div
-        className="absolute inset-x-0 z-30 rounded-t-[28px] bg-white/[0.92] backdrop-blur-xl border-t border-[rgba(140,180,240,0.3)] shadow-[0_12px_32px_rgba(30,95,216,0.15)] transition-[top] duration-300 ease-out"
+        className="absolute inset-x-0 z-30 rounded-t-[28px] bg-white/[0.92] shadow-[0_12px_32px_rgba(30,95,216,0.15)] backdrop-blur-xl border-t border-[rgba(140,180,240,0.3)] transition-[top] duration-300 ease-out"
         style={{ top: drawerTop, bottom: 0, willChange: 'transform' }}
       >
         <div
-          className="flex cursor-grab flex-col px-6 pb-4 pt-3 active:cursor-grabbing"
+          className="flex cursor-grab flex-col px-6 pb-2 pt-3 active:cursor-grabbing"
           style={{ touchAction: 'none' }}
           onPointerDown={onDrawerPointerDown}
           onClick={() => {
             if (!expanded && !suppressTapRef.current && !loading) snapDrawer(true);
           }}
         >
-          <div className="mx-auto mb-4 h-1 w-9 rounded-full bg-[rgba(140,180,240,0.4)]" />
+          <div className="mx-auto mb-3 h-1 w-9 rounded-full bg-[rgba(140,180,240,0.4)]" />
+          <div className="mb-3 flex items-center gap-2">
+            <button
+              type="button"
+              className={`rounded-full border px-3 py-1.5 text-[12px] font-semibold transition-all ${
+                editMode
+                  ? 'border-white bg-white text-[#1a1a2e] shadow-[0_10px_26px_rgba(30,95,216,0.12)]'
+                  : 'border-[rgba(140,180,240,0.3)] bg-[rgba(232,242,255,0.55)] text-[#5a5a62]'
+              }`}
+              onClick={(event) => {
+                event.stopPropagation();
+                if (!expanded) snapDrawer(true);
+                setEditMode((prev) => {
+                  const next = !prev;
+                  showToastMessage(next ? '已进入编辑' : '已退出编辑');
+                  return next;
+                });
+              }}
+            >
+              {editMode ? '完成' : '编辑'}
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-[rgba(140,180,240,0.3)] bg-[rgba(232,242,255,0.55)] px-3 py-1.5 text-[12px] font-semibold text-[#5a5a62]"
+              onClick={(event) => {
+                event.stopPropagation();
+                window.location.hash = 'route';
+              }}
+            >
+              去探索
+            </button>
+          </div>
           {!loading && plan ? (
             <>
               {allPlans.length > 1 && (
-                <div className="mb-4">
-                  <div className="text-[11px] font-semibold text-[#8e8e93] mb-2 flex items-center gap-1.5">
-                    <Sparkles className="h-3 w-3 text-[#5b9eff]" /> 多 Agent 为你生成了 {allPlans.length} 条方案
-                  </div>
-                  <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1" style={{ WebkitOverflowScrolling: 'touch' }}>
+                <div className="mb-4 border-b border-[rgba(140,180,240,0.22)]">
+                  <div className="flex items-end">
                     {allPlans.map((p, i) => {
                       const active = i === activePlanIdx;
-                      const personaMap: Record<string, { emoji: string; label: string }> = {
-                        photographer: { emoji: '📷', label: '拍照党' },
-                        foodie: { emoji: '🍜', label: '美食家' },
-                        value: { emoji: '💰', label: '性价比' },
-                        literary: { emoji: '📚', label: '文青' },
-                        local: { emoji: '🏠', label: '老饕' },
-                        parent: { emoji: '👶', label: '带娃' },
-                      };
                       return (
                         <button
                           key={i}
@@ -1140,32 +1208,20 @@ function RoutePlanAppInner() {
                             setSelectedStopId(p.stops[0]?.id || null);
                             setEditMode(false);
                           }}
-                          className={`shrink-0 w-[65%] rounded-[16px] p-3 text-left transition-all ${
+                          className={`relative flex-1 min-w-0 px-1 py-3 text-center transition-colors ${
                             active
-                              ? 'bg-gradient-to-br from-[#1e5fd8] to-[#5b9eff] text-white shadow-[0_8px_24px_rgba(30,95,216,0.3)]'
-                              : 'bg-white/80 text-[#1a1a2e] border border-[rgba(140,180,240,0.3)]'
+                              ? 'text-[#1e5fd8]'
+                              : 'text-[#8e8e93]'
                           }`}
                         >
-                          <div className="text-[13px] font-bold truncate">{p.dayTitle || `方案 ${i + 1}`}</div>
-                          {p.stance && <div className={`text-[11px] mt-1 leading-4 line-clamp-2 ${active ? 'text-white/80' : 'text-[#8e8e93]'}`}>{p.stance}</div>}
-                          <div className="flex items-center gap-1 mt-2 flex-wrap">
-                            {(p.personas || []).map((pid: string) => {
-                              const pm = personaMap[pid];
-                              return pm ? (
-                                <span key={pid} className={`text-[10px] px-1.5 py-0.5 rounded-full ${active ? 'bg-white/20 text-white' : 'bg-[rgba(91,158,255,0.1)] text-[#5b9eff]'}`}>
-                                  {pm.emoji} {pm.label}
-                                </span>
-                              ) : null;
-                            })}
+                          <div className="text-[13px] font-semibold tracking-[0.01em]">
+                            {`路线${i + 1}`}
                           </div>
-                          {(p.personas?.length ?? 0) > 0 && (
-                            <div className="flex justify-center mt-1.5">
-                              <RadarChart scores={calcRadarScores(p.personas || [])} size={56} />
-                            </div>
-                          )}
-                          <div className={`text-[10px] mt-1.5 ${active ? 'text-white/60' : 'text-[#8e8e93]'}`}>
-                            {p.stops.length}站 · {p.totalDurationText}
-                          </div>
+                          <span
+                            className={`pointer-events-none absolute inset-x-4 bottom-0 h-[2.5px] rounded-full transition-opacity ${
+                              active ? 'bg-[#1e5fd8] opacity-100' : 'opacity-0'
+                            }`}
+                          />
                         </button>
                       );
                     })}
@@ -1174,18 +1230,18 @@ function RoutePlanAppInner() {
               )}
               <div className="text-[18px] font-bold tracking-[0.01em] text-[#1a1a2e]">{plan.dayTitle}</div>
               {plan.stance && (
-                <div className="mt-1 text-[12px] text-[#5b9eff] font-medium">{plan.stance}</div>
+                <div className="mt-1 text-[12px] text-[#5a5a62] font-medium">{plan.stance}</div>
               )}
               {plan.personas && plan.personas.length > 0 && (
                 <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
                   {plan.personas.map((pid: string) => {
                     const pm: Record<string, string> = {photographer:'📷 拍照党',foodie:'🍜 美食家',value:'💰 性价比',literary:'📚 文青',local:'🏠 老饕',parent:'👶 带娃'};
-                    return pm[pid] ? <span key={pid} className="text-[10px] px-2 py-0.5 rounded-full bg-[rgba(91,158,255,0.1)] text-[#5b9eff] font-medium">{pm[pid]}</span> : null;
+                    return pm[pid] ? <span key={pid} className="rounded-md bg-[rgba(232,242,255,0.65)] px-2 py-1 text-[11px] font-semibold leading-none text-[#5a5a62]">{pm[pid]}</span> : null;
                   })}
                 </div>
               )}
               {!expanded ? (
-                <p className="mt-2 line-clamp-2 pr-10 text-[13px] leading-6 text-[#8e8e93]">{plan.summary}</p>
+                <p className="mt-2 line-clamp-2 pr-10 text-[13px] leading-6 text-[#8c9098]">{plan.summary}</p>
               ) : (
                 <>
                   <div className="mt-3 flex flex-wrap gap-2 text-[12px] font-semibold">
@@ -1205,7 +1261,7 @@ function RoutePlanAppInner() {
             style={{ height: expanded ? `calc(100% - 154px)` : `calc(100% - 92px)` }}
           >
             {expanded ? (
-              <div className="space-y-4 pt-2">
+              <div className="space-y-6 pt-2">
                 {orderedStops.map((stop, index) => {
                   const isSelected = selectedStopId === stop.id;
                   return (
@@ -1220,33 +1276,59 @@ function RoutePlanAppInner() {
                         </div>
                       ) : null}
 
-                      <div
-                        className={`rounded-[24px] ${
-                          isSelected ? 'bg-white/[0.92] shadow-[0_12px_28px_rgba(30,95,216,0.12)] border border-[rgba(140,180,240,0.3)]' : 'bg-white/[0.75]'
-                        }`}
-                      >
-                        <div
-                          className="w-full rounded-[16px] bg-white p-3"
+                      <div className={`${isSelected ? 'rounded-[24px] bg-[rgba(232,242,255,0.38)] p-2' : ''}`}>
+                        <button
+                          type="button"
+                          className="flex w-full items-start gap-4 text-left"
                           onClick={(event) => {
                             event.stopPropagation();
                             setSelectedStopId(stop.id);
+                            setDetailStop(stop);
                           }}
                         >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1 min-w-0">
-                              <span className="shrink-0 w-6 h-6 rounded-full bg-[#5b9eff] text-white text-[11px] font-bold flex items-center justify-center">{index + 1}</span>
-                              <span className="text-[14px] font-bold truncate">{stop.title}</span>
-                              <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded" style={{ color: categoryLabelColorMap[stop.category], background: categoryLabelColorMap[stop.category] + '18' }}>{categoryLabelMap[stop.category]}</span>
+                          <div className="relative shrink-0">
+                            <img src={getStableCardImage(stop)} alt={stop.title} referrerPolicy="no-referrer" className="h-24 w-24 rounded-[22px] object-cover shadow-sm" />
+                            <span className="absolute left-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#5b9eff] text-[11px] font-bold text-white">
+                              {index + 1}
+                            </span>
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="min-w-0">
+                                <div className="truncate text-[18px] font-bold leading-6 text-[#1a1a2e]">{stop.title}</div>
+                                <div className="mt-2 flex flex-wrap gap-1.5">
+                                  <span className="rounded-md bg-[rgba(91,158,255,0.15)] px-2 py-1 text-[11px] font-semibold leading-none text-[#5b9eff]">
+                                    {stop.arriveAt}-{stop.departAt}
+                                  </span>
+                                  <span className="rounded-md bg-[rgba(232,242,255,0.65)] px-2 py-1 text-[11px] font-semibold leading-none text-[#5a5a62]">
+                                    {categoryLabelMap[stop.category]}
+                                  </span>
+                                  {stop.avg_rating ? (
+                                    <span className="rounded-md bg-[rgba(232,242,255,0.65)] px-2 py-1 text-[11px] font-semibold leading-none text-[#5a5a62]">
+                                      {stop.avg_rating}分
+                                    </span>
+                                  ) : null}
+                                  {stop.avg_price ? (
+                                    <span className="rounded-md bg-[rgba(232,242,255,0.65)] px-2 py-1 text-[11px] font-semibold leading-none text-[#5a5a62]">
+                                      人均¥{stop.avg_price}
+                                    </span>
+                                  ) : null}
+                                </div>
+                              </div>
                             </div>
-                            <span className="shrink-0 text-[12px] font-semibold text-[#1a1a2e]">{stop.arriveAt}-{stop.departAt}</span>
+                            <p
+                              className="mt-2 text-[15px] leading-7 text-[#8e8e93]"
+                              style={{
+                                display: '-webkit-box',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden'
+                              }}
+                            >
+                              {stop.desc}
+                            </p>
                           </div>
-                          <div className="flex items-center gap-3 mt-1 text-[11px] text-[#8e8e93]">
-                            {stop.avg_rating ? <span className="text-[#f59e0b]">★{stop.avg_rating}</span> : null}
-                            {stop.review_count ? <span>{stop.review_count}条评价</span> : null}
-                            {stop.avg_price ? <span>人均¥{stop.avg_price}</span> : null}
-                            <span className="ml-auto text-[#5b9eff] font-medium" onClick={(e) => { e.stopPropagation(); setDetailStop(stop); }}>详情→</span>
-                          </div>
-                        </div>
+                        </button>
                         {editMode && (
                           <div className="flex items-center gap-2 px-3 pb-3 pt-1">
                             <button type="button" className="flex-1 py-1.5 rounded-xl bg-[rgba(232,242,255,0.65)] text-[12px] font-semibold text-[#5a5a62]"
@@ -1335,25 +1417,17 @@ function RoutePlanAppInner() {
         </div>
       </div>
 
-      {!loading && plan && expanded ? (
+      {!loading && plan ? (
         <div className="absolute bottom-20 right-4 z-50">
           <button
             type="button"
-            className={`flex h-11 items-center justify-center gap-2 rounded-full px-4 shadow-[0_12px_28px_rgba(30,95,216,0.18)] ${
-              editMode ? 'bg-gradient-to-r from-[#1e5fd8] to-[#5b9eff] text-white' : 'bg-white/[0.9] text-[#1a1a2e] border border-[rgba(140,180,240,0.3)] backdrop-blur-xl'
-            }`}
+            className="flex h-11 items-center justify-center gap-2 rounded-full border border-black/[0.05] bg-white/95 px-4 text-[#17191d] shadow-[0_10px_24px_rgba(15,23,42,0.08)] backdrop-blur-xl"
             onClick={(event) => {
               event.stopPropagation();
-              if (!expanded) snapDrawer(true);
-              setEditMode((prev) => {
-                const next = !prev;
-                showToastMessage(next ? '已进入编辑' : '已退出编辑');
-                return next;
-              });
+              window.location.hash = 'home';
             }}
           >
-            {editMode ? <X className="h-4.5 w-4.5" strokeWidth={2.5} /> : <PenLine className="h-4.5 w-4.5" strokeWidth={2.4} />}
-            <span className="text-[14px] font-semibold">{editMode ? '完成' : '编辑'}</span>
+            <span className="text-[14px] font-semibold text-[#17191d]">回首页</span>
           </button>
         </div>
       ) : null}
@@ -1361,8 +1435,9 @@ function RoutePlanAppInner() {
       {replaceIndex !== null ? (
         <div className="absolute inset-0 z-50 bg-black/24" onClick={() => setReplaceIndex(null)}>
           <div
-            className="absolute inset-x-0 bottom-0 rounded-t-[30px] bg-[#f7f8fb] backdrop-blur-xl px-5 pb-8 pt-3 shadow-[0_-20px_60px_rgba(30,95,216,0.15)]"
+            className="absolute inset-x-0 bottom-0 rounded-t-[30px] bg-[#f7f8fb] backdrop-blur-xl px-5 pb-6 pt-3 shadow-[0_-20px_60px_rgba(30,95,216,0.15)]"
             onClick={(event) => event.stopPropagation()}
+            style={{ maxHeight: '72vh' }}
           >
             <div className="mx-auto h-1 w-9 rounded-full bg-[rgba(140,180,240,0.4)]" />
             <div className="mt-4 flex items-center justify-between">
@@ -1375,23 +1450,70 @@ function RoutePlanAppInner() {
               </button>
             </div>
 
-            <div className="mt-5 space-y-3">
+            <div
+              className="mt-4 pr-1"
+              style={{
+                maxHeight: 'calc(72vh - 92px)',
+                overflowY: 'auto',
+                WebkitOverflowScrolling: 'touch',
+                overscrollBehavior: 'contain',
+                touchAction: 'pan-y'
+              }}
+            >
+              <div className="space-y-3.5 pb-2">
               {candidatePois.map((candidate) => (
                 <button
                   key={candidate.id}
                   type="button"
-                  className="flex w-full items-center gap-4 rounded-[24px] bg-[rgba(232,242,255,0.55)] p-3 text-left"
+                  className="flex w-full items-start gap-3 text-left"
                   onClick={() => handleApplyCandidate(candidate)}
                 >
-                  <img src={candidate.image} alt={candidate.title} referrerPolicy="no-referrer" className="h-16 w-16 rounded-[18px] object-cover" />
-                  <div className="min-w-0 flex-1">
-                    <div className="truncate text-[16px] font-bold">{candidate.title}</div>
-                    <div className="mt-1 text-[12px] font-medium text-[#5b9eff]">{candidate.vibe}</div>
-                    <div className="mt-1 text-[13px] leading-6 text-[#5a5a62]">{candidate.desc}</div>
+                  <div className="shrink-0 overflow-hidden rounded-[18px] shadow-sm" style={{ width: 80, height: 80, flex: '0 0 80px' }}>
+                    <img
+                      src={getStableCardImage(candidate)}
+                      alt={candidate.title}
+                      referrerPolicy="no-referrer"
+                      className="block h-full w-full object-cover"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
                   </div>
-                  <ChevronRight className="h-4.5 w-4.5 text-black/28" strokeWidth={2.2} />
+                  <div className="min-w-0 flex-1" style={{ minWidth: 0, flex: '1 1 auto' }}>
+                    <div className="min-w-0">
+                      <div className="truncate text-[16px] font-bold leading-5 text-[#1a1a2e]">{candidate.title}</div>
+                      <div className="mt-1.5 flex flex-wrap gap-1.5">
+                        <span className="rounded-md bg-[rgba(91,158,255,0.15)] px-2 py-1 text-[10px] font-semibold leading-none text-[#5b9eff]">
+                          {candidate.vibe}
+                        </span>
+                        <span className="rounded-md bg-[rgba(232,242,255,0.65)] px-2 py-1 text-[10px] font-semibold leading-none text-[#5a5a62]">
+                          {categoryLabelMap[candidate.category]}
+                        </span>
+                        {candidate.avg_rating ? (
+                          <span className="rounded-md bg-[rgba(232,242,255,0.65)] px-2 py-1 text-[10px] font-semibold leading-none text-[#5a5a62]">
+                            {candidate.avg_rating}分
+                          </span>
+                        ) : null}
+                        {candidate.avg_price ? (
+                          <span className="rounded-md bg-[rgba(232,242,255,0.65)] px-2 py-1 text-[10px] font-semibold leading-none text-[#5a5a62]">
+                            人均¥{candidate.avg_price}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                    <p
+                      className="mt-1.5 text-[13px] leading-6 text-[#8e8e93]"
+                      style={{
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden'
+                      }}
+                    >
+                      {candidate.desc}
+                    </p>
+                  </div>
                 </button>
               ))}
+              </div>
             </div>
           </div>
         </div>

@@ -2539,6 +2539,7 @@ Router.register('home', (() => {
     }
     function updateUploadBtn() {
         const btn = document.getElementById('imgUploadBtn');
+        if (!btn) return;
         const n = state.thumbs.length;
         // 在📷按钮上叠一个轻量徽章，因为缩略图不再显示在输入框，徽章是用户唯一能看到的「已上传/已识别」反馈
         let badge = btn.querySelector('.upload-badge');
@@ -2679,32 +2680,35 @@ Router.register('home', (() => {
             Router.go('plan');
         });
 
-        document.getElementById('imgUpload').addEventListener('change', (e) => {
-            const files = Array.from(e.target.files || []);
-            if (!files.length) return;
-            const slot = 3 - state.thumbs.length;
-            if (slot <= 0) { showCwToast('最多上传 3 张'); e.target.value = ''; return; }
-            const picks = files.slice(0, slot);
-            if (files.length > slot) showCwToast(`最多 3 张，已保留前 ${slot} 张`);
-            let pending = picks.length;
-            const newThumbs = [];
-            picks.forEach(f => {
-                const r = new FileReader();
-                r.onload = (ev) => {
-                    const t = { url: ev.target.result, name: f.name, status: 'pending' };
-                    state.thumbs.push(t);
-                    newThumbs.push(t);
-                    pending--;
-                    if (pending === 0) {
-                        renderThumbs();
-                        // 全部读取完后触发 AI 识别
-                        recognizePoisFromImages(newThumbs);
-                    }
-                };
-                r.readAsDataURL(f);
+        const imgUploadEl = document.getElementById('imgUpload');
+        if (imgUploadEl) {
+            imgUploadEl.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files || []);
+                if (!files.length) return;
+                const slot = 3 - state.thumbs.length;
+                if (slot <= 0) { showCwToast('最多上传 3 张'); e.target.value = ''; return; }
+                const picks = files.slice(0, slot);
+                if (files.length > slot) showCwToast(`最多 3 张，已保留前 ${slot} 张`);
+                let pending = picks.length;
+                const newThumbs = [];
+                picks.forEach(f => {
+                    const r = new FileReader();
+                    r.onload = (ev) => {
+                        const t = { url: ev.target.result, name: f.name, status: 'pending' };
+                        state.thumbs.push(t);
+                        newThumbs.push(t);
+                        pending--;
+                        if (pending === 0) {
+                            renderThumbs();
+                            // 全部读取完后触发 AI 识别
+                            recognizePoisFromImages(newThumbs);
+                        }
+                    };
+                    r.readAsDataURL(f);
+                });
+                e.target.value = '';
             });
-            e.target.value = '';
-        });
+        }
 
         document.getElementById('recRefreshBtn').addEventListener('click', refreshRecs);
 
@@ -3125,7 +3129,7 @@ Router.register('settings', (() => {
  * ===================================================================== */
 Router.start();
 </script>
-<script src="./explore-route.bundle.js"></script>
-<script src="./route-plan.bundle.js"></script>
+<script src="./explore-route.bundle.js?v=20260607c"></script>
+<script src="./route-plan.bundle.js?v=20260607c"></script>
 </body>
 </html>

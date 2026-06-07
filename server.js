@@ -205,6 +205,86 @@ function extractJson(text) {
     try { return JSON.parse(candidate.slice(a, b + 1)); } catch { return null; }
 }
 
+function getLLMProviders() {
+    const providers = [];
+    if (DEEPSEEK_API_KEY) providers.push({ url: DEEPSEEK_API_URL, key: DEEPSEEK_API_KEY, model: DEEPSEEK_MODEL, name: 'DeepSeek' });
+    if (ARK_API_KEY) providers.push({ url: ARK_API_URL_TEXT, key: ARK_API_KEY, model: ARK_TEXT_MODEL, name: 'ARK' });
+    return providers;
+}
+
+async function chatJson(systemPrompt, userPayload, { temperature = 0.4 } = {}) {
+    const providers = getLLMProviders();
+    if (!providers.length) throw new Error('server missing LLM API key');
+    const messages = [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: typeof userPayload === 'string' ? userPayload : JSON.stringify(userPayload) }
+    ];
+    for (const provider of providers) {
+        try {
+            const r = await fetchWithTimeout(provider.url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + provider.key },
+                body: JSON.stringify({
+                    model: provider.model,
+                    messages,
+                    temperature,
+                    response_format: { type: 'json_object' }
+                })
+            });
+            const text = await r.text();
+            if (!r.ok) {
+                console.error(`[llm] ${provider.name} json error ${r.status}:`, text.slice(0, 300));
+                continue;
+            }
+            let data;
+            try { data = JSON.parse(text); } catch { continue; }
+            let outText = '';
+            if (data && Array.isArray(data.choices) && data.choices[0]?.message?.content) {
+                outText = data.choices[0].message.content;
+            } else if (typeof data.output_text === 'string') {
+                outText = data.output_text;
+            }
+            const parsed = extractJson(outText);
+            if (parsed && typeof parsed === 'object') return parsed;
+        } catch (e) {
+            console.error(`[llm] ${provider.name} json failed:`, e.message);
+        }
+    }
+    throw new Error('all LLM providers failed');
+}
+
+async function chatText(systemPrompt, userPayload, { temperature = 0.3 } = {}) {
+    const providers = getLLMProviders();
+    if (!providers.length) throw new Error('server missing LLM API key');
+    const messages = [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: typeof userPayload === 'string' ? userPayload : JSON.stringify(userPayload) }
+    ];
+    for (const provider of providers) {
+        try {
+            const r = await fetchWithTimeout(provider.url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + provider.key },
+                body: JSON.stringify({ model: provider.model, messages, temperature })
+            });
+            const text = await r.text();
+            if (!r.ok) {
+                console.error(`[llm] ${provider.name} text error ${r.status}:`, text.slice(0, 300));
+                continue;
+            }
+            let data;
+            try { data = JSON.parse(text); } catch { return text; }
+            if (data && Array.isArray(data.choices) && data.choices[0]?.message?.content) {
+                return data.choices[0].message.content;
+            }
+            if (typeof data.output_text === 'string') return data.output_text;
+        } catch (e) {
+            console.error(`[llm] ${provider.name} text failed:`, e.message);
+        }
+    }
+    throw new Error('all LLM providers failed');
+}
+
 function normalizeRefine(raw) {
     const f = raw && typeof raw === 'object' ? raw : {};
     const str = (v) => (typeof v === 'string' ? v.trim() : '');
@@ -222,6 +302,201 @@ function normalizeRefine(raw) {
         style:  str(f.style),
         other:  str(f.other),
     };
+}
+
+const HIGHLIGHT_SYSTEM_PROMPT = `你是点评文本高亮助手。
+你会收到一条用户评论，以及可选的路线上下文。
+
+任务：
+1. 从评论里提取一个最值得高亮的短语。
+2. 短语必须直接摘自原评论，不要改写。
+3. 控制在 2-16 个汉字或等价短文本。
+4. 只输出合法 JSON：{"phrase":"..."}。`;
+
+const SUMMARY_SYSTEM_PROMPT = `你是 CityWalk 方案总结助手。
+给定一个路线方案和若干用户评论，输出简洁、可信、面向用户的总结。
+
+只输出合法 JSON：
+{
+  "digest": "1句总结，18-40字",
+  "fitFor": ["适合人群1", "适合人群2", "适合人群3"],
+  "notFor": ["不适合人群1", "不适合人群2"],
+  "basedOn": "基于X条评论"
+}
+
+要求：
+1. 不要夸张，不要编造评论里没有体现的偏好。
+2. fitFor 最多 3 项，notFor 最多 2 项。
+3. 语言自然、简练。`;
+
+const MEMORY_SYSTEM_PROMPT = `你是本地生活用户画像分析助手。
+请根据用户基础资料、收藏、评论，生成一个稳定、克制的 MemoryImage JSON。
+
+只输出合法 JSON，结构必须为：
+{
+  "version": 1,
+  "generated_at": "ISO_DATETIME",
+  "summary": "一句话画像",
+  "dominantPersonas": [{"persona_id":"literary|foodie|value|photographer|local|parent","weight":0.75,"evidence":"证据"}],
+  "priceSensitivity": 0.5,
+  "preferredCategories": [{"name":"咖啡","weight":0.8}],
+  "dislikeSignals": ["信号1", "信号2", "信号3"],
+  "timePatterns": {"favorite_window":"14:00-19:00","weekend_active":true},
+  "sourceStats": {"favorites_count": 0, "reviews_count": 0, "since": "2026-01"}
+}
+
+规则：
+1. 只在以下 persona_id 中选择：literary、foodie、value、photographer、local、parent。
+2. dominantPersonas 返回 2-3 项，weight 为 0-1 的数字。
+3. preferredCategories 返回 3-5 项。
+4. 结合显式证据，不要编造过强结论。
+5. generated_at 用 ISO 时间字符串。`;
+
+function sanitizeMemoryImage(raw, fallbackStats = {}) {
+    const personas = ['literary', 'foodie', 'value', 'photographer', 'local', 'parent'];
+    const num = (v, d = 0) => {
+        const n = Number(v);
+        return Number.isFinite(n) ? n : d;
+    };
+    const str = (v, d = '') => (typeof v === 'string' && v.trim() ? v.trim() : d);
+    const dominantPersonas = Array.isArray(raw?.dominantPersonas)
+        ? raw.dominantPersonas
+            .map(p => ({
+                persona_id: personas.includes(p?.persona_id) ? p.persona_id : null,
+                weight: Math.max(0, Math.min(1, num(p?.weight, 0.5))),
+                evidence: str(p?.evidence, '基于近期行为推断')
+            }))
+            .filter(p => p.persona_id)
+            .slice(0, 3)
+        : [];
+    const preferredCategories = Array.isArray(raw?.preferredCategories)
+        ? raw.preferredCategories
+            .map(x => ({
+                name: str(x?.name),
+                weight: Math.max(0, Math.min(1, num(x?.weight, 0.5)))
+            }))
+            .filter(x => x.name)
+            .slice(0, 5)
+        : [];
+    const dislikeSignals = Array.isArray(raw?.dislikeSignals)
+        ? raw.dislikeSignals.map(x => str(x)).filter(Boolean).slice(0, 3)
+        : [];
+    return {
+        version: Math.max(1, Math.round(num(raw?.version, fallbackStats.version || 1))),
+        generated_at: str(raw?.generated_at, new Date().toISOString()),
+        summary: str(raw?.summary, '一个偏好城市探索的本地生活用户'),
+        dominantPersonas: dominantPersonas.length ? dominantPersonas : [
+            { persona_id: 'local', weight: 0.6, evidence: '基于近期浏览与互动推断' },
+            { persona_id: 'foodie', weight: 0.5, evidence: '收藏与评论中存在美食相关线索' }
+        ],
+        priceSensitivity: Math.max(0, Math.min(1, num(raw?.priceSensitivity, 0.5))),
+        preferredCategories: preferredCategories.length ? preferredCategories : [
+            { name: '本地生活', weight: 0.7 },
+            { name: 'CityWalk', weight: 0.6 },
+            { name: '咖啡', weight: 0.5 }
+        ],
+        dislikeSignals: dislikeSignals.length ? dislikeSignals : ['不爱拥挤', '偏好真实体验'],
+        timePatterns: {
+            favorite_window: str(raw?.timePatterns?.favorite_window, '14:00-19:00'),
+            weekend_active: !!raw?.timePatterns?.weekend_active,
+        },
+        sourceStats: {
+            favorites_count: Math.max(0, Math.round(num(raw?.sourceStats?.favorites_count, fallbackStats.favorites_count || 0))),
+            reviews_count: Math.max(0, Math.round(num(raw?.sourceStats?.reviews_count, fallbackStats.reviews_count || 0))),
+            since: str(raw?.sourceStats?.since, fallbackStats.since || '—'),
+        }
+    };
+}
+
+async function handleHealth(req, res) {
+    if (req.method !== 'GET') return sendJson(res, 405, { error: 'method not allowed' });
+    const providers = getLLMProviders().map(x => x.name);
+    sendJson(res, 200, {
+        ok: true,
+        has_key: providers.length > 0,
+        providers
+    });
+}
+
+async function handleLLM(req, res) {
+    if (req.method !== 'POST') return sendJson(res, 405, { error: 'method not allowed' });
+    if (!HAS_LLM) return sendJson(res, 503, { error: 'server missing LLM API key' });
+
+    let payload;
+    try {
+        const buf = await readBody(req, 2 * 1024 * 1024);
+        payload = JSON.parse(buf.toString('utf8'));
+    } catch (e) {
+        return sendJson(res, 400, { error: 'invalid json body: ' + e.message });
+    }
+
+    const method = String(payload?.method || '').trim();
+    const input = payload?.payload || {};
+    if (!method) return sendJson(res, 400, { error: 'missing method' });
+
+    try {
+        if (method === 'highlightReviewKeyPhrase') {
+            const reviewText = String(input?.reviewText || '').trim();
+            if (!reviewText) return sendJson(res, 400, { error: 'missing reviewText' });
+            const parsed = await chatJson(HIGHLIGHT_SYSTEM_PROMPT, {
+                reviewText,
+                planContext: String(input?.planContext || '').trim()
+            }, { temperature: 0.2 });
+            const phrase = String(parsed?.phrase || '').trim() || reviewText.slice(0, 8);
+            return sendJson(res, 200, { result: phrase.slice(0, 32) });
+        }
+
+        if (method === 'summarizePlan') {
+            const plan = input?.plan || {};
+            const reviews = Array.isArray(input?.reviews) ? input.reviews.slice(0, 12) : [];
+            const result = await chatJson(SUMMARY_SYSTEM_PROMPT, {
+                plan: {
+                    id: plan?.id,
+                    title: plan?.title,
+                    subtitle: plan?.subtitle,
+                    stance: plan?.stance,
+                },
+                reviews
+            }, { temperature: 0.4 });
+            return sendJson(res, 200, {
+                result: {
+                    digest: String(result?.digest || '这是一条节奏均衡、适合城市漫游的路线。').trim(),
+                    fitFor: Array.isArray(result?.fitFor) ? result.fitFor.map(x => String(x).trim()).filter(Boolean).slice(0, 3) : [],
+                    notFor: Array.isArray(result?.notFor) ? result.notFor.map(x => String(x).trim()).filter(Boolean).slice(0, 2) : [],
+                    basedOn: String(result?.basedOn || `基于${reviews.length}条评论`).trim(),
+                }
+            });
+        }
+
+        if (method === 'analyzeUserMemory') {
+            const profile = input?.profile || {};
+            const favorites = Array.isArray(input?.favorites) ? input.favorites.slice(0, 60) : [];
+            const reviews = Array.isArray(input?.reviews) ? input.reviews.slice(0, 60) : [];
+            const previousImage = input?.previousImage || null;
+            const raw = await chatJson(MEMORY_SYSTEM_PROMPT, {
+                profile,
+                favorites,
+                reviews,
+                previousImage
+            }, { temperature: 0.35 });
+            const result = sanitizeMemoryImage(raw, {
+                version: Number(previousImage?.version || 0) + 1,
+                favorites_count: favorites.length,
+                reviews_count: reviews.length,
+                since: profile?.join_date || '—',
+            });
+            return sendJson(res, 200, { result });
+        }
+
+        if (method === 'extractPitfalls' || method === 'extractImplicitTags' || method === 'personaDebate' || method === 'narrateChapters') {
+            return sendJson(res, 501, { error: `method not implemented: ${method}` });
+        }
+
+        return sendJson(res, 400, { error: `unsupported method: ${method}` });
+    } catch (e) {
+        console.error(`[llm] ${method} failed:`, e.message);
+        return sendJson(res, 502, { error: e.message || 'llm failed' });
+    }
 }
 
 async function handleRefine(req, res) {
@@ -398,7 +673,6 @@ function enrichPlanWithPois(plan, poisMap) {
 
 async function handlePlan(req, res) {
     if (req.method !== 'POST') return sendJson(res, 405, { error: 'method not allowed' });
-    if (!HAS_LLM) return sendJson(res, 500, { error: 'server missing LLM API key' });
 
     let payload;
     try {
@@ -436,6 +710,16 @@ async function handlePlan(req, res) {
     // 构建 POI 索引
     const poisMap = {};
     allPois.forEach(p => { poisMap[p.poi_id] = p; });
+
+    if (!HAS_LLM) {
+        const fallback = buildFallbackPlan(allPois);
+        const enriched = enrichPlanWithPois(fallback, poisMap);
+        return sendJson(res, 200, {
+            plans: [enriched],
+            fallback: true,
+            reason: 'server missing LLM API key'
+        });
+    }
 
     // 构建候选 POI 摘要（精简信息发给 LLM，避免 token 过多）
     const poiSummaries = allPois.map(p => ({
@@ -477,6 +761,7 @@ async function handlePlan(req, res) {
     ];
 
     let llmSuccess = false;
+    let fallbackReason = 'all LLM providers failed';
     for (const provider of llmProviders) {
         try {
             console.log(`[plan] trying ${provider.name}...`);
@@ -488,6 +773,11 @@ async function handlePlan(req, res) {
             const text = await r.text();
             if (!r.ok) {
                 console.error(`[plan] ${provider.name} error ${r.status}:`, text.slice(0, 300));
+                if (r.status === 402 && /Insufficient Balance/i.test(text)) {
+                    fallbackReason = `${provider.name} insufficient balance`;
+                } else {
+                    fallbackReason = `${provider.name} error ${r.status}`;
+                }
                 continue;
             }
             let data;
@@ -509,17 +799,19 @@ async function handlePlan(req, res) {
                 llmSuccess = true; break;
             } else {
                 console.warn(`[plan] ${provider.name} returned unparseable, trying next...`);
+                fallbackReason = `${provider.name} returned unparseable`;
                 continue;
             }
         } catch (e) {
             console.error(`[plan] ${provider.name} fetch failed:`, e.message);
+            fallbackReason = `${provider.name} fetch failed`;
             continue;
         }
     }
     if (!llmSuccess) {
         const fallback = buildFallbackPlan(allPois);
         const enriched = enrichPlanWithPois(fallback, poisMap);
-        sendJson(res, 200, { plans: [enriched], fallback: true, reason: 'all LLM providers failed' });
+        sendJson(res, 200, { plans: [enriched], fallback: true, reason: fallbackReason });
     }
 }
 
@@ -673,6 +965,8 @@ function serveStatic(req, res) {
 
 /* ============== 入口 ============== */
 const server = http.createServer((req, res) => {
+    if (req.url.startsWith('/api/health')) return handleHealth(req, res);
+    if (req.url.startsWith('/api/llm'))    return handleLLM(req, res);
     if (req.url.startsWith('/api/vision')) return handleVision(req, res);
     if (req.url.startsWith('/api/refine')) return handleRefine(req, res);
     if (req.url.startsWith('/api/plan'))   return handlePlan(req, res);
