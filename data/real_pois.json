@@ -651,7 +651,8 @@
           "highlight": "提拉米苏18元"
         }
       ],
-      "deals": []
+      "deals": [],
+      "dp_image": "https://img.meituan.net/kylisean/f196bf4d7c5424819db649418a00a35f15270335.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0"
     },
     {
       "poi_id": "dp_aniang_noodle",
@@ -703,7 +704,8 @@
           "highlight": "14点关门别踩空"
         }
       ],
-      "deals": []
+      "deals": [],
+      "dp_image": "https://p0.meituan.net/biztone/b3ea40e3bc770698d3f18cc17bfea0d0377604.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0"
     },
     {
       "poi_id": "dp_laohuza",
@@ -759,7 +761,8 @@
       ],
       "deals": [],
       "dp_shop_id": "H545GUVvNuYj60DV",
-      "dp_name": "老虎灶(源城·锦翠苑店)"
+      "dp_name": "老虎灶(源城·锦翠苑店)",
+      "dp_image": "https://img.meituan.net/msmerchant/8ffa80bfeddca02f554d990d09f35d0117229.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0"
     },
     {
       "poi_id": "dp_binjiang",

@@ -453,10 +453,10 @@ const defaultSpots: Spot[] = [
     planTag: '4300条评价',
     distanceTag: '免费',
     desc: '五原路菜场旁边的水果摊是全上海最有烟火气的角落。阿姨切水果的刀法是艺术。',
-    image: scenicPhoto('五原路', { top: '#A7F3D0', bottom: '#059669', accent: '#FDE68A', accent2: '#99F6E4' }),
+    image: 'https://img.meituan.net/kylisean/f196bf4d7c5424819db649418a00a35f15270335.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0',
     lng: 121.4382,
     lat: 31.2098,
-    gallery: [],
+    gallery: ['https://img.meituan.net/kylisean/f196bf4d7c5424819db649418a00a35f15270335.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0'],
     intro: '五原路菜场旁边的水果摊是全上海最有烟火气的角落。阿姨切水果的刀法是艺术。 藏在梧桐树下的小路，游客很少。有几家独立设计师店值得逛。 无问西东那家甜品店，提拉米苏才 18 块，味道不输大牌甜品店。',
     hours: '全天开放',
     dianpingPosts: [
@@ -479,10 +479,10 @@ const defaultSpots: Spot[] = [
     planTag: '6500条评价',
     distanceTag: '人均¥28',
     desc: '黄鱼面 28 块，汤头浓到可以拿来拌饭。早上 7 点来基本不排队。',
-    image: scenicPhoto('阿娘面馆', { top: '#FCA5A5', bottom: '#DC2626', accent: '#FDE68A', accent2: '#BBF7D0' }),
+    image: 'https://p0.meituan.net/biztone/b3ea40e3bc770698d3f18cc17bfea0d0377604.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0',
     lng: 121.4682,
     lat: 31.2185,
-    gallery: [],
+    gallery: ['https://p0.meituan.net/biztone/b3ea40e3bc770698d3f18cc17bfea0d0377604.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0'],
     intro: '黄鱼面 28 块，汤头浓到可以拿来拌饭。早上 7 点来基本不排队。 11 点以后排队二三十分钟是常态。面条偏软，喜欢硬面的可以跟老板说。 大肠面和辣肉面也不错。下午 2 点就关门了，别踩空。',
     hours: '06:30-14:00',
     dianpingPosts: [
@@ -505,10 +505,10 @@ const defaultSpots: Spot[] = [
     planTag: '3200条评价',
     distanceTag: '人均¥22',
     desc: '蟹粉小笼三两 48，汤汁真的鲜。先咬个小口吸汤，别直接一口闷。',
-    image: scenicPhoto('老虎灶', { top: '#F59E0B', bottom: '#B45309', accent: '#BBF7D0', accent2: '#93C5FD' }),
+    image: 'https://img.meituan.net/msmerchant/8ffa80bfeddca02f554d990d09f35d0117229.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0',
     lng: 121.4815,
     lat: 31.2125,
-    gallery: [],
+    gallery: ['https://img.meituan.net/msmerchant/8ffa80bfeddca02f554d990d09f35d0117229.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0'],
     intro: '蟹粉小笼三两 48，汤汁真的鲜。先咬个小口吸汤，别直接一口闷。 7 点半到刚好不排队。锅贴也值得一试，底部煎得焦脆。 环境确实一般，苍蝇馆子风格。但味道是真的好，别在意装修。',
     hours: '06:00-13:00',
     dianpingPosts: [
@@ -1023,8 +1023,7 @@ function ExploreRouteAppInner() {
                     className="flex w-full items-start gap-4 text-left"
                     onClick={() => openSpot(spot.id)}
                   >
-                    <img src={spot.image} alt={spot.title} referrerPolicy="no-referrer" className="h-24 w-24 shrink-0 rounded-[22px] object-cover shadow-sm"
-                      onError={(e) => { const t = e.currentTarget as HTMLImageElement; const fb = scenicPhoto((spot.title || '').slice(0, 6), { top: '#89CFF0', bottom: '#4E87B7', accent: '#B9D98D', accent2: '#E7C97F' }); if (t.src !== fb) t.src = fb; }} />
+                    <img src={spot.image} alt={spot.title} referrerPolicy="no-referrer" className="h-24 w-24 shrink-0 rounded-[22px] object-cover shadow-sm" />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
@@ -1132,7 +1131,6 @@ function ExploreRouteAppInner() {
                     alt={`${detailSpot.title}-${index + 1}`}
                     referrerPolicy="no-referrer"
                     className="h-[160px] w-[280px] shrink-0 rounded-[26px] object-cover"
-                    onError={(e) => { const t = e.currentTarget as HTMLImageElement; const fb = scenicPhoto((detailSpot.title || '').slice(0, 6), { top: '#89CFF0', bottom: '#4E87B7', accent: '#B9D98D', accent2: '#E7C97F' }); if (t.src !== fb) t.src = fb; }}
                   />
                 ))}
               </div>

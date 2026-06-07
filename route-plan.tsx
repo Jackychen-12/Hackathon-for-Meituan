@@ -121,9 +121,24 @@ const CATEGORY_LABEL_MAP: Record<CategoryId, string> = {
 };
 
 function getStableCardImage(item: { title: string; category: CategoryId; image?: string }) {
-  if (item.image?.startsWith('data:image/')) return item.image;
+  if (item.image) return item.image;
   return scenicPhoto(item.title.slice(0, 6), cardPaletteMap[item.category] || cardPaletteMap.sight);
 }
+
+function getFallbackCardImage(item: { title: string; category: CategoryId }) {
+  return scenicPhoto(item.title.slice(0, 6), cardPaletteMap[item.category] || cardPaletteMap.sight);
+}
+
+const realPlaceImages: Record<string, string> = {
+  '武康路': 'https://p0.meituan.net/tdctraveldark/f13f09278bb0752dd65b42fd9668ec68364043.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0',
+  '安福路': 'https://img.meituan.net/kylisean/f196bf4d7c5424819db649418a00a35f15270335.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0',
+  '老吉士': 'https://p0.meituan.net/biztone/b3ea40e3bc770698d3f18cc17bfea0d0377604.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0',
+  '红宝石': 'https://p0.meituan.net/biztone/28d68accfb17606ee01a6e1c82a22236367582.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0',
+  '巨鹿路': 'https://p0.meituan.net/dpmerchantpic/ebc2bccded1bf3a8b02adcf28f163674410216.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0',
+  '永康路咖啡': 'https://p1.meituan.net/merchant/aa20f9b671354897ba4ac673a202de02934486.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0',
+  '徐汇滨江': 'https://img.meituan.net/content/e7e05be59f019d8d82feb1d75bdfbb52166809.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0',
+  '上海中心大厦': 'https://p0.meituan.net/tdctraveldark/4371fd08e5831f3ffa4ba6a71cd215c71188656.jpg%40340w_255h_1e_1c_1l%7Cwatermark%3D0',
+};
 
 function escapeXml(value: string) {
   return String(value || '')
@@ -249,7 +264,7 @@ const catalog: CatalogPoi[] = [
     area: '衡复/徐汇',
     desc: '梧桐掩映的老洋房街区，武康大楼是必拍地标，适合作为路线的开场漫步。',
     vibe: '梧桐漫步',
-    image: scenicPhoto('武康路', { top: '#89CFF0', bottom: '#4E87B7', accent: '#B9D98D', accent2: '#E7C97F' }),
+    image: realPlaceImages['武康路'],
     x: 42, y: 30, stayMin: 60, lng: 121.4365, lat: 31.2084,
     keywords: ['梧桐', '老洋房', '散步', '拍照', '街区', '景点']
   },
@@ -260,7 +275,7 @@ const catalog: CatalogPoi[] = [
     area: '衡复/徐汇',
     desc: '买手店和独立咖啡馆扎堆，逛街、拍照、喝咖啡都能无缝衔接。',
     vibe: '潮流街区',
-    image: scenicPhoto('安福路', { top: '#7D8D9F', bottom: '#334155', accent: '#D8B4FE', accent2: '#C084FC' }),
+    image: realPlaceImages['安福路'],
     x: 38, y: 38, stayMin: 75, lng: 121.4378, lat: 31.2122,
     keywords: ['购物', '买手店', '逛街', '咖啡', '潮流', '拍照']
   },
@@ -271,7 +286,7 @@ const catalog: CatalogPoi[] = [
     area: '衡复/徐汇',
     desc: '地道本帮菜馆，浓油赤酱老上海味道，适合作为路线中的正餐站点。',
     vibe: '本帮味道',
-    image: scenicPhoto('老吉士', { top: '#D9C3A4', bottom: '#A16207', accent: '#FDE68A', accent2: '#A3E635' }),
+    image: realPlaceImages['老吉士'],
     x: 48, y: 42, stayMin: 80, lng: 121.4412, lat: 31.2055,
     keywords: ['吃饭', '美食', '本帮菜', '餐厅', '老上海']
   },
@@ -282,7 +297,7 @@ const catalog: CatalogPoi[] = [
     area: '衡复/徐汇',
     desc: '经典奶油小方和鲜奶蛋糕，老上海甜蜜记忆，很适合下午茶歇脚。',
     vibe: '经典西点',
-    image: scenicPhoto('红宝石', { top: '#FBCFE8', bottom: '#BE185D', accent: '#F9A8D4', accent2: '#FDE68A' }),
+    image: realPlaceImages['红宝石'],
     x: 52, y: 35, stayMin: 40, lng: 121.4488, lat: 31.2098,
     keywords: ['甜品', '蛋糕', '下午茶', '咖啡', '经典']
   },
@@ -293,7 +308,7 @@ const catalog: CatalogPoi[] = [
     area: '衡复/徐汇',
     desc: '文艺小店和网红餐厅密集，适合边走边拍，作为路线中的质感转场。',
     vibe: '文艺街巷',
-    image: scenicPhoto('巨鹿路', { top: '#8DD3C7', bottom: '#4B8E7B', accent: '#C6E48B', accent2: '#9AD0F5' }),
+    image: realPlaceImages['巨鹿路'],
     x: 58, y: 28, stayMin: 55, lng: 121.4512, lat: 31.2195,
     keywords: ['文艺', '街巷', '拍照', '小店', '夜逛']
   },
@@ -304,7 +319,7 @@ const catalog: CatalogPoi[] = [
     area: '衡复/徐汇',
     desc: '精品咖啡一条街，适合在路线中间放慢节奏补充能量。',
     vibe: '精品咖啡',
-    image: scenicPhoto('永康路咖啡', { top: '#A7F3D0', bottom: '#059669', accent: '#FDE68A', accent2: '#99F6E4' }),
+    image: realPlaceImages['永康路咖啡'],
     x: 45, y: 50, stayMin: 50, lng: 121.4492, lat: 31.2058,
     keywords: ['咖啡', '饮品', '休息', '文艺', '街区']
   },
@@ -315,7 +330,7 @@ const catalog: CatalogPoi[] = [
     area: '徐汇区',
     desc: '黄浦江边开阔散步道，适合傍晚看日落和城市天际线。',
     vibe: '江边漫步',
-    image: scenicPhoto('徐汇滨江', { top: '#B6E0FE', bottom: '#7DD3FC', accent: '#93C5FD', accent2: '#FDE68A' }),
+    image: realPlaceImages['徐汇滨江'],
     x: 30, y: 68, stayMin: 70, lng: 121.4505, lat: 31.1832,
     keywords: ['江', '日落', '散步', '夜景', '公园', '拍照']
   },
@@ -326,7 +341,7 @@ const catalog: CatalogPoi[] = [
     area: '浦东新区',
     desc: '632 米城市地标，观光层俯瞰全城，适合作为路线的高潮或收尾。',
     vibe: '城市之巅',
-    image: scenicPhoto('上海中心大厦', { top: '#1E3A8A', bottom: '#0F172A', accent: '#F5D061', accent2: '#F59E0B' }),
+    image: realPlaceImages['上海中心大厦'],
     x: 78, y: 45, stayMin: 90, lng: 121.5055, lat: 31.2335,
     keywords: ['景点', '拍照', '地标', '经典', '夜景', '观光']
   }
@@ -1545,7 +1560,13 @@ function RoutePlanAppInner() {
                           }}
                         >
                           <div className="relative shrink-0">
-                            <img src={getStableCardImage(stop)} alt={stop.title} referrerPolicy="no-referrer" className="h-24 w-24 rounded-[22px] object-cover shadow-sm" />
+                            <img
+                              src={getStableCardImage(stop)}
+                              alt={stop.title}
+                              referrerPolicy="no-referrer"
+                              className="h-24 w-24 rounded-[22px] object-cover shadow-sm"
+                              onError={(e) => { (e.currentTarget as HTMLImageElement).src = getFallbackCardImage(stop); }}
+                            />
                             <span className="absolute left-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[#5b9eff] text-[11px] font-bold text-white">
                               {index + 1}
                             </span>
@@ -1728,6 +1749,7 @@ function RoutePlanAppInner() {
                       referrerPolicy="no-referrer"
                       className="block h-full w-full object-cover"
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).src = getFallbackCardImage(candidate); }}
                     />
                   </div>
                   <div className="min-w-0 flex-1" style={{ minWidth: 0, flex: '1 1 auto' }}>
@@ -1813,7 +1835,7 @@ function RoutePlanAppInner() {
             <div className="mt-4 overflow-y-auto px-6 pb-8" style={{ maxHeight: 'calc(70vh - 100px)' }}>
               {detailStop.image && (
                 <img src={detailStop.image} alt="" referrerPolicy="no-referrer" className="w-full h-[160px] rounded-[22px] object-cover mb-4"
-                  onError={(e) => { const t = e.currentTarget as HTMLImageElement; const fb = getStableCardImage({ title: detailStop.title || '', category: (detailStop as any).category }); if (t.src !== fb) t.src = fb; }} />
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
               )}
               <div className="text-[14px] leading-7 text-[#5a5a62] mb-4">{detailStop.desc}</div>
               {detailStop.business_hours && (
