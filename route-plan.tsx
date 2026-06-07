@@ -3,9 +3,10 @@ import { createRoot } from 'react-dom/client';
 import {
   ChevronDown,
   ChevronRight,
+  Download,
   Footprints,
+  Star,
   Share2,
-  Route,
   Sparkles,
   X
 } from 'lucide-react';
@@ -18,7 +19,7 @@ type PendingQuery = {
   images?: string[];
   presets?: Record<string, string | null>;
   pois?: Array<{ name: string; desc?: string }>;
-  source?: 'home' | 'explore' | 'adjust';
+  source?: 'home' | 'explore' | 'adjust' | 'favorite';
   region?: string;
   city?: string;
   personas?: string[];
@@ -70,6 +71,19 @@ type RoutePlan = {
   stance?: string;
 };
 
+type FavoriteRouteItem = {
+  id: string;
+  fingerprint: string;
+  title: string;
+  savedAt: string;
+  plan: RoutePlan;
+  query: PendingQuery;
+  cityName?: string;
+};
+
+const FAVORITE_ROUTES_KEY = 'cw_favorite_routes';
+const ROUTE_SNAPSHOT_KEY = 'cw_open_route_snapshot';
+
 const makeDataUri = (svg: string) => `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 
 const scenicPhoto = (title: string, palette: { top: string; bottom: string; accent: string; accent2: string }) =>
@@ -98,10 +112,133 @@ const cardPaletteMap: Record<CategoryId, { top: string; bottom: string; accent: 
   shopping: { top: '#7D8D9F', bottom: '#334155', accent: '#D8B4FE', accent2: '#C084FC' },
   stay: { top: '#1E3A8A', bottom: '#0F172A', accent: '#F5D061', accent2: '#F59E0B' },
 };
+const CATEGORY_LABEL_MAP: Record<CategoryId, string> = {
+  sight: '景点',
+  food: '吃喝',
+  drink: '喝咖',
+  shopping: '购物',
+  stay: '住宿'
+};
 
 function getStableCardImage(item: { title: string; category: CategoryId; image?: string }) {
   if (item.image?.startsWith('data:image/')) return item.image;
   return scenicPhoto(item.title.slice(0, 6), cardPaletteMap[item.category] || cardPaletteMap.sight);
+}
+
+function escapeXml(value: string) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function wrapPosterText(text: string, maxUnits: number, maxLines: number) {
+  const lines: string[] = [];
+  let current = '';
+  let units = 0;
+  const source = String(text || '').replace(/\s+/g, ' ').trim();
+  const charUnits = (char: string) => /[\u0000-\u00ff]/.test(char) ? 0.55 : 1;
+
+  for (const char of source) {
+    const nextUnits = units + charUnits(char);
+    if (nextUnits > maxUnits && current) {
+      lines.push(current);
+      current = char;
+      units = charUnits(char);
+      if (lines.length === maxLines) break;
+    } else {
+      current += char;
+      units = nextUnits;
+    }
+  }
+  if (lines.length < maxLines && current) lines.push(current);
+  if (lines.length > maxLines) lines.length = maxLines;
+  if (lines.length === maxLines && source.length > lines.join('').length) {
+    lines[maxLines - 1] = `${lines[maxLines - 1].slice(0, Math.max(0, lines[maxLines - 1].length - 1))}…`;
+  }
+  return lines;
+}
+
+function buildSharePoster(plan: RoutePlan, cityName: string) {
+  const width = 720;
+  const padding = 36;
+  const stopCardHeight = 124;
+  const headerHeight = 220;
+  const footerHeight = 110;
+  const totalHeight = headerHeight + plan.stops.length * stopCardHeight + footerHeight;
+  const summaryLines = wrapPosterText(plan.summary, 21, 2);
+  const defs: string[] = [];
+
+  const stopBlocks = plan.stops.map((stop, index) => {
+    const top = headerHeight + index * stopCardHeight;
+    const imageHref = getStableCardImage(stop);
+    const imageId = `poster-stop-${index}`;
+    defs.push(`
+      <clipPath id="${imageId}">
+        <rect x="${padding + 18}" y="${top + 18}" width="88" height="88" rx="22" ry="22" />
+      </clipPath>
+    `);
+    const descLines = wrapPosterText(stop.desc, 23, 2);
+    return `
+      <g>
+        <rect x="${padding}" y="${top}" width="${width - padding * 2}" height="104" rx="28" fill="rgba(255,255,255,0.92)" />
+        <image href="${imageHref}" x="${padding + 18}" y="${top + 18}" width="88" height="88" preserveAspectRatio="xMidYMid slice" clip-path="url(#${imageId})" />
+        <circle cx="${padding + 38}" cy="${top + 38}" r="16" fill="#5b9eff" />
+        <text x="${padding + 38}" y="${top + 44}" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">${index + 1}</text>
+        <text x="${padding + 126}" y="${top + 36}" font-size="24" font-weight="700" fill="#1a1a2e">${escapeXml(stop.title)}</text>
+        <rect x="${padding + 126}" y="${top + 50}" width="110" height="26" rx="13" fill="rgba(91,158,255,0.12)" />
+        <text x="${padding + 181}" y="${top + 68}" text-anchor="middle" font-size="13" font-weight="600" fill="#1e5fd8">${escapeXml(`${stop.arriveAt}-${stop.departAt}`)}</text>
+        <rect x="${padding + 246}" y="${top + 50}" width="76" height="26" rx="13" fill="rgba(232,242,255,0.85)" />
+        <text x="${padding + 284}" y="${top + 68}" text-anchor="middle" font-size="13" font-weight="600" fill="#5a5a62">${escapeXml(CATEGORY_LABEL_MAP[stop.category])}</text>
+        ${descLines.map((line, lineIdx) => `
+          <text x="${padding + 126}" y="${top + 92 + lineIdx * 20}" font-size="14" fill="#7b8494">${escapeXml(line)}</text>
+        `).join('')}
+      </g>
+    `;
+  }).join('');
+
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${totalHeight}" viewBox="0 0 ${width} ${totalHeight}">
+      <defs>
+        <linearGradient id="posterBg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#edf5ff" />
+          <stop offset="55%" stop-color="#f7fbff" />
+          <stop offset="100%" stop-color="#eef2f7" />
+        </linearGradient>
+        <linearGradient id="posterAccent" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#1e5fd8" />
+          <stop offset="100%" stop-color="#5b9eff" />
+        </linearGradient>
+        ${defs.join('')}
+      </defs>
+      <rect width="${width}" height="${totalHeight}" fill="url(#posterBg)" />
+      <rect x="0" y="0" width="${width}" height="180" fill="url(#posterAccent)" opacity="0.08" />
+      <text x="${padding}" y="52" font-size="18" font-weight="600" fill="#5b9eff">${escapeXml(cityName)} · CityWalk Route</text>
+      <text x="${padding}" y="96" font-size="42" font-weight="800" fill="#1a1a2e">${escapeXml(plan.dayTitle || plan.title)}</text>
+      ${summaryLines.map((line, idx) => `
+        <text x="${padding}" y="${132 + idx * 24}" font-size="18" fill="#5a6475">${escapeXml(line)}</text>
+      `).join('')}
+      <g transform="translate(${padding}, 168)">
+        <rect x="0" y="0" width="140" height="34" rx="17" fill="rgba(255,255,255,0.92)" />
+        <text x="70" y="23" text-anchor="middle" font-size="15" font-weight="600" fill="#1a1a2e">起始 ${escapeXml(plan.startTime)}</text>
+        <rect x="152" y="0" width="140" height="34" rx="17" fill="rgba(255,255,255,0.92)" />
+        <text x="222" y="23" text-anchor="middle" font-size="15" font-weight="600" fill="#1a1a2e">${escapeXml(plan.totalDurationText)}</text>
+        <rect x="304" y="0" width="128" height="34" rx="17" fill="rgba(255,255,255,0.92)" />
+        <text x="368" y="23" text-anchor="middle" font-size="15" font-weight="600" fill="#1a1a2e">${escapeXml(plan.totalDistanceText)}</text>
+      </g>
+      ${stopBlocks}
+      <text x="${padding}" y="${totalHeight - 42}" font-size="18" font-weight="700" fill="#1a1a2e">收藏这条路线，随时回来继续走</text>
+      <text x="${padding}" y="${totalHeight - 16}" font-size="13" fill="#8e8e93">由 CityWalk 生成 · ${escapeXml(new Date().toLocaleDateString('zh-CN'))}</text>
+    </svg>
+  `;
+  return {
+    width,
+    height: totalHeight,
+    svg,
+    dataUrl: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
+  };
 }
 
 const catalog: CatalogPoi[] = [
@@ -542,6 +679,11 @@ function pickLocalMockPlans(query: PendingQuery, adjustmentText: string, realPoi
     : [];
 
   const generatedPlan = buildRoutePlan(query, adjustmentText);
+  const shouldOfferMultiplePlans = query.source === 'home';
+
+  if (!shouldOfferMultiplePlans) {
+    return [localPlans[0] || generatedPlan];
+  }
 
   if (localPlans.length === 0) return [generatedPlan];
   if (adjustmentText) return [generatedPlan, ...localPlans.slice(0, 1)];
@@ -567,6 +709,30 @@ function getCurrentQuery(): PendingQuery {
     };
   } catch {
     return { text: raw, source: 'home', city: '上海市', region: '衡复/徐汇' };
+  }
+}
+
+function getRouteFingerprint(plan: RoutePlan | null | undefined) {
+  if (!plan) return '';
+  return `${plan.dayTitle}__${plan.subtitle}__${plan.stops.map((stop) => stop.id).join('|')}`;
+}
+
+function getFavoriteRoutes(): FavoriteRouteItem[] {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(FAVORITE_ROUTES_KEY) || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function getPendingRouteSnapshot(): FavoriteRouteItem | null {
+  try {
+    const raw = sessionStorage.getItem(ROUTE_SNAPSHOT_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
   }
 }
 
@@ -775,10 +941,12 @@ function RoutePlanAppInner() {
   const [replaceIndex, setReplaceIndex] = useState<number | null>(null);
   const [replaceMode, setReplaceMode] = useState<'replace' | 'add'>('replace');
   const [shareOpen, setShareOpen] = useState(false);
+  const [exportingShare, setExportingShare] = useState(false);
   const [selectedStopId, setSelectedStopId] = useState<string | null>(null);
   const [toastText, setToastText] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [currentQuery, setCurrentQuery] = useState<PendingQuery>(getCurrentQuery());
+  const [, setFavoriteVersion] = useState(0);
   const [containerHeight, setContainerHeight] = useState(844);
   const [drawerTop, setDrawerTop] = useState(240);
   const suppressTapRef = useRef(false);
@@ -809,6 +977,7 @@ function RoutePlanAppInner() {
   }, []);
 
   const refreshPlan = async (query: PendingQuery, adjustment = '') => {
+    sessionStorage.removeItem(ROUTE_SNAPSHOT_KEY);
     setLoading(true);
     setEditMode(false);
     setSelectedStopId(null);
@@ -831,13 +1000,41 @@ function RoutePlanAppInner() {
     setLoading(false);
   };
 
+  const applyFavoriteSnapshot = (snapshot: FavoriteRouteItem) => {
+    const nextPlan = snapshot.plan;
+    const nextQuery = snapshot.query || getCurrentQuery();
+    setLoading(false);
+    setEditMode(false);
+    setReplaceIndex(null);
+    setCurrentQuery(nextQuery);
+    setCityName(snapshot.cityName || nextQuery.city || '上海市');
+    setAllPlans([nextPlan]);
+    setActivePlanIdx(0);
+    setPlan(nextPlan);
+    setSelectedStopId(nextPlan.stops[0]?.id || null);
+  };
+
   useEffect(() => {
     const boot = () => {
-      if (window.location.hash === '#plan') refreshPlan(getCurrentQuery());
+      if (window.location.hash === '#plan') {
+        const snapshot = getPendingRouteSnapshot();
+        if (snapshot?.plan) {
+          applyFavoriteSnapshot(snapshot);
+          return;
+        }
+        refreshPlan(getCurrentQuery());
+      }
     };
     boot();
     const onHashChange = () => {
-      if (window.location.hash === '#plan') refreshPlan(getCurrentQuery());
+      if (window.location.hash === '#plan') {
+        const snapshot = getPendingRouteSnapshot();
+        if (snapshot?.plan) {
+          applyFavoriteSnapshot(snapshot);
+          return;
+        }
+        refreshPlan(getCurrentQuery());
+      }
     };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
@@ -884,6 +1081,9 @@ function RoutePlanAppInner() {
   };
 
   const orderedStops = plan?.stops || [];
+  const currentRouteFingerprint = getRouteFingerprint(plan);
+  const isCurrentRouteFavorited = !!plan && getFavoriteRoutes().some((item) => item.fingerprint === currentRouteFingerprint);
+  const sharePoster = useMemo(() => plan ? buildSharePoster(plan, cityName) : null, [plan, cityName]);
   const candidatePois = useMemo(() => {
     const usedIds = new Set(orderedStops.map((stop) => stop.id));
     const fromCatalog = catalog.filter((poi) => !usedIds.has(poi.id) || replaceMode === 'replace');
@@ -1000,6 +1200,67 @@ function RoutePlanAppInner() {
     setAdjustInput('');
   };
 
+  const saveCurrentRouteToFavorites = () => {
+    if (!plan) return;
+    if (isCurrentRouteFavorited) {
+      showToastMessage('已在收藏夹中');
+      return;
+    }
+    const nextItem: FavoriteRouteItem = {
+      id: `route_${Date.now()}`,
+      fingerprint: currentRouteFingerprint,
+      title: plan.dayTitle || plan.title || '收藏路线',
+      savedAt: new Date().toISOString(),
+      plan,
+      query: currentQuery,
+      cityName
+    };
+    const nextRoutes = [nextItem, ...getFavoriteRoutes()];
+    localStorage.setItem(FAVORITE_ROUTES_KEY, JSON.stringify(nextRoutes));
+    setFavoriteVersion((value) => value + 1);
+    showToastMessage('已收藏到收藏夹');
+  };
+
+  const downloadSharePoster = async () => {
+    if (!sharePoster || exportingShare) return;
+    setExportingShare(true);
+    try {
+      const image = new Image();
+      image.decoding = 'sync';
+      const loaded = await new Promise<HTMLImageElement>((resolve, reject) => {
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = sharePoster.dataUrl;
+      });
+      const canvas = document.createElement('canvas');
+      canvas.width = sharePoster.width;
+      canvas.height = sharePoster.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('canvas unavailable');
+      ctx.fillStyle = '#f7fbff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(loaded, 0, 0);
+      const pngUrl = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = pngUrl;
+      link.download = `${plan?.dayTitle || 'citywalk-route'}-长图.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToastMessage('长图已导出');
+    } catch {
+      const fallback = document.createElement('a');
+      fallback.href = sharePoster.dataUrl;
+      fallback.download = `${plan?.dayTitle || 'citywalk-route'}-长图.svg`;
+      document.body.appendChild(fallback);
+      fallback.click();
+      document.body.removeChild(fallback);
+      showToastMessage('已导出 SVG 长图');
+    } finally {
+      setExportingShare(false);
+    }
+  };
+
   const snapDrawer = (nextExpanded: boolean) => {
     setExpanded(nextExpanded);
     const nextTop = nextExpanded ? expandedTop : collapsedTop;
@@ -1050,13 +1311,7 @@ function RoutePlanAppInner() {
     return `${distance} · ${minutes}分钟`;
   };
 
-  const categoryLabelMap: Record<CategoryId, string> = {
-    sight: '景点',
-    food: '吃喝',
-    drink: '喝咖',
-    shopping: '购物',
-    stay: '住宿'
-  };
+  const categoryLabelMap = CATEGORY_LABEL_MAP;
   const categoryLabelColorMap: Record<CategoryId, string> = {
     sight: '#1e5fd8',
     food: '#e86b30',
@@ -1122,14 +1377,18 @@ function RoutePlanAppInner() {
             <div className="flex items-center gap-2.5">
               <button
                 type="button"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-black/[0.05] bg-white/90 text-[#111318] shadow-[0_4px_10px_rgba(15,23,42,0.06)] backdrop-blur"
+                className={`flex h-10 w-10 items-center justify-center rounded-full border shadow-[0_4px_10px_rgba(15,23,42,0.06)] backdrop-blur ${
+                  isCurrentRouteFavorited
+                    ? 'border-[rgba(253,186,116,0.45)] bg-[rgba(253,186,116,0.18)] text-[#b45309]'
+                    : 'border-black/[0.05] bg-white/90 text-[#111318]'
+                }`}
                 onClick={(event) => {
                   event.stopPropagation();
-                  window.location.hash = 'route';
+                  saveCurrentRouteToFavorites();
                 }}
-                title="返回探索"
+                title="收藏路线"
               >
-                <Route className="h-5 w-5" strokeWidth={2.4} />
+                <Star className="h-4.5 w-4.5" strokeWidth={2.2} fill={isCurrentRouteFavorited ? 'currentColor' : 'none'} />
               </button>
               <button
                 type="button"
@@ -1260,8 +1519,7 @@ function RoutePlanAppInner() {
             className="overflow-y-auto px-6 pb-28"
             style={{ height: expanded ? `calc(100% - 154px)` : `calc(100% - 92px)` }}
           >
-            {expanded ? (
-              <div className="space-y-6 pt-2">
+            <div className={`space-y-6 ${expanded ? 'pt-2' : 'pt-1'}`}>
                 {orderedStops.map((stop, index) => {
                   const isSelected = selectedStopId === stop.id;
                   return (
@@ -1400,9 +1658,6 @@ function RoutePlanAppInner() {
                   </div>
                 )}
               </div>
-            ) : (
-              <div className="pt-2 text-[13px] leading-6 text-black/35">上滑查看路线详情，或点按标题直接展开。</div>
-            )}
           </div>
         ) : null}
       </div>
@@ -1435,9 +1690,8 @@ function RoutePlanAppInner() {
       {replaceIndex !== null ? (
         <div className="absolute inset-0 z-50 bg-black/24" onClick={() => setReplaceIndex(null)}>
           <div
-            className="absolute inset-x-0 bottom-0 rounded-t-[30px] bg-[#f7f8fb] backdrop-blur-xl px-5 pb-6 pt-3 shadow-[0_-20px_60px_rgba(30,95,216,0.15)]"
+            className="absolute inset-x-0 bottom-0 flex max-h-[72vh] flex-col rounded-t-[30px] bg-[#f7f8fb] px-5 pb-6 pt-3 shadow-[0_-20px_60px_rgba(30,95,216,0.15)] backdrop-blur-xl"
             onClick={(event) => event.stopPropagation()}
-            style={{ maxHeight: '72vh' }}
           >
             <div className="mx-auto h-1 w-9 rounded-full bg-[rgba(140,180,240,0.4)]" />
             <div className="mt-4 flex items-center justify-between">
@@ -1451,9 +1705,8 @@ function RoutePlanAppInner() {
             </div>
 
             <div
-              className="mt-4 pr-1"
+              className="mt-4 min-h-0 flex-1 pr-1"
               style={{
-                maxHeight: 'calc(72vh - 92px)',
                 overflowY: 'auto',
                 WebkitOverflowScrolling: 'touch',
                 overscrollBehavior: 'contain',
@@ -1647,7 +1900,7 @@ function RoutePlanAppInner() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-[22px] font-bold">路线长图预览</div>
-                <div className="mt-1 text-[13px] text-[#8e8e93]">当前先做预览态，后续可继续接导出图片。</div>
+                <div className="mt-1 text-[13px] text-[#8e8e93]">已根据当前路线生成可导出的分享长图。</div>
               </div>
               <button type="button" className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F3F4F6]" onClick={() => setShareOpen(false)}>
                 <X className="h-4.5 w-4.5" strokeWidth={2.5} />
@@ -1655,51 +1908,26 @@ function RoutePlanAppInner() {
             </div>
 
             <div className="mt-5 rounded-[30px] bg-[rgba(232,242,255,0.55)] p-4">
-              <div className="rounded-[26px] bg-white p-4">
-                <div className="flex items-center gap-2 text-[12px] font-semibold text-[#5b9eff]">
-                  <Sparkles className="h-4 w-4" strokeWidth={2.2} />
-                  AI 推荐路线
-                </div>
-                <div className="mt-3 text-[24px] font-bold leading-8">{plan.title}</div>
-                <div className="mt-2 text-[14px] leading-7 text-black/62">{plan.summary}</div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <div className="rounded-full bg-[rgba(232,242,255,0.65)] px-3 py-1.5 text-[12px] font-semibold">起始 {plan.startTime}</div>
-                  <div className="rounded-full bg-[rgba(232,242,255,0.65)] px-3 py-1.5 text-[12px] font-semibold">{plan.totalDurationText}</div>
-                  <div className="rounded-full bg-[rgba(232,242,255,0.65)] px-3 py-1.5 text-[12px] font-semibold">{plan.totalDistanceText}</div>
-                </div>
+              <div className="overflow-hidden rounded-[26px] bg-white p-3 shadow-[0_12px_32px_rgba(30,95,216,0.08)]">
+                {sharePoster ? (
+                  <img
+                    src={sharePoster.dataUrl}
+                    alt="路线长图预览"
+                    className="w-full rounded-[22px] border border-[rgba(140,180,240,0.18)]"
+                  />
+                ) : null}
               </div>
-
-              <div className="mt-4 space-y-3">
-                {orderedStops.map((stop, index) => (
-                  <div key={`${stop.id}-share-${index}`} className="rounded-[24px] bg-white p-3">
-                    <div className="flex items-start gap-3">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#5b9eff] text-[13px] font-bold text-white">
-                        {index + 1}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-[16px] font-bold">{stop.title}</div>
-                        <div className="mt-1 text-[12px] text-[#8e8e93]">
-                          {stop.arriveAt} - {stop.departAt} · {formatDuration(stop.stayMin)}
-                        </div>
-                        <div className="mt-2 text-[13px] leading-6 text-[#5a5a62]">{stop.desc}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
               <button
                 type="button"
-                className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#1e5fd8] to-[#5b9eff] text-white text-[14px] font-semibold shadow-[0_4px_12px_rgba(30,95,216,0.3)] mb-3"
-                onClick={() => {
-                  showToastMessage('请使用手机截图保存');
-                  setTimeout(() => setShareOpen(false), 1200);
-                }}
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#1e5fd8] to-[#5b9eff] py-3 text-[14px] font-semibold text-white shadow-[0_4px_12px_rgba(30,95,216,0.3)]"
+                onClick={downloadSharePoster}
+                disabled={exportingShare}
               >
-                截图保存并分享
+                <Download className="h-4.5 w-4.5" strokeWidth={2.4} />
+                {exportingShare ? '正在导出…' : '一键导出长图'}
               </button>
               <div className="mt-4 rounded-[24px] bg-white p-4 text-[13px] leading-7 text-black/48">
-                截图即可分享给朋友。完整路线已保存，随时可以回来查看。
+                导出后会下载为 PNG 长图，适合直接发给朋友或保存到相册。
               </div>
             </div>
           </div>

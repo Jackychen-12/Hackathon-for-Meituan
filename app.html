@@ -2824,7 +2824,7 @@ Router.register('mine', (() => {
             // 统计数字（大众点评用户）
             const routesDP = JSON.parse(localStorage.getItem('cw_route_count') || '0');
             const checkinsDP = JSON.parse(localStorage.getItem('cw_checkins') || '[]');
-            const favsDP = JSON.parse(localStorage.getItem('cw_favorites') || '[]');
+            const favsDP = JSON.parse(localStorage.getItem('cw_favorite_routes') || '[]');
             const statNumsDP = document.querySelectorAll('#page-mine .stat-num');
             if (statNumsDP[0]) statNumsDP[0].textContent = routesDP;
             if (statNumsDP[1]) statNumsDP[1].textContent = checkinsDP.length;
@@ -2884,7 +2884,7 @@ Router.register('mine', (() => {
         // 统计数字
         const routes = JSON.parse(localStorage.getItem('cw_route_count') || '0');
         const checkins = JSON.parse(localStorage.getItem('cw_checkins') || '[]');
-        const favs = JSON.parse(localStorage.getItem('cw_favorites') || '[]');
+        const favs = JSON.parse(localStorage.getItem('cw_favorite_routes') || '[]');
         const statNums = document.querySelectorAll('#page-mine .stat-num');
         if (statNums[0]) statNums[0].textContent = routes;
         if (statNums[1]) statNums[1].textContent = checkins.length;
@@ -3029,23 +3029,51 @@ Router.register('checkins', (() => {
     };
 })());
 
+function getFavoriteRoutes() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem('cw_favorite_routes') || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+}
+function formatFavoriteTime(iso) {
+    if (!iso) return '刚刚收藏';
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return '刚刚收藏';
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+function escapeHTML(str) {
+    return String(str || '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
 Router.register('favorites', (() => {
     return function init() {
-        const favs = JSON.parse(localStorage.getItem('cw_favorites') || '[]');
+        const favs = getFavoriteRoutes();
         const $list = document.getElementById('favoritesList');
         if (!favs.length) {
             $list.innerHTML = '<div style="text-align:center;padding:40px 0;color:#8e8e93;font-size:14px;">还没有收藏路线<br><span style="font-size:12px;">去首页生成路线后收藏吧~</span></div>';
         } else {
-            $list.innerHTML = '<div class="menu-list">' + favs.map((name, i) => `
-                <div class="menu-item" style="cursor:pointer;" onclick="sessionStorage.setItem('cw_pending_query',JSON.stringify({text:'${name.replace(/'/g,"\\'")}',source:'favorite'}));location.hash='plan';">
+            $list.innerHTML = '<div class="menu-list">' + favs.map((item, i) => `
+                <div class="menu-item favorite-route-item" data-index="${i}" style="cursor:pointer;">
                     <div class="menu-icon" style="background:rgba(253,186,116,0.2);font-size:16px;">⭐</div>
                     <div style="flex:1;min-width:0;">
-                        <div class="menu-text">${name}</div>
-                        <div style="font-size:11px;color:#8e8e93;margin-top:2px;">点击重新规划此路线</div>
+                        <div class="menu-text">${escapeHTML(item.title)}</div>
+                        <div style="font-size:11px;color:#8e8e93;margin-top:2px;">收藏于 ${formatFavoriteTime(item.savedAt)}</div>
                     </div>
                     <div class="menu-arrow">›</div>
                 </div>
             `).join('') + '</div>';
+            $list.querySelectorAll('.favorite-route-item').forEach((el) => {
+                el.addEventListener('click', () => {
+                    const idx = Number(el.dataset.index || 0);
+                    const selected = favs[idx];
+                    if (!selected) return;
+                    sessionStorage.setItem('cw_open_route_snapshot', JSON.stringify(selected));
+                    location.hash = 'plan';
+                });
+            });
         }
         document.getElementById('favoritesBackBtn').onclick = () => Router.go('mine');
     };
@@ -3129,7 +3157,7 @@ Router.register('settings', (() => {
  * ===================================================================== */
 Router.start();
 </script>
-<script src="./explore-route.bundle.js?v=20260607c"></script>
-<script src="./route-plan.bundle.js?v=20260607c"></script>
+<script src="./explore-route.bundle.js?v=20260607e"></script>
+<script src="./route-plan.bundle.js?v=20260607e"></script>
 </body>
 </html>
