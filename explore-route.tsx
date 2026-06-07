@@ -1023,7 +1023,8 @@ function ExploreRouteAppInner() {
                     className="flex w-full items-start gap-4 text-left"
                     onClick={() => openSpot(spot.id)}
                   >
-                    <img src={spot.image} alt={spot.title} referrerPolicy="no-referrer" className="h-24 w-24 shrink-0 rounded-[22px] object-cover shadow-sm" />
+                    <img src={spot.image} alt={spot.title} referrerPolicy="no-referrer" className="h-24 w-24 shrink-0 rounded-[22px] object-cover shadow-sm"
+                      onError={(e) => { const t = e.currentTarget as HTMLImageElement; const fb = scenicPhoto((spot.title || '').slice(0, 6), { top: '#89CFF0', bottom: '#4E87B7', accent: '#B9D98D', accent2: '#E7C97F' }); if (t.src !== fb) t.src = fb; }} />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
@@ -1131,6 +1132,7 @@ function ExploreRouteAppInner() {
                     alt={`${detailSpot.title}-${index + 1}`}
                     referrerPolicy="no-referrer"
                     className="h-[160px] w-[280px] shrink-0 rounded-[26px] object-cover"
+                    onError={(e) => { const t = e.currentTarget as HTMLImageElement; const fb = scenicPhoto((detailSpot.title || '').slice(0, 6), { top: '#89CFF0', bottom: '#4E87B7', accent: '#B9D98D', accent2: '#E7C97F' }); if (t.src !== fb) t.src = fb; }}
                   />
                 ))}
               </div>

@@ -1813,7 +1813,7 @@ function RoutePlanAppInner() {
             <div className="mt-4 overflow-y-auto px-6 pb-8" style={{ maxHeight: 'calc(70vh - 100px)' }}>
               {detailStop.image && (
                 <img src={detailStop.image} alt="" referrerPolicy="no-referrer" className="w-full h-[160px] rounded-[22px] object-cover mb-4"
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                  onError={(e) => { const t = e.currentTarget as HTMLImageElement; const fb = getStableCardImage({ title: detailStop.title || '', category: (detailStop as any).category }); if (t.src !== fb) t.src = fb; }} />
               )}
               <div className="text-[14px] leading-7 text-[#5a5a62] mb-4">{detailStop.desc}</div>
               {detailStop.business_hours && (
